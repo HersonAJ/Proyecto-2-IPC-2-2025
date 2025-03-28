@@ -21,32 +21,37 @@ export class LoginComponent {
 
   login(email: string, password: string): void {
     if (!email.trim() || !password.trim()) {
-      alert("debe de ingresar un correo y una contraseña");
+      alert("Debe ingresar un correo y una contraseña");
     } else {
-      // Crea el payload (el objeto que será enviado como JSON)
       const loginPayload = {
         correo: email,
         contrasena: password
       };
-
-      // Construye la URL usando las constantes
+  
       const url = this.restConstants.getApiURL() + "login";
-
-      // Realiza la petición POST al backend
+  
       this.http.post(url, loginPayload).subscribe({
         next: (response: any) => {
-          // espera un json
-          if (response && response.mensaje === "bienvenido") {
+          // Verifica si el mensaje del backend indica un usuario válido
+          if (response && response.mensaje === "Usuario válido") {
             alert("Bienvenido!");
           } else {
             alert("Respuesta inesperada");
           }
         },
         error: (error) => {
-          // En caso de error
-          alert("Credenciales no validas");
+          // Manejo de errores específicos
+          if (error.status === 401) {
+            // Cuando el backend devuelve 401, indica credenciales inválidas
+            alert("Credenciales incorrectas");
+          } else {
+            // Otros errores (conexión, timeout, etc.)
+            alert("Error en la conexión con el servidor");
+          }
         }
       });
     }
   }
+  
+  
 }

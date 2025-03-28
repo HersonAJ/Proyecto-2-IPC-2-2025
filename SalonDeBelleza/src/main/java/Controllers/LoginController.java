@@ -4,6 +4,7 @@
  */
 package Controllers;
 
+import BackendDB.LoginDB;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -22,24 +23,21 @@ public class LoginController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(LoginRequest loginRequest) {
-        // Validación simple: se compara con valores fijos
-        if ("algo@gmail.com".equals(loginRequest.getCorreo()) && "123".equals(loginRequest.getContrasena())) {
-            return Response.ok("{\"mensaje\": \"bienvenido\"}").build();
+        // Valida si el usuario existe en la base de datos
+        boolean usuarioValido = LoginDB.validarUsuario(loginRequest.getCorreo(), loginRequest.getContrasena());
+
+        if (usuarioValido) {
+            return Response.ok("{\"mensaje\": \"Usuario válido\"}").build();
         } else {
             return Response.status(Response.Status.UNAUTHORIZED)
-                           .entity("{\"mensaje\": \"Credenciales no validas\"}")
+                           .entity("{\"mensaje\": \"Credenciales inválidas\"}")
                            .build();
         }
     }
-    
-    // Clase interna para representar la solicitud de login
+
     public static class LoginRequest {
         private String correo;
         private String contrasena;
-
-        // Constructor vacío obligatorio para la deserialización
-        public LoginRequest() {
-        }
 
         public String getCorreo() {
             return correo;
