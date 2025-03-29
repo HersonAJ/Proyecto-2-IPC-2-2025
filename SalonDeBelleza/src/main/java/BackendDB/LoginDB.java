@@ -4,6 +4,7 @@
  */
 package BackendDB;
 
+import Modelos.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,26 +17,35 @@ import java.sql.SQLException;
 public class LoginDB {
 
     // Método para validar si el usuario existe en la base de datos
-    public static boolean validarUsuario(String correo, String contraseña) {
-        String query = "SELECT COUNT(*) FROM Usuarios WHERE Correo = ? AND Contraseña = ?";
-        
-        try (Connection conn = ConexionDB.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+    public static Usuario autenticarUsuario(String correo, String contrasena) {
+        String query = "SELECT * FROM Usuarios WHERE Correo = ? AND Contraseña = ?";
 
-            
+        try (Connection conn = ConexionDB.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+
             stmt.setString(1, correo);
-            stmt.setString(2, contraseña);
+            stmt.setString(2, contrasena);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                   
-                    return rs.getInt(1) > 0;
+                    Usuario usuario = new Usuario();
+                    // Rellenar atributos del objeto usuario
+                    usuario.setIdUsuario(rs.getInt("ID_Usuario"));
+                    usuario.setNombre(rs.getString("Nombre"));
+                    usuario.setDpi(rs.getString("DPI"));
+                    usuario.setTelefono(rs.getString("Telefono"));
+                    usuario.setDireccion(rs.getString("Direccion"));
+                    usuario.setCorreo(rs.getString("Correo"));
+                    usuario.setContrasena(rs.getString("Contraseña"));
+                    usuario.setRol(rs.getString("Rol"));
+                    usuario.setEstado(rs.getString("Estado"));
+                    usuario.setDescripcion(rs.getString("Descripción"));
+                    return usuario;
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error al validar el usuario: " + e.getMessage());
+            System.out.println("Error al autenticar el usuario: " + e.getMessage());
         }
-        return false;
+        return null;
     }
-}
 
+}

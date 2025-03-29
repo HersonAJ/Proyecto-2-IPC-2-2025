@@ -24,4 +24,10 @@ export class UsuarioService {
     const url = `${this.apiURL}usuarios`;
     return this.http.get<any[]>(url);
   }
+
+  //metodo para el login 
+  login(credenciales: any): Observable<any> {
+    const url = `${this.apiURL}login`;
+    return this.http.post<any>(url, credenciales);
+  }
 }
