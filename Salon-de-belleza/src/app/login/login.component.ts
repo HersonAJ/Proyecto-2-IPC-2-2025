@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UsuarioService } from '../usuario.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,10 @@ export class LoginComponent {
   protected email: string = "";
   protected password: string = "";
 
-  constructor(private usuarioService: UsuarioService) { }
+  constructor(
+    private usuarioService: UsuarioService, 
+    private authService: AuthService  
+  ) { }
 
   login(): void {
     if (!this.email.trim() || !this.password.trim()) {
@@ -27,11 +31,11 @@ export class LoginComponent {
       this.usuarioService.login(loginPayload).subscribe({
         next: (response: any) => {
           if (response && response.mensaje === "Usuario válido") {
-            if(response.token) {
-              // Almacenar el token el local starage
-              localStorage.setItem('token', response.token);
+            if (response.token) {
+              this.authService.login(response.token);
             }
             alert("Bienvenido!");
+            // Opcionalmente, redirige a otra ruta
           } else {
             alert("Respuesta inesperada");
           }

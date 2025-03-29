@@ -1,0 +1,22 @@
+<div class="container mt-4">
+    <h2>Mi Perfil</h2>
+    <div *ngIf="perfil; else loading">
+      <p><strong>ID:</strong> {{ perfil.id }}</p>
+      <p><strong>Nombre:</strong> {{ perfil.nombre }}</p>
+      <p><strong>DPI:</strong> {{ perfil.dpi }}</p>
+      <p><strong>Teléfono:</strong> {{ perfil.telefono }}</p>
+      <p><strong>Dirección:</strong> {{ perfil.direccion }}</p>
+      <p><strong>Correo:</strong> {{ perfil.correo }}</p>
+      <p><strong>Descripción:</strong> {{ perfil.descripcion }}</p>
+      <p><strong>Tipo de Usuario:</strong> {{ perfil.rol }}</p>
+      <p><strong>Estado:</strong> {{ perfil.estado }}</p>
+      <p><strong>Hobbies:</strong> {{ perfil.hobbies }}</p>
+      <div *ngIf="perfil.fotoPerfil">
+        <img [src]="'data:image/jpeg;base64,' + perfil.fotoPerfil" alt="Foto de perfil" class="img-fluid" style="max-width:200px;">
+      </div>
+    </div>
+    <ng-template #loading>
+      <p>Cargando perfil...</p>
+    </ng-template>
+  </div>
+  
