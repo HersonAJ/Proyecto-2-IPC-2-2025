@@ -1,0 +1,26 @@
+/* Fondo con degradado y sombra para un look moderno */
+.custom-navbar {
+    background: linear-gradient(90deg, #ff7e5f, #feb47b);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Estilo de la marca (logo) */
+  .custom-navbar .navbar-brand {
+    font-weight: bold;
+    font-size: 1.8rem;
+    color: #ffffff !important;
+  }
+  
+  /* Estilo para cada enlace de la navbar */
+  .custom-navbar .nav-link {
+    font-size: 1.1rem;
+    color: #ffffff !important;
+    margin-left: 1rem;
+    transition: color 0.3s ease;
+  }
+  
+  /* Cambio de color al pasar el ratón */
+  .custom-navbar .nav-link:hover {
+    color: #333333 !important;
+  }
+  
