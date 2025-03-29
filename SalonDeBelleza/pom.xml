@@ -21,13 +21,6 @@
         </dependency>
         
         
-        <dependency>
-            <groupId>jakarta.platform</groupId>
-            <artifactId>jakarta.jakartaee-api</artifactId>
-            <version>${jakartaee}</version>
-            <scope>provided</scope>
-        </dependency>
-        
         <!-- the REST API -->
         <dependency>
             <groupId>jakarta.ws.rs</groupId>

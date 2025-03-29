@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<form (ngSubmit)="registrarCliente()" enctype="multipart/form-data" class="container mt-4">
+  
+  <div class="mb-3">
+    <label for="nombre" class="form-label">Nombre</label>
+    <input type="text" [(ngModel)]="nombre" name="nombre" id="nombre" class="form-control" placeholder="Ingrese su nombre" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="dpi" class="form-label">DPI</label>
+    <input type="text" [(ngModel)]="dpi" name="dpi" id="dpi" class="form-control" placeholder="Ingrese su DPI" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="telefono" class="form-label">Teléfono</label>
+    <input type="tel" [(ngModel)]="telefono" name="telefono" id="telefono" 
+           class="form-control" placeholder="Ingrese su número de teléfono" required 
+           (keypress)="restrictInput($event)"
+           pattern="^\+?\d+$"
+           title="Ingrese sólo números positivos, opcionalmente precedidos por +">
+  </div>
+  
+
+  <div class="mb-3">
+    <label for="direccion" class="form-label">Dirección</label>
+    <input type="text" [(ngModel)]="direccion" name="direccion" id="direccion" class="form-control" placeholder="Ingrese su dirección">
+  </div>
+
+  <div class="mb-3">
+    <label for="correo" class="form-label">Correo</label>
+    <!-- El type="email" valida que se ingrese una dirección que contenga @ -->
+    <input type="email" [(ngModel)]="correo" name="correo" id="correo" class="form-control" placeholder="Ingrese su correo electrónico" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="contrasena" class="form-label">Contraseña</label>
+    <input type="password" [(ngModel)]="contrasena" name="contrasena" id="contrasena" class="form-control" placeholder="Ingrese su contraseña" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="hobbies" class="form-label">Hobbies</label>
+    <!-- Se espera que el usuario ingrese una cadena separada por comas -->
+    <input type="text" [(ngModel)]="hobbies" name="hobbies" id="hobbies" class="form-control" placeholder="Ej. leer, nadar, cocinar">
+  </div>
+
+  <div class="mb-3">
+    <label for="descripcion" class="form-label">Descripción</label>
+    <textarea [(ngModel)]="descripcion" name="descripcion" id="descripcion" class="form-control" placeholder="Describe tus intereses o características"></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="fotoPerfil" class="form-label">Foto de perfil</label>
+    <input type="file" (change)="onFileChange($event)" name="fotoPerfil" id="fotoPerfil" class="form-control">
+  </div>
+
+  <button type="submit" class="btn btn-primary w-100">Registrar</button>
+  
+</form>
