@@ -1,23 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { PerfilService } from '../perfil.service';
-import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { EditarPerfilComponent } from '../editar-perfil/editar-perfil.component';
 
 @Component({
   selector: 'app-mi-perfil',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, EditarPerfilComponent],
   templateUrl: './mi-perfil.component.html',
   styleUrls: ['./mi-perfil.component.css']
 })
 export class MiPerfilComponent implements OnInit {
-  // Objeto que contendrá la información del perfil del usuario
+  // Objeto que contiene la informacion del usuario
   perfil: any;
+  mostrarEditar: boolean = false;
 
   constructor(private perfilService: PerfilService, private router: Router) { }
 
   ngOnInit(): void {
-    // Verifica si existe un token en el localStorage
     const token = localStorage.getItem('token');
     if (!token) {
       alert('Debe iniciar sesión para ver su perfil.');
@@ -38,5 +39,14 @@ export class MiPerfilComponent implements OnInit {
         alert('Error al obtener el perfil');
       }
     });
+  }
+  habilitarEdicion(): void {
+    this.mostrarEditar = true;
+  }
+
+  finalizarEdicion(): void {
+    this.mostrarEditar = false;
+    // Recargar perfil actualizado
+    this.obtenerPerfil();
   }
 }

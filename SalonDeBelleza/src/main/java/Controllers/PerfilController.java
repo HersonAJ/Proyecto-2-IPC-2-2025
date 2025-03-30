@@ -22,10 +22,7 @@ import java.util.Base64;
 @Path("perfil")
 public class PerfilController {
 
-    /**
-     * Endpoint para obtener el perfil del usuario autenticado.
-     * Se espera el token JWT en el header "Authorization" en el formato "Bearer <token>".
-     */
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerPerfil(@HeaderParam("Authorization") String authHeader) {
@@ -64,7 +61,7 @@ public class PerfilController {
 
             // Preparar el JSON de respuesta incluyendo todos los datos, incluidos hobbies y foto
             String jsonResponse = String.format(
-                "{\"id\": %d, \"nombre\": \"%s\", \"dpi\": \"%s\", \"telefono\": \"%s\", " +
+                "{\"idUsuario\": %d, \"nombre\": \"%s\", \"dpi\": \"%s\", \"telefono\": \"%s\", " +
                 "\"direccion\": \"%s\", \"correo\": \"%s\", \"descripcion\": \"%s\", \"rol\": \"%s\", " +
                 "\"estado\": \"%s\", \"hobbies\": \"%s\", \"fotoPerfil\": \"%s\"}",
                 usuario.getIdUsuario(),

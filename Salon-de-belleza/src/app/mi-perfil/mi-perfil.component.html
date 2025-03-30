@@ -1,22 +1,32 @@
 <div class="container mt-4">
-    <h2>Mi Perfil</h2>
-    <div *ngIf="perfil; else loading">
-      <p><strong>ID:</strong> {{ perfil.id }}</p>
-      <p><strong>Nombre:</strong> {{ perfil.nombre }}</p>
-      <p><strong>DPI:</strong> {{ perfil.dpi }}</p>
-      <p><strong>Teléfono:</strong> {{ perfil.telefono }}</p>
-      <p><strong>Dirección:</strong> {{ perfil.direccion }}</p>
-      <p><strong>Correo:</strong> {{ perfil.correo }}</p>
-      <p><strong>Descripción:</strong> {{ perfil.descripcion }}</p>
-      <p><strong>Tipo de Usuario:</strong> {{ perfil.rol }}</p>
-      <p><strong>Estado:</strong> {{ perfil.estado }}</p>
-      <p><strong>Hobbies:</strong> {{ perfil.hobbies }}</p>
-      <div *ngIf="perfil.fotoPerfil">
-        <img [src]="'data:image/jpeg;base64,' + perfil.fotoPerfil" alt="Foto de perfil" class="img-fluid" style="max-width:200px;">
-      </div>
+  <h2>Mi Perfil</h2>
+  
+  <div *ngIf="perfil; else loading">
+    <!-- Se muestran los detalles del perfil -->
+    <p><strong>ID:</strong> {{ perfil.idUsuario }}</p>
+    <p><strong>Nombre:</strong> {{ perfil.nombre }}</p>
+    <p><strong>DPI:</strong> {{ perfil.dpi }}</p>
+    <p><strong>Teléfono:</strong> {{ perfil.telefono }}</p>
+    <p><strong>Dirección:</strong> {{ perfil.direccion }}</p>
+    <p><strong>Correo:</strong> {{ perfil.correo }}</p>
+    <p><strong>Descripción:</strong> {{ perfil.descripcion }}</p>
+    <p><strong>Tipo de Usuario:</strong> {{ perfil.rol }}</p>
+    <p><strong>Estado:</strong> {{ perfil.estado }}</p>
+    <p><strong>Hobbies:</strong> {{ perfil.hobbies }}</p>
+    <div *ngIf="perfil.fotoPerfil">
+      <img [src]="'data:image/jpeg;base64,' + perfil.fotoPerfil" alt="Foto de perfil" class="img-fluid" style="max-width:200px;">
     </div>
-    <ng-template #loading>
-      <p>Cargando perfil...</p>
-    </ng-template>
+    
+    <!-- Botón para habilitar edición -->
+    <button class="btn btn-warning mt-3" (click)="habilitarEdicion()">Editar Perfil</button>
+    
+    <!-- Si se habilita la edición, se muestra el componente para editar -->
+    <div *ngIf="mostrarEditar">
+      <app-editar-perfil (onGuardar)="finalizarEdicion()"></app-editar-perfil>
+    </div>
   </div>
   
+  <ng-template #loading>
+    <p>Cargando perfil...</p>
+  </ng-template>
+</div>

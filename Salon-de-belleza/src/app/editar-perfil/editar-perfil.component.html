@@ -1,0 +1,51 @@
+<div class="container mt-4">
+  <h3>Editar Perfil</h3>
+  <form (ngSubmit)="actualizarPerfil()">
+    <!-- Campos editables del perfil -->
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre</label>
+      <input type="text" id="nombre" [(ngModel)]="perfil.nombre" name="nombre" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label for="dpi" class="form-label">DPI</label>
+      <input type="text" id="dpi" [(ngModel)]="perfil.dpi" name="dpi" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label for="telefono" class="form-label">Teléfono</label>
+      <input type="text" id="telefono" [(ngModel)]="perfil.telefono" name="telefono" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label for="direccion" class="form-label">Dirección</label>
+      <input type="text" id="direccion" [(ngModel)]="perfil.direccion" name="direccion" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label for="contrasena" class="form-label">Contraseña</label>
+      <input type="password" id="contrasena" [(ngModel)]="perfil.contrasena" name="contrasena" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label for="descripcion" class="form-label">Descripción</label>
+      <textarea id="descripcion" [(ngModel)]="perfil.descripcion" name="descripcion" class="form-control"></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="hobbies" class="form-label">Hobbies</label>
+      <input type="text" id="hobbies" [(ngModel)]="perfil.hobbies" name="hobbies" class="form-control" placeholder="Ej: leer, nadar, cocinar">
+    </div>
+    <div class="mb-3">
+      <label for="fotoPerfil" class="form-label">Foto de perfil</label>
+      <input type="file" id="fotoPerfil" (change)="onFileChange($event)" class="form-control">
+      <div *ngIf="perfil.fotoPerfil" class="mt-2">
+        <img [src]="'data:image/jpeg;base64,' + perfil.fotoPerfil" alt="Foto de perfil" class="img-fluid" style="max-width:200px;">
+      </div>
+    </div>
+    <!-- Campos no editables: correo y rol -->
+    <div class="mb-3">
+      <label for="correo" class="form-label">Correo Electrónico</label>
+      <input type="email" id="correo" [(ngModel)]="perfil.correo" name="correo" class="form-control" readonly>
+    </div>
+    <div class="mb-3">
+      <label for="rol" class="form-label">Tipo de Usuario</label>
+      <input type="text" id="rol" [(ngModel)]="perfil.rol" name="rol" class="form-control" readonly>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Actualizar Perfil</button>
+  </form>
+</div>

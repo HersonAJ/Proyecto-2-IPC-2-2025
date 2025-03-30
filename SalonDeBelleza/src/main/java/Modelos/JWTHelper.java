@@ -29,7 +29,7 @@ public class JWTHelper {
         this.verifier = JWT.require(algorithm).build();
     }
 
-public String generateToken(String correo, String rol, String nombre) {
+public String generateToken(String correo, String rol, String nombre, int idUsuario) {
     Date now = new Date();
     Date expiryDate = new Date(now.getTime() + expirationTime);
 
@@ -37,6 +37,7 @@ public String generateToken(String correo, String rol, String nombre) {
             .withSubject(correo)
             .withClaim("rol", rol)
             .withClaim("nombre", nombre)
+            .withClaim("idUsuario", idUsuario)
             .withIssuedAt(now)
             .withExpiresAt(expiryDate)
             .sign(algorithm);
@@ -63,6 +64,11 @@ public String generateToken(String correo, String rol, String nombre) {
     public String getRolFromToken(String token) {
         DecodedJWT decodedJWT = verifier.verify(token);
         return decodedJWT.getClaim("rol").asString(); // Extre el rol 
+    }
+    
+    public int getIdUsuarioFromToken(String token) {
+        DecodedJWT decodedJWT = verifier.verify(token);
+        return decodedJWT.getClaim("idUsuario").asInt();
     }
 }
 

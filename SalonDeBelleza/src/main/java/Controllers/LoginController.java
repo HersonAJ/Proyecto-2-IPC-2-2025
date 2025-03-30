@@ -36,13 +36,14 @@ public class LoginController {
             if (usuario != null) {
                 // Generar el token JWT usando toda la información que retorna el objeto usuario
                 JWTHelper jwtHelper = new JWTHelper();
-                String token = jwtHelper.generateToken(usuario.getCorreo(), usuario.getRol(), usuario.getNombre());
+                String token = jwtHelper.generateToken(usuario.getCorreo(), usuario.getRol(), usuario.getNombre(), usuario.getIdUsuario());
 
-                // Generar la respuesta JSON con token y datos relevantes del usuario
+                // Generar la respuesta JSON 
                 String jsonResponse = String.format(
-                        "{\"mensaje\": \"Usuario válido\", \"token\": \"%s\", \"usuario\": {\"id\": %d, \"correo\": \"%s\", \"nombre\": \"%s\", \"rol\": \"%s\"}}",
+                        "{\"mensaje\": \"Usuario válido\", \"token\": \"%s\", \"usuario\": {\"idUsuario\": %d, \"correo\": \"%s\", \"nombre\": \"%s\", \"rol\": \"%s\"}}",
                         token, usuario.getIdUsuario(), usuario.getCorreo(), usuario.getNombre(), usuario.getRol()
                 );
+
                 return Response.ok(jsonResponse).build();
             } else {
                 return Response.status(Response.Status.UNAUTHORIZED)
