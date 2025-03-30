@@ -1,0 +1,16 @@
+.hero {
+    position: relative;
+  }
+  
+  .hero-overlay {
+    background: rgba(0, 0, 0, 0.4);
+  }
+  
+  .servicios .card {
+    transition: transform 0.3s;
+  }
+  
+  .servicios .card:hover {
+    transform: scale(1.05);
+  }
+  

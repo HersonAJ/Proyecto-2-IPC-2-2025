@@ -1,0 +1,75 @@
+<div class="container mt-4">
+    <!-- Hero Section -->
+    <section class="hero position-relative mb-4">
+      <img src="https://picsum.photos/1200/400" 
+           class="img-fluid w-100"
+           alt="Salón de Belleza" 
+           crossorigin="anonymous">
+      <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-white">
+        <h1 class="display-4 fw-bold">Bienvenido al Salón de Belleza</h1>
+        <p class="lead">Reserva tu cita hoy mismo</p>
+        <button class="btn btn-primary btn-lg mt-3">Agendar Cita</button>
+      </div>
+    </section>
+  
+    <!-- Servicios Destacados -->
+    <section class="servicios mb-4">
+      <h2 class="mb-3">Servicios Destacados</h2>
+      <div class="row">
+        <div class="col-md-4 mb-3" *ngFor="let servicio of servicios">
+          <div class="card h-100">
+            <img [src]="servicio.imagen" 
+                 class="card-img-top" 
+                 alt="Imagen de {{ servicio.nombre }}" 
+                 crossorigin="anonymous">
+            <div class="card-body">
+              <h5 class="card-title">{{ servicio.nombre }}</h5>
+              <p class="card-text">{{ servicio.descripcion }}</p>
+              <p class="card-text"><strong>Precio: </strong>{{ servicio.precio | currency }}</p>
+            </div>
+            <div class="card-footer">
+              <a href="#" class="btn btn-outline-primary w-100">Ver Detalles</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Testimonios -->
+    <section class="testimonios mb-4">
+      <h2 class="mb-3">Testimonios</h2>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <blockquote class="blockquote">
+                <p>"Excelente atención y resultados increíbles!"</p>
+                <footer class="blockquote-footer">Ana <cite title="Source Title">Ciudad de Guatemala</cite></footer>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <blockquote class="blockquote">
+                <p>"Recomiendo este salón, su equipo es muy profesional."</p>
+                <footer class="blockquote-footer">Carlos <cite title="Source Title">Mixco</cite></footer>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <blockquote class="blockquote">
+                <p>"Un ambiente agradable y precios competitivos."</p>
+                <footer class="blockquote-footer">Mariana <cite title="Source Title">Quetzaltenango</cite></footer>
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  
