@@ -1,0 +1,66 @@
+<div class="panel-control bg-light p-3 h-100">
+    <h4 class="text-center mb-4">Panel de Control</h4>
+    <div class="list-group">
+      <!-- Opciones para Cliente -->
+      <a *ngIf="rolUsuario === 'Cliente'" routerLink="/catalogo-servicios" class="list-group-item list-group-item-action bg-primary text-white">
+        <i class="bi bi-card-list me-2"></i>Catálogo
+      </a>
+      <a *ngIf="rolUsuario === 'Cliente'" routerLink="/reservar-cita" class="list-group-item list-group-item-action bg-primary text-white">
+        <i class="bi bi-calendar-check me-2"></i>Agendar Cita
+      </a>
+      <a *ngIf="rolUsuario === 'Cliente'" routerLink="/cancelar-cita" class="list-group-item list-group-item-action bg-primary text-white">
+        <i class="bi bi-x-circle me-2"></i>Cancelar Cita
+      </a>
+      <a *ngIf="rolUsuario === 'Cliente'" routerLink="/editar-perfil" class="list-group-item list-group-item-action bg-primary text-white">
+        <i class="bi bi-person-circle me-2"></i>Perfil
+      </a>
+      <a *ngIf="rolUsuario === 'Cliente'" routerLink="/historial-citas" class="list-group-item list-group-item-action bg-primary text-white">
+        <i class="bi bi-clock-history me-2"></i>Historial
+      </a>
+  
+      <!-- Opciones para Empleado -->
+      <a *ngIf="rolUsuario === 'Empleado'" routerLink="/citas-asignadas" class="list-group-item list-group-item-action bg-success text-white">
+        <i class="bi bi-clipboard-check me-2"></i>Citas Asignadas
+      </a>
+      <a *ngIf="rolUsuario === 'Empleado'" routerLink="/actualizar-cita" class="list-group-item list-group-item-action bg-success text-white">
+        <i class="bi bi-pencil-square me-2"></i>Actualizar Cita
+      </a>
+      <a *ngIf="rolUsuario === 'Empleado'" routerLink="/generar-factura" class="list-group-item list-group-item-action bg-success text-white">
+        <i class="bi bi-receipt me-2"></i>Generar Factura
+      </a>
+  
+      <!-- Opciones para Administrador -->
+      <a *ngIf="rolUsuario === 'Administrador'" routerLink="/gestion-usuarios" class="list-group-item list-group-item-action bg-dark text-white">
+        <i class="bi bi-people me-2"></i>Gestionar Usuarios
+      </a>
+      <a *ngIf="rolUsuario === 'Administrador'" routerLink="/configurar-horarios" class="list-group-item list-group-item-action bg-dark text-white">
+        <i class="bi bi-clock me-2"></i>Configurar Horarios
+      </a>
+      <a *ngIf="rolUsuario === 'Administrador'" routerLink="/reportes" class="list-group-item list-group-item-action bg-dark text-white">
+        <i class="bi bi-bar-chart me-2"></i>Generar Reportes
+      </a>
+  
+      <!-- Opciones para Marketing -->
+      <a *ngIf="rolUsuario === 'Marketing'" routerLink="/crear-anuncio" class="list-group-item list-group-item-action bg-info text-white">
+        <i class="bi bi-bullseye me-2"></i>Crear Anuncio
+      </a>
+      <a *ngIf="rolUsuario === 'Marketing'" routerLink="/gestion-anuncios" class="list-group-item list-group-item-action bg-info text-white">
+        <i class="bi bi-gear me-2"></i>Gestionar Anuncios
+      </a>
+      <a *ngIf="rolUsuario === 'Marketing'" routerLink="/reportes-marketing" class="list-group-item list-group-item-action bg-info text-white">
+        <i class="bi bi-pie-chart me-2"></i>Reportes Marketing
+      </a>
+  
+      <!-- Opciones para Servicios -->
+      <a *ngIf="rolUsuario === 'Servicios'" routerLink="/crear-servicio" class="list-group-item list-group-item-action bg-warning text-white">
+        <i class="bi bi-plus-circle me-2"></i>Crear Servicio
+      </a>
+      <a *ngIf="rolUsuario === 'Servicios'" routerLink="/agregar-catalogo" class="list-group-item list-group-item-action bg-warning text-white">
+        <i class="bi bi-collection me-2"></i>Agregar Catálogo
+      </a>
+      <a *ngIf="rolUsuario === 'Servicios'" routerLink="/reportes-servicios" class="list-group-item list-group-item-action bg-warning text-white">
+        <i class="bi bi-graph-up me-2"></i>Reportes Servicios
+      </a>
+    </div>
+  </div>
+  

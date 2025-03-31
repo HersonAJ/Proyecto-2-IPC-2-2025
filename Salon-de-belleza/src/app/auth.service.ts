@@ -19,4 +19,16 @@ export class AuthService {
     localStorage.removeItem('token');
     this.loggedInSubject.next(false);
   }
+
+    // Método para obtener el rol del usuario a partir del token almacenado
+    getRolFromToken(token: string): string {
+      try {
+        // Decodificar el token 
+        const payload = JSON.parse(atob(token.split('.')[1])); 
+        return payload.rol; 
+      } catch (error) {
+        console.error('Error al decodificar el token:', error);
+        return ''; // Retorna un valor vacío en caso de error
+      }
+    }
 }

@@ -1,0 +1,22 @@
+/* Contenedor principal para organizar layout */
+.layout-container {
+    display: flex; /* flexbox para crear un layout con aside y main */
+    flex-direction: row; /* Posiciona los elementos en una fila */
+  }
+  
+  /* Panel de control (aside a la izquierda) */
+  .panel-control {
+    width: 300px; /* Define un ancho fijo para el panel de control */
+    min-height: 100vh; /* Asegura que ocupe la altura completa de la ventana */
+    background-color: #f8f9fa; 
+    border-right: 1px solid #ddd; /* Línea divisoria para estética */
+    padding: 10px; /* Espaciado interno para el contenido */
+  }
+  
+  /* Contenido principal (main) */
+  .main-content {
+    flex: 1; /* Hace que el contenido principal ocupe todo el espacio restante */
+    padding: 10px; /* Espaciado interno */
+  }
+  
+  

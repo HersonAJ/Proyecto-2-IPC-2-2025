@@ -1,3 +1,29 @@
+<!--
 <!DOCTYPE html>
 <app-header></app-header>
 <router-outlet></router-outlet>
+<app-panel-control></app-panel-control>
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salon de Belleza</title>
+</head>
+<body>
+  <div class="layout-container">
+    <!-- Panel de control (lateral izquierdo) -->
+    <aside class="panel-control">
+      <app-panel-control></app-panel-control>
+    </aside>
+
+    <!-- Contenido principal (derecha) -->
+    <main class="main-content">
+      <app-header></app-header>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</body>
+</html>
