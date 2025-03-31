@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<form (ngSubmit)="registrarUsuario()" enctype="multipart/form-data" class="container mt-4">
+  
+  <h2 class="text-center mb-4">Registrar Nuevo Usuario</h2>
+  
+  <div class="mb-3">
+    <label for="nombre" class="form-label">Nombre</label>
+    <input type="text" [(ngModel)]="nombre" name="nombre" id="nombre" class="form-control" placeholder="Ingrese el nombre del usuario" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="dpi" class="form-label">DPI</label>
+    <input type="text" [(ngModel)]="dpi" name="dpi" id="dpi" class="form-control" placeholder="Ingrese el DPI del usuario" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="telefono" class="form-label">Teléfono</label>
+    <input type="tel" [(ngModel)]="telefono" name="telefono" id="telefono" 
+           class="form-control" placeholder="Ingrese el número de teléfono del usuario" required
+           (keypress)="restrictInput($event)"
+           pattern="^\+?\d+$"
+           title="Ingrese sólo números positivos, opcionalmente precedidos por +">
+  </div>
+
+  <div class="mb-3">
+    <label for="direccion" class="form-label">Dirección</label>
+    <input type="text" [(ngModel)]="direccion" name="direccion" id="direccion" class="form-control" placeholder="Ingrese la dirección del usuario">
+  </div>
+
+  <div class="mb-3">
+    <label for="correo" class="form-label">Correo</label>
+    <input type="email" [(ngModel)]="correo" name="correo" id="correo" class="form-control" placeholder="Ingrese el correo electrónico del usuario" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="contrasena" class="form-label">Contraseña</label>
+    <input type="password" [(ngModel)]="contrasena" name="contrasena" id="contrasena" class="form-control" placeholder="Ingrese la contraseña" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="rol" class="form-label">Rol</label>
+    <select [(ngModel)]="rol" name="rol" id="rol" class="form-select" required>
+      <option value="" disabled selected>Seleccione el rol del usuario</option>
+      <option value="Empleado">Empleado</option>
+      <option value="Administrador">Administrador</option>
+      <option value="Marketing">Marketing</option>
+      <option value="Servicios">Servicios</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="descripcion" class="form-label">Descripción</label>
+    <textarea [(ngModel)]="descripcion" name="descripcion" id="descripcion" class="form-control" placeholder="Agregue una descripción del usuario"></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="fotoPerfil" class="form-label">Foto de perfil</label>
+    <input type="file" (change)="onFileChange($event)" name="fotoPerfil" id="fotoPerfil" class="form-control">
+  </div>
+
+  <button type="submit" class="btn btn-primary w-100">Registrar Usuario</button>
+</form>

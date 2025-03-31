@@ -30,6 +30,9 @@
       </a>
   
       <!-- Opciones para Administrador -->
+      <a *ngIf="rolUsuario === 'Administrador'" routerLink="/registrar-usuario" class="list-group-item list-group-item-action bg-dark text-white">
+        <i class="bi bi-person-plus-fill me-2"></i>Crear Usuario
+      </a>
       <a *ngIf="rolUsuario === 'Administrador'" routerLink="/gestion-usuarios" class="list-group-item list-group-item-action bg-dark text-white">
         <i class="bi bi-people me-2"></i>Gestionar Usuarios
       </a>
