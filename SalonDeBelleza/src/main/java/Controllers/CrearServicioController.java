@@ -4,7 +4,7 @@
  */
 package Controllers;
 
-import BackendDB.GestionServiciosDB;
+import BackendDB.CrearServicioDB;
 import Modelos.JWTHelper;
 import Modelos.Servicio;
 import Modelos.Usuario;
@@ -26,10 +26,10 @@ import java.util.Map;
  *
  * @author herson
  */
-@Path("/servicios")
-public class GestionServiciosController {
+@Path("/serviciosNuevos")
+public class CrearServicioController {
 
-    private final GestionServiciosDB gestionServiciosDB = new GestionServiciosDB();
+    private final CrearServicioDB crearServicioDB = new CrearServicioDB();
     private final JWTHelper jwtHelper = new JWTHelper();
 
     @POST
@@ -69,7 +69,7 @@ public class GestionServiciosController {
             servicio.setIdEncargado(idEncargado);
 
             // Crear el servicio en la base de datos
-            boolean creado = gestionServiciosDB.crearServicio(servicio, empleadosIds);
+            boolean creado = crearServicioDB.crearServicio(servicio, empleadosIds);
             if (creado) {
                 return Response.status(Response.Status.CREATED)
                         .entity("{\"message\": \"Servicio creado exitosamente.\"}")
@@ -91,7 +91,7 @@ public class GestionServiciosController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerServicios() {
         try {
-            List<Servicio> servicios = gestionServiciosDB.obtenerServicios();
+            List<Servicio> servicios = crearServicioDB.obtenerServicios();
 
             // Convertir imágenes de byte[] a Base64 y enviarlas como parte de la respuesta
             List<Map<String, Object>> serviciosConImagenes = new ArrayList<>();
@@ -146,7 +146,7 @@ public class GestionServiciosController {
             }
 
             // Obtener la lista de empleados
-            List<Usuario> empleados = gestionServiciosDB.obtenerEmpleados();
+            List<Usuario> empleados = crearServicioDB.obtenerEmpleados();
 
             return Response.ok(empleados).build();
 

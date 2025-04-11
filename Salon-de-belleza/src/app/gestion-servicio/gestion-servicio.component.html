@@ -1,0 +1,160 @@
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Gestión de Servicios</h2>
+
+  <!-- Lista de Servicios con Formularios en Collapses -->
+  <div class="accordion" id="serviciosAccordion">
+    <div
+      *ngFor="let servicio of servicios; let i = index"
+      class="accordion-item mb-4 border rounded shadow-sm"
+    >
+      <h2 class="accordion-header" id="heading-{{ i }}">
+        <button
+          class="accordion-button d-flex align-items-center"
+          type="button"
+          (click)="toggleCollapse(i)"
+          [class.collapsed]="selectedServiceIndex !== i"
+          [attr.aria-expanded]="selectedServiceIndex === i"
+        >
+          <span class="badge bg-primary rounded-pill me-3" style="min-width: 70px; text-align: center;">
+            {{ servicio.estado }}
+          </span>
+          <span class="flex-grow-1">{{ servicio.nombreServicio }}</span>
+        </button>
+      </h2>
+      <div
+        id="collapse-{{ i }}"
+        class="accordion-collapse"
+        [class.collapse]="selectedServiceIndex !== i"
+        [class.show]="selectedServiceIndex === i"
+        [attr.aria-labelledby]="'heading-' + i"
+      >
+        <div class="accordion-body">
+          <!-- Formulario de Gestión -->
+          <form [formGroup]="gestionForm" (ngSubmit)="guardarCambios()">
+            <!-- Nombre del Servicio -->
+            <div class="mb-3">
+              <label for="nombreServicio-{{ i }}" class="form-label">Nombre del Servicio</label>
+              <input
+                type="text"
+                id="nombreServicio-{{ i }}"
+                formControlName="nombreServicio"
+                class="form-control"
+                placeholder="Ingrese el nombre del servicio"
+                required
+              />
+            </div>
+            <!-- Descripción -->
+            <div class="mb-3">
+              <label for="descripcion-{{ i }}" class="form-label">Descripción</label>
+              <textarea
+                id="descripcion-{{ i }}"
+                formControlName="descripcion"
+                class="form-control"
+                placeholder="Ingrese la descripción del servicio"
+                rows="3"
+                required
+              ></textarea>
+            </div>
+            <!-- Duración -->
+            <div class="mb-3">
+              <label for="duracion-{{ i }}" class="form-label">Duración (minutos)</label>
+              <input
+                type="number"
+                id="duracion-{{ i }}"
+                formControlName="duracion"
+                class="form-control"
+                placeholder="Duración en minutos"
+                required
+              />
+            </div>
+            <!-- Precio -->
+            <div class="mb-3">
+              <label for="precio-{{ i }}" class="form-label">Precio</label>
+              <input
+                type="number"
+                id="precio-{{ i }}"
+                formControlName="precio"
+                class="form-control"
+                placeholder="Precio del servicio"
+                required
+              />
+            </div>
+            <!-- Estado -->
+            <div class="mb-3">
+              <label for="estado-{{ i }}" class="form-label">Estado</label>
+              <select
+                id="estado-{{ i }}"
+                formControlName="estado"
+                class="form-select"
+                required
+              >
+                <option value="Visible">Visible</option>
+                <option value="Oculto">Oculto</option>
+              </select>
+            </div>
+            <!-- Imagen Actual -->
+            <div class="mb-3 text-center">
+              <img
+                *ngIf="servicioSeleccionado?.imagen"
+                [src]="'data:image/jpeg;base64,' + servicioSeleccionado.imagen"
+                alt="Imagen del Servicio"
+                class="img-fluid rounded"
+                style="max-width: 200px;"
+              />
+              <p *ngIf="!servicioSeleccionado?.imagen" class="text-muted">No hay imagen disponible.</p>
+            </div>
+            <!-- Subir Nueva Imagen -->
+            <div class="mb-3">
+              <label for="imagen-{{ i }}" class="form-label">Subir Nueva Imagen</label>
+              <input
+                type="file"
+                id="imagen-{{ i }}"
+                (change)="onFileChange($event)"
+                class="form-control"
+              />
+            </div>
+            <!-- Empleados Asignados -->
+            <div class="mb-3">
+              <label class="form-label">Empleados Asignados</label>
+              <ul class="list-group">
+                <li
+                  *ngFor="let empleado of empleadosAsignados"
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <span>{{ empleado.nombre }}</span>
+                  <small class="text-muted">{{ empleado.descripcion || 'Sin descripción' }}</small>
+                  <input
+                    type="checkbox"
+                    checked
+                    (change)="onEmpleadoChange($event, empleado.idUsuario)"
+                  />
+                </li>
+              </ul>
+            </div>
+            <!-- Empleados No Asignados -->
+            <div class="mb-3">
+              <label class="form-label">Empleados No Asignados</label>
+              <ul class="list-group">
+                <li
+                  *ngFor="let empleado of empleadosNoAsignados"
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <span>{{ empleado.nombre }}</span>
+                  <small class="text-muted">{{ empleado.descripcion || 'Sin descripción' }}</small>
+                  <input
+                    type="checkbox"
+                    (change)="onEmpleadoChange($event, empleado.idUsuario)"
+                  />
+                </li>
+              </ul>
+            </div>
+            <!-- Botón para Guardar Cambios -->
+            <button type="submit" class="btn btn-success w-100">
+              Guardar Cambios
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

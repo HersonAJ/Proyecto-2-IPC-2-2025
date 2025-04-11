@@ -18,11 +18,11 @@ import java.util.List;
  *
  * @author herson
  */
-public class GestionServiciosDB {
+public class CrearServicioDB {
 
     // Método para crear un servicio
     public boolean crearServicio(Servicio servicio, List<Integer> empleadosIds) {
-        Connection connection = null; 
+        Connection connection = null;
         String queryServicio = "INSERT INTO Servicios (Nombre_Servicio, Descripción, Duración, Precio, Estado, Imagen, ID_Encargado) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
         String queryAsociacion = "INSERT INTO Trabajadores_Servicios (ID_Empleado, ID_Servicio) VALUES (?, ?)";
@@ -95,7 +95,13 @@ public class GestionServiciosDB {
     // Método para obtener todos los servicios
     public List<Servicio> obtenerServicios() {
         List<Servicio> servicios = new ArrayList<>();
-        String query = "SELECT ID_Servicio, Nombre_Servicio, Descripción, Duración, Precio, Estado, Imagen, ID_Encargado FROM Servicios";
+        String query = "SELECT s.ID_Servicio, s.Nombre_Servicio, s.Descripción, s.Duración, "
+                + "s.Precio, s.Estado, s.Imagen, s.ID_Encargado, "
+                + "GROUP_CONCAT(u.Nombre) AS EmpleadosAsignados "
+                + "FROM Servicios s "
+                + "LEFT JOIN Trabajadores_Servicios ts ON s.ID_Servicio = ts.ID_Servicio "
+                + "LEFT JOIN Usuarios u ON ts.ID_Empleado = u.ID_Usuario "
+                + "GROUP BY s.ID_Servicio";
 
         try (Connection connection = ConexionDB.getConnection(); PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
 
@@ -109,6 +115,10 @@ public class GestionServiciosDB {
                 servicio.setEstado(resultSet.getString("Estado"));
                 servicio.setImagen(resultSet.getBytes("Imagen"));
                 servicio.setIdEncargado(resultSet.getInt("ID_Encargado"));
+
+                // Agregar empleados asignados
+                String empleadosAsignados = resultSet.getString("EmpleadosAsignados");
+                servicio.setEmpleadosAsignados(empleadosAsignados != null ? empleadosAsignados.split(",") : new String[0]);
 
                 servicios.add(servicio);
             }

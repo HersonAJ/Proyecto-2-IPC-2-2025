@@ -10,7 +10,7 @@ export class ServiciosService {
   private apiURL: string;
 
   constructor(private http: HttpClient, private restConstant: RestConstants) { 
-    this.apiURL = this.restConstant.getApiURL() + 'servicios';
+    this.apiURL = this.restConstant.getApiURL() + 'serviciosNuevos';
   }
 
   // Método para crear un servicio

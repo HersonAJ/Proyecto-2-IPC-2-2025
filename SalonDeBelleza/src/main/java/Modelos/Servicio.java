@@ -18,7 +18,16 @@ public class Servicio {
     private String estado;
     private byte[] imagen;
     private int idEncargado;
+    private String [] empleadosAsignados;
 
+    public String[] getEmpleadosAsignados() {
+        return empleadosAsignados;
+    }
+
+    public void setEmpleadosAsignados(String[] empleadosAsignados) {
+        this.empleadosAsignados = empleadosAsignados;
+    }
+    
     public int getIdServicio() {
         return idServicio;
     }
