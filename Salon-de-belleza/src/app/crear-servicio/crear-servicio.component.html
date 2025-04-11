@@ -1,0 +1,100 @@
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Crear Nuevo Servicio</h2>
+  <form (ngSubmit)="crearServicio()" class="card p-4">
+    <!-- Nombre del Servicio -->
+    <div class="mb-3">
+      <label for="nombreServicio" class="form-label">Nombre del Servicio</label>
+      <input 
+        type="text" 
+        [(ngModel)]="servicio.nombreServicio" 
+        name="nombreServicio" 
+        id="nombreServicio" 
+        class="form-control" 
+        placeholder="Ingrese el nombre del servicio" 
+        required>
+    </div>
+
+    <!-- Descripción -->
+    <div class="mb-3">
+      <label for="descripcion" class="form-label">Descripción</label>
+      <textarea 
+        [(ngModel)]="servicio.descripcion" 
+        name="descripcion" 
+        id="descripcion" 
+        class="form-control" 
+        placeholder="Ingrese la descripción del servicio" 
+        rows="4" 
+        required></textarea>
+    </div>
+
+    <!-- Duración -->
+    <div class="mb-3">
+      <label for="duracion" class="form-label">Duración (minutos)</label>
+      <input 
+        type="number" 
+        [(ngModel)]="servicio.duracion" 
+        name="duracion" 
+        id="duracion" 
+        class="form-control" 
+        placeholder="Duración en minutos" 
+        required>
+    </div>
+
+    <!-- Precio -->
+    <div class="mb-3">
+      <label for="precio" class="form-label">Precio</label>
+      <input 
+        type="number" 
+        [(ngModel)]="servicio.precio" 
+        name="precio" 
+        id="precio" 
+        class="form-control" 
+        placeholder="Precio del servicio" 
+        required>
+    </div>
+
+    <!-- Estado -->
+    <div class="mb-3">
+      <label for="estado" class="form-label">Estado</label>
+      <select 
+        [(ngModel)]="servicio.estado" 
+        name="estado" 
+        id="estado" 
+        class="form-select" 
+        required>
+        <option value="Visible">Visible</option>
+        <option value="Oculto">Oculto</option>
+      </select>
+    </div>
+
+    <!-- Imagen -->
+    <div class="mb-3">
+      <label for="imagen" class="form-label">Imagen del Servicio</label>
+      <input 
+        type="file" 
+        (change)="onFileChange($event)" 
+        name="imagen" 
+        id="imagen" 
+        class="form-control">
+    </div>
+
+    <!-- Selección de Empleados -->
+    <div class="mb-3">
+      <label for="empleados" class="form-label">Seleccionar Empleados</label>
+      <div id="empleados" class="form-check" *ngFor="let empleado of empleados">
+        <input 
+          class="form-check-input" 
+          type="checkbox" 
+          [value]="empleado.idUsuario" 
+          (change)="onEmpleadoChange($event, empleado.idUsuario)"
+          id="empleado-{{empleado.idUsuario}}">
+        <label class="form-check-label" for="empleado-{{empleado.idUsuario}}">
+          {{empleado.nombre}} - {{empleado.descripcion}}
+        </label>
+      </div>
+    </div>
+
+    <!-- Botón de Enviar -->
+    <button type="submit" class="btn btn-primary w-100">Crear Servicio</button>
+  </form>
+</div>

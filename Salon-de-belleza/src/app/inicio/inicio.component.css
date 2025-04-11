@@ -13,4 +13,38 @@
   .servicios .card:hover {
     transform: scale(1.05);
   }
+  .card-img-top {
+    border-radius: 5px; /* Opcional: Redondea los bordes */
+  }
+
+  .uniform-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.uniform-image-container {
+  flex: 0 0 auto;
+  max-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  overflow: hidden;
+}
+
+.uniform-image-container img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.card-body {
+  flex: 1 1 auto;
+}
+
+  
+  
   
