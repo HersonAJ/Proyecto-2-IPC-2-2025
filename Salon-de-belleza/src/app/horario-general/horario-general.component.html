@@ -1,0 +1,41 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Configurar Horario General</h2>
+  
+    <form (ngSubmit)="guardarHorarioGeneral()">
+      <table class="table table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>Día de la Semana</th>
+            <th>Hora de Apertura</th>
+            <th>Hora de Cierre</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let dia of diasSemana; let i = index">
+            <td>{{ dia }}</td>
+            <td>
+              <input
+                type="time"
+                [(ngModel)]="horarios[i].horaApertura"
+                name="horaApertura-{{ i }}"
+                class="form-control"
+                required
+                placeholder="--:--">
+            </td>
+            <td>
+              <input
+                type="time"
+                [(ngModel)]="horarios[i].horaCierre"
+                name="horaCierre-{{ i }}"
+                class="form-control"
+                required
+                placeholder="--:--">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <button type="submit" class="btn btn-primary w-100 mt-4">Guardar Horario</button>
+    </form>
+  </div>
+  

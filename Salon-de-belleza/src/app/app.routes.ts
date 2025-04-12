@@ -7,6 +7,7 @@ import { RegistrarUsuarioComponent } from './registrar-usuario/registrar-usuario
 import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.component';
 import { CrearServicioComponent } from './crear-servicio/crear-servicio.component';
 import { GestionServicioComponent } from './gestion-servicio/gestion-servicio.component';
+import { HorarioGeneralComponent } from './horario-general/horario-general.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -17,4 +18,5 @@ export const routes: Routes = [
     {path: 'gestion-usuarios', component:GestionUsuariosComponent},
     {path: 'crear-servicio', component:CrearServicioComponent},
     {path: 'gestion-servicio', component:GestionServicioComponent},
+    {path: 'horario-general', component:HorarioGeneralComponent},
 ];
