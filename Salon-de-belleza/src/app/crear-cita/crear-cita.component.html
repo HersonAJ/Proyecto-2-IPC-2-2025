@@ -1,0 +1,89 @@
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Crear Cita</h1>
+  
+    <!-- Mensaje de feedback -->
+    <div *ngIf="mensaje" class="alert alert-info" role="alert">
+      {{ mensaje }}
+    </div>
+  
+    <form (ngSubmit)="crearCita()">
+      <!-- Selección de Servicio -->
+      <div class="form-group">
+        <label for="servicio">Servicio</label>
+        <select
+          id="servicio"
+          class="form-control"
+          [(ngModel)]="cita.idServicio"
+          (change)="onServicioChange()"
+          name="servicio"
+          required
+        >
+          <option value="" disabled selected>Seleccione un servicio</option>
+          <option *ngFor="let servicio of servicios" [value]="servicio.idServicio">
+            {{ servicio.nombreServicio }}
+          </option>
+        </select>
+      </div>
+  
+      <!-- Selección de Empleado -->
+      <div class="form-group mt-3">
+        <label for="empleado">Empleado</label>
+        <select
+          id="empleado"
+          class="form-control"
+          [(ngModel)]="cita.idEmpleado"
+          (change)="onEmpleadoYFechaChange()"
+          name="empleado"
+          required
+        >
+          <option value="" disabled selected>Seleccione un empleado</option>
+          <option *ngFor="let empleado of empleados" [value]="empleado.idUsuario">
+            {{ empleado.nombre }}
+          </option>
+        </select>
+      </div>
+  
+      <!-- Selección de Fecha -->
+      <div class="form-group mt-3">
+        <label for="fecha">Fecha</label>
+        <input
+          type="date"
+          id="fecha"
+          class="form-control"
+          [(ngModel)]="cita.fechaCita"
+          (change)="onEmpleadoYFechaChange()"
+          name="fecha"
+          required
+        />
+      </div>
+  
+      <!-- Horarios Ocupados -->
+      <div *ngIf="horariosOcupados.length > 0" class="mt-3">
+        <h5>Horarios Ocupados:</h5>
+        <ul class="list-group">
+          <li *ngFor="let bloque of horariosOcupados" class="list-group-item">
+            {{ bloque.inicio }} - {{ bloque.fin }}
+          </li>
+        </ul>
+      </div>
+  
+      <!-- Selección de Hora -->
+      <div class="form-group mt-3">
+        <label for="hora">Hora</label>
+        <input
+          type="time"
+          id="hora"
+          class="form-control"
+          [(ngModel)]="cita.horaCita"
+          name="hora"
+          required
+        />
+      </div>
+  
+      <!-- Botón para crear la cita -->
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary">Crear Cita</button>
+      </div>
+    </form>
+  </div>
+  

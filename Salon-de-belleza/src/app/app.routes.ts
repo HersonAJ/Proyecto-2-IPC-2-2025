@@ -8,6 +8,7 @@ import { GestionUsuariosComponent } from './gestion-usuarios/gestion-usuarios.co
 import { CrearServicioComponent } from './crear-servicio/crear-servicio.component';
 import { GestionServicioComponent } from './gestion-servicio/gestion-servicio.component';
 import { HorarioGeneralComponent } from './horario-general/horario-general.component';
+import { CrearCitaComponent } from './crear-cita/crear-cita.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -19,4 +20,5 @@ export const routes: Routes = [
     {path: 'crear-servicio', component:CrearServicioComponent},
     {path: 'gestion-servicio', component:GestionServicioComponent},
     {path: 'horario-general', component:HorarioGeneralComponent},
+    {path: 'crear-cita', component: CrearCitaComponent},
 ];
