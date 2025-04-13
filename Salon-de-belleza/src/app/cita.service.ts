@@ -21,16 +21,16 @@ export interface Servicio {
   duracion: number;
   precio: number;
   estado: string;
-  imagen: string | null; // La imagen puede ser binaria o null si no hay una imagen
+  imagen: string | null;
   idEncargado: number;
-  empleadosAsignados: string[]; // Nombres de los empleados asignados
+  empleadosAsignados: string[]; 
 }
 
 // Modelo para bloques horarios ocupados
 export interface BloqueOcupado {
   inicio: string;  // Formato HH:mm
   fin: string;     // Formato HH:mm
-  estado: string;  // Siempre "ocupado" en este caso
+  estado: string;  // Siempre "ocupado" 
 }
 
 @Injectable({
@@ -46,7 +46,7 @@ export class CitaService {
   // Método para crear una cita
   crearCita(cita: Cita): Observable<any> {
     const url = `${this.apiURL}citas/crear`;
-    return this.http.post<any>(url, cita); // Asegurarse de que devuelve un Observable del tipo correcto
+    return this.http.post<any>(url, cita); 
   }
   
 
@@ -61,7 +61,7 @@ export class CitaService {
     const url = `${this.apiURL}citas/servicios`;
     return this.http.get<Servicio[]>(url);
   }
-    // NUEVO MÉTODO: Obtener horarios ocupados de un empleado en una fecha específica
+    //metodo para obtener los horarios ocupados de los empleados
     obtenerHorariosOcupados(idEmpleado: number, fecha: string): Observable<BloqueOcupado[]> {
       const url = `${this.apiURL}citas/horarios-ocupados/${idEmpleado}/${fecha}`;
       return this.http.get<BloqueOcupado[]>(url);

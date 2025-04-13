@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CitaService, Cita, Servicio, BloqueOcupado } from '../cita.service';
+import { AuthService } from '../auth.service'; 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -16,7 +17,7 @@ export class CrearCitaComponent implements OnInit {
   horariosOcupados: BloqueOcupado[] = [];
   cita: Cita = {
     idServicio: 0,
-    idCliente: 1,
+    idCliente: 0, 
     idEmpleado: 0,
     fechaCita: '',
     horaCita: '',
@@ -25,7 +26,7 @@ export class CrearCitaComponent implements OnInit {
   mensaje: string = '';
   servicioSeleccionado: Servicio | null = null;
 
-  constructor(private citaService: CitaService) {}
+  constructor(private citaService: CitaService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.cargarServicios();
@@ -71,7 +72,6 @@ export class CrearCitaComponent implements OnInit {
     }
   }
   
-
   onEmpleadoYFechaChange(): void {
     if (this.cita.idEmpleado && this.cita.fechaCita) {
       this.cargarHorariosOcupados();
@@ -90,35 +90,46 @@ export class CrearCitaComponent implements OnInit {
   }
 
   crearCita(): void {
+    const idCliente = this.authService.getIdUsuarioFromToken(); // Obtener el ID del cliente desde el token
+    if (!idCliente) {
+      this.mensaje = 'Error: No se pudo identificar al cliente autenticado.';
+      return;
+    }
+
+    this.cita.idCliente = idCliente; // Asignar el ID del cliente a la cita
+
     if (this.validarCita()) {
       this.citaService.crearCita(this.cita).subscribe({
         next: (response) => {
-          // Procesar la respuesta y mostrar el mensaje del backend
           this.mensaje = response?.message || 'La cita fue creada exitosamente.';
-          this.resetFormulario(); // Reiniciar el formulario tras un éxito
+          this.resetFormulario();
         },
         error: (err) => {
-          // Mostrar mensajes claros en caso de error
+          console.error('Error desde el backend:', err); // Mostrar el error recibido
           this.mensaje = err.error?.message || 'Ocurrió un error al crear la cita.';
+        },
+        complete: () => {
+          // Mensaje de respaldo
+          if (!this.mensaje) {
+            this.mensaje = 'La cita fue creada exitosamente.';
+          }
         },
       });
     }
   }
-  
 
   validarCita(): boolean {
     if (!this.cita.idServicio || !this.cita.idEmpleado || !this.cita.fechaCita || !this.cita.horaCita) {
       this.mensaje = 'Por favor, completa todos los campos antes de enviar.';
       return false;
     }
-
-    return true; // La validación de horarios ocupados ya se realiza en el backend.
+    return true; 
   }
 
   resetFormulario(): void {
     this.cita = {
       idServicio: 0,
-      idCliente: 1,
+      idCliente: 0, 
       idEmpleado: 0,
       fechaCita: '',
       horaCita: '',
@@ -128,5 +139,4 @@ export class CrearCitaComponent implements OnInit {
     this.empleados = []; // Limpiar los empleados al reiniciar el formulario
     this.mensaje = ''; // Limpiar los mensajes
   }
-  
 }

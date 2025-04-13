@@ -128,7 +128,6 @@ public class CitaDB {
 
         try (Connection connection = ConexionDB.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            // Configuramos el parámetro del día de la semana
             preparedStatement.setInt(1, diaSemanaBD);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -150,7 +149,7 @@ public class CitaDB {
             System.out.println("Error al validar el horario de apertura: " + e.getMessage());
             e.printStackTrace();
         }
-        return false; // Si ocurre un error, asumime que no es válido
+        return false;
     }
 
     public boolean validarDisponibilidadTrabajador(int idEmpleado, LocalDate fechaCita, LocalTime horaCita) {
@@ -217,46 +216,44 @@ public class CitaDB {
         }
         return -1; // Error
     }
-    
+
     //metodo de prueba para enviar la disponibilidad
-public List<Map<String, String>> obtenerHorariosOcupados(int idEmpleado, LocalDate fecha) {
-    List<Map<String, String>> horariosOcupados = new ArrayList<>();
-    
-    String sql = "SELECT c.Hora_Cita, s.Duración " +
-                 "FROM Citas c " +
-                 "JOIN Servicios s ON c.ID_Servicio = s.ID_Servicio " +
-                 "WHERE c.ID_Empleado = ? " +
-                 "AND c.Fecha_Cita = ? " +
-                 "AND c.Estado = 'Pendiente' " +
-                 "ORDER BY c.Hora_Cita";
-    
-    try (Connection connection = ConexionDB.getConnection();
-         PreparedStatement stmt = connection.prepareStatement(sql)) {
-        
-        stmt.setInt(1, idEmpleado);
-        stmt.setDate(2, java.sql.Date.valueOf(fecha));
-        
-        ResultSet rs = stmt.executeQuery();
-        
-        while (rs.next()) {
-            LocalTime horaInicio = rs.getTime("Hora_Cita").toLocalTime();
-            int duracion = rs.getInt("Duración");
-            LocalTime horaFin = horaInicio.plusMinutes(duracion);
-            
-            Map<String, String> bloque = new HashMap<>();
-            bloque.put("inicio", horaInicio.toString());
-            bloque.put("fin", horaFin.toString());
-            bloque.put("estado", "ocupado");
-            
-            horariosOcupados.add(bloque);
+    public List<Map<String, String>> obtenerHorariosOcupados(int idEmpleado, LocalDate fecha) {
+        List<Map<String, String>> horariosOcupados = new ArrayList<>();
+
+        String sql = "SELECT c.Hora_Cita, s.Duración "
+                + "FROM Citas c "
+                + "JOIN Servicios s ON c.ID_Servicio = s.ID_Servicio "
+                + "WHERE c.ID_Empleado = ? "
+                + "AND c.Fecha_Cita = ? "
+                + "AND c.Estado = 'Pendiente' "
+                + "ORDER BY c.Hora_Cita";
+
+        try (Connection connection = ConexionDB.getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, idEmpleado);
+            stmt.setDate(2, java.sql.Date.valueOf(fecha));
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                LocalTime horaInicio = rs.getTime("Hora_Cita").toLocalTime();
+                int duracion = rs.getInt("Duración");
+                LocalTime horaFin = horaInicio.plusMinutes(duracion);
+
+                Map<String, String> bloque = new HashMap<>();
+                bloque.put("inicio", horaInicio.toString());
+                bloque.put("fin", horaFin.toString());
+                bloque.put("estado", "ocupado");
+
+                horariosOcupados.add(bloque);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener horarios ocupados: " + e.getMessage());
+            e.printStackTrace();
         }
-        
-    } catch (SQLException e) {
-        System.out.println("Error al obtener horarios ocupados: " + e.getMessage());
-        e.printStackTrace();
+
+        return horariosOcupados;
     }
-    
-    return horariosOcupados;
-}
-        
 }
