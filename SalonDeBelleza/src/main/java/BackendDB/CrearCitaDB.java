@@ -18,7 +18,7 @@ import java.util.Map;
  *
  * @author herson
  */
-public class CitaDB {
+public class CrearCitaDB {
 
     public boolean crearCita(Cita cita) {
         LocalTime horaCita = cita.getHoraCita();

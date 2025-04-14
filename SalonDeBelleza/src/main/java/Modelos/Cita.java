@@ -14,13 +14,23 @@ import java.time.LocalTime;
 public class Cita {
     
     private int idCita;
-    private int idServicio;
     private int idCliente;
-    private int idEmpleado;
     private LocalDate fechaCita;
     private LocalTime horaCita;
     private String estado;
     private boolean facturaGenerada;
+    
+    //elementos para obtener la cita completa
+    // Detalles del servicio
+    private int idServicio;
+    private String nombreServicio;
+    private String descripcionServicio;
+    private int duracionServicio;
+    private double precioServicio;
+
+    // Detalles del empleado
+    private int idEmpleado;
+    private String nombreEmpleado;
 
     public int getIdCita() {
         return idCita;
@@ -54,6 +64,26 @@ public class Cita {
         return facturaGenerada;
     }
 
+    public String getNombreServicio() {
+        return nombreServicio;
+    }
+
+    public String getDescripcionServicio() {
+        return descripcionServicio;
+    }
+
+    public int getDuracionServicio() {
+        return duracionServicio;
+    }
+
+    public double getPrecioServicio() {
+        return precioServicio;
+    }
+
+    public String getNombreEmpleado() {
+        return nombreEmpleado;
+    }
+    
     public void setIdCita(int idCita) {
         this.idCita = idCita;
     }
@@ -84,6 +114,26 @@ public class Cita {
 
     public void setFacturaGenerada(boolean facturaGenerada) {
         this.facturaGenerada = facturaGenerada;
+    }
+
+    public void setNombreServicio(String nombreServicio) {
+        this.nombreServicio = nombreServicio;
+    }
+
+    public void setDescripcionServicio(String descripcionServicio) {
+        this.descripcionServicio = descripcionServicio;
+    }
+
+    public void setDuracionServicio(int duracionServicio) {
+        this.duracionServicio = duracionServicio;
+    }
+
+    public void setPrecioServicio(double precioServicio) {
+        this.precioServicio = precioServicio;
+    }
+
+    public void setNombreEmpleado(String nombreEmpleado) {
+        this.nombreEmpleado = nombreEmpleado;
     }
     
     @Override

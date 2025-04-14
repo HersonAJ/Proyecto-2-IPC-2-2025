@@ -4,7 +4,7 @@
  */
 package Controllers;
 
-import BackendDB.CitaDB;
+import BackendDB.CrearCitaDB;
 import Modelos.Cita;
 import Modelos.Servicio;
 import Modelos.Usuario;
@@ -25,9 +25,9 @@ import java.util.Map;
  * @author herson
  */
 @Path("/citas")
-public class CitaController {
+public class CrearCitaController {
 
-    private final CitaDB citaDB = new CitaDB();
+    private final CrearCitaDB citaDB = new CrearCitaDB();
 
     @POST
     @Path("/crear")
