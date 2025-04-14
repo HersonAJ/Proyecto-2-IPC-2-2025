@@ -31,6 +31,9 @@ public class Cita {
     // Detalles del empleado
     private int idEmpleado;
     private String nombreEmpleado;
+    
+    //detalles del cliente
+    private String nombreCliente;
 
     public int getIdCita() {
         return idCita;
@@ -83,6 +86,10 @@ public class Cita {
     public String getNombreEmpleado() {
         return nombreEmpleado;
     }
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
     
     public void setIdCita(int idCita) {
         this.idCita = idCita;
@@ -134,6 +141,10 @@ public class Cita {
 
     public void setNombreEmpleado(String nombreEmpleado) {
         this.nombreEmpleado = nombreEmpleado;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
     }
     
     @Override

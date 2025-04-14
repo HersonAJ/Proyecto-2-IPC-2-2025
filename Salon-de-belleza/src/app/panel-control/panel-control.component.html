@@ -24,11 +24,11 @@
     </a>
 
     <!-- Opciones para Empleado -->
-    <a *ngIf="rolUsuario === 'Empleado'" routerLink="/citas-asignadas"
+    <a *ngIf="rolUsuario === 'Empleado'" routerLink="/citas-asignadas-empleado"
       class="list-group-item list-group-item-action bg-success text-white">
       <i class="bi bi-clipboard-check me-2"></i>Citas Asignadas
     </a>
-    <a *ngIf="rolUsuario === 'Empleado'" routerLink="/actualizar-cita"
+    <a *ngIf="rolUsuario === 'Empleado'" routerLink="/gestionar-citas-empleado"
       class="list-group-item list-group-item-action bg-success text-white">
       <i class="bi bi-pencil-square me-2"></i>Actualizar Cita
     </a>

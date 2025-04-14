@@ -10,6 +10,8 @@ import { GestionServicioComponent } from './gestion-servicio/gestion-servicio.co
 import { HorarioGeneralComponent } from './horario-general/horario-general.component';
 import { CrearCitaComponent } from './crear-cita/crear-cita.component';
 import { CitasAgendadasClienteComponent } from './citas-agendadas-cliente/citas-agendadas-cliente.component';
+import { CitasAsignadasComponent } from './citas-asignadas/citas-asignadas.component';
+import { GestionarCitasEmpleadoComponent } from './gestionar-citas-empleado/gestionar-citas-empleado.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -23,4 +25,6 @@ export const routes: Routes = [
     {path: 'horario-general', component:HorarioGeneralComponent},
     {path: 'crear-cita', component: CrearCitaComponent},
     {path: 'citas-agendadas-cliente', component: CitasAgendadasClienteComponent},
+    {path: 'citas-asignadas-empleado', component: CitasAsignadasComponent},
+    {path: 'gestionar-citas-empleado' , component : GestionarCitasEmpleadoComponent}
 ];
