@@ -33,6 +33,21 @@ export interface BloqueOcupado {
   estado: string;  // Siempre "ocupado" 
 }
 
+export interface Factura {
+  idFactura: number;
+  idCita: number;
+  idCliente: number;
+  nombreCliente: string;
+  direccionCliente: string;
+  numeroTelefonoCliente: string;
+  idEmpleado: number;
+  nombreEmpleado: string;
+  idServicio: number;
+  total: number;
+  fechaFactura: string;
+  detalles: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -61,9 +76,15 @@ export class CitaService {
     const url = `${this.apiURL}citas/servicios`;
     return this.http.get<Servicio[]>(url);
   }
-    //metodo para obtener los horarios ocupados de los empleados
-    obtenerHorariosOcupados(idEmpleado: number, fecha: string): Observable<BloqueOcupado[]> {
+  //metodo para obtener los horarios ocupados de los empleados
+  obtenerHorariosOcupados(idEmpleado: number, fecha: string): Observable<BloqueOcupado[]> {
       const url = `${this.apiURL}citas/horarios-ocupados/${idEmpleado}/${fecha}`;
       return this.http.get<BloqueOcupado[]>(url);
     }
+
+  // Método para obtener las facturas del cliente
+  obtenerFacturasCliente(idCliente: number): Observable<Factura[]> {
+    const url = `${this.apiURL}facturas/cliente/${idCliente}`;
+    return this.http.get<Factura[]>(url);
+  }
 }

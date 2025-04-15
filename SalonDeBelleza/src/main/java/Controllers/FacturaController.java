@@ -10,6 +10,7 @@ import Modelos.Cita;
 import Modelos.Factura;
 import Modelos.JWTHelper;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -18,6 +19,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -98,4 +100,22 @@ public class FacturaController {
         }
     }
 
+    @GET
+    @Path("/cliente/{idCliente}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerFacturasPorCliente(@PathParam("idCliente") int idCliente) {
+        try {
+            List<Factura> facturas = facturaDB.obtenerFacturasPorCliente(idCliente);
+            if (facturas.isEmpty()) {
+                return Response.status(Response.Status.NO_CONTENT)
+                        .entity("{\"message\": \"No hay facturas disponibles para este cliente.\"}")
+                        .build();
+            }
+            return Response.ok(facturas).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"message\": \"Error al obtener las facturas: " + e.getMessage() + "\"}")
+                    .build();
+        }
+    }
 }

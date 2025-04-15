@@ -15,11 +15,32 @@ public class Factura {
     private int idFactura;
     private int idCita;
     private int idCliente;
+    private String nombreCliente;
+    private String direccionCliente;
+    private String numeroTelefonoCliente;
+    private String nombreEmpleado;
     private int idEmpleado;
     private int idServicio;
     private double total;
     private LocalDate fechaFactura;
     private String detalles;
+
+    public Factura(int idFactura, int idCita, int idCliente, String nombreCliente, String direccionCliente,
+            String numeroTelefonoCliente, String nombreEmpleado, int idEmpleado, int idServicio,
+            double total, LocalDate fechaFactura, String detalles) {
+        this.idFactura = idFactura;
+        this.idCita = idCita;
+        this.idCliente = idCliente;
+        this.nombreCliente = nombreCliente;
+        this.direccionCliente = direccionCliente;
+        this.numeroTelefonoCliente = numeroTelefonoCliente;
+        this.nombreEmpleado = nombreEmpleado;
+        this.idEmpleado = idEmpleado;
+        this.idServicio = idServicio;
+        this.total = total;
+        this.fechaFactura = fechaFactura;
+        this.detalles = detalles;
+    }
 
     public Factura(int idFactura, int idCita, int idCliente, int idEmpleado, int idServicio,
             double total, LocalDate fechaFactura, String detalles) {
@@ -80,6 +101,22 @@ public class Factura {
         return total;
     }
 
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public String getDireccionCliente() {
+        return direccionCliente;
+    }
+
+    public String getNumeroTelefonoCliente() {
+        return numeroTelefonoCliente;
+    }
+
+    public String getNombreEmpleado() {
+        return nombreEmpleado;
+    }
+
     public void setTotal(double total) {
         this.total = total;
     }
@@ -99,4 +136,21 @@ public class Factura {
     public void setDetalles(String detalles) {
         this.detalles = detalles;
     }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
+
+    public void setDireccionCliente(String direccionCliente) {
+        this.direccionCliente = direccionCliente;
+    }
+
+    public void setNumeroTelefonoCliente(String numeroTelefonoCliente) {
+        this.numeroTelefonoCliente = numeroTelefonoCliente;
+    }
+
+    public void setNombreEmpleado(String nombreEmpleado) {
+        this.nombreEmpleado = nombreEmpleado;
+    }
+
 }

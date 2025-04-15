@@ -13,6 +13,7 @@ import { CitasAgendadasClienteComponent } from './citas-agendadas-cliente/citas-
 import { CitasAsignadasComponent } from './citas-asignadas/citas-asignadas.component';
 import { GestionarCitasEmpleadoComponent } from './gestionar-citas-empleado/gestionar-citas-empleado.component';
 import { CrearFacturaComponent } from './crear-factura/crear-factura.component';
+import { FacturaClienteComponent } from './factura-cliente/factura-cliente.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -29,4 +30,5 @@ export const routes: Routes = [
     {path: 'citas-asignadas-empleado', component: CitasAsignadasComponent},
     {path: 'gestionar-citas-empleado' , component : GestionarCitasEmpleadoComponent},
     {path: 'crear-factura' , component: CrearFacturaComponent},
+    {path: 'factura-cliente', component: FacturaClienteComponent},
 ];

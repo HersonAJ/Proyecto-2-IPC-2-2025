@@ -34,25 +34,25 @@ export class CitasAgendadasClienteComponent implements OnInit{
     }
 
     this.obtenerCitaService.obtenerCitasPendientes(token, idCliente).subscribe({
-      next: (data: Cita[]) => {
-        this.citas = data;
-        this,this.cargando = false;
+      next: (data: Cita[] | null) => {
+        this.citas = data || []; // Asignar un array vacío si no hay datos
+        this.cargando = false;
       },
       error: (err) => {
-        console.error('Error al obtener la citas pendientes:' ,err);
-        this.mensaje = 'No se pudieron cargas las citas pendientes.';
+        console.error('Error al obtener las citas pendientes:', err);
+        this.mensaje = 'No se pudieron cargar las citas pendientes.';
         this.cargando = false;
       }
     });
-  }
+  }  
 
   transformarFecha(fecha: number[]): string {
-    const [year, month, day] = fecha; // Desestructurar el arreglo
+    const [year, month, day] = fecha; 
     return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
   }
   
   transformarHora(hora: number[]): string {
-    const [hour, minute] = hora; // Desestructurar el arreglo
+    const [hour, minute] = hora; 
     return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
   }
 }

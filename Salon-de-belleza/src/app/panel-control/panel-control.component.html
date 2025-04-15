@@ -18,6 +18,10 @@
       class="list-group-item list-group-item-action bg-primary text-white">
       <i class="bi bi-x-circle me-2"></i>Cancelar Cita
     </a>
+  <a *ngIf="rolUsuario === 'Cliente'" routerLink="/factura-cliente"
+    class="list-group-item list-group-item-action bg-primary text-white">
+    <i class="bi bi-x-circle me-2"></i>Facturas
+  </a>    
     <a *ngIf="rolUsuario === 'Cliente'" routerLink="/historial-citas"
       class="list-group-item list-group-item-action bg-primary text-white">
       <i class="bi bi-clock-history me-2"></i>Historial
