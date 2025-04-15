@@ -18,6 +18,16 @@ export interface Cita {
   estado: string;
 }
 
+export interface Factura {
+  idFactura: number;
+  idCita: number;
+  idCliente: number;
+  idEmpleado: number;
+  idServicio: number;
+  total: number;
+  fechaFactura: string;
+  detalles: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +50,12 @@ export class CitaEmpleadoService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.put(url, null, { headers });
   }
+
+    // Crear una factura
+    crearFactura(token: string, idCita: number): Observable<Factura> {
+      const url = `${this.apiURL}facturas/crear/${idCita}`;
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      return this.http.post<Factura>(url, null, { headers });
+    }
   
 }

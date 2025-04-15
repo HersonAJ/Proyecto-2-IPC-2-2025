@@ -96,4 +96,48 @@ public class GestionCitaEmpleadoDB {
         }
     }
 
+    //metodo para obtener las citas para la factura
+    public Cita obtenerCitaPorId(int idCita) {
+        String sql = "SELECT c.ID_Cita, c.Fecha_Cita, c.Hora_Cita, c.Estado, c.Factura_Generada, "
+                + "s.ID_Servicio, s.Nombre_Servicio, s.Descripción AS Descripcion_Servicio, s.Duración, s.Precio, "
+                + "u_cliente.ID_Usuario AS ID_Cliente, u_cliente.Nombre AS Nombre_Cliente "
+                + "FROM Citas c "
+                + "INNER JOIN Servicios s ON c.ID_Servicio = s.ID_Servicio "
+                + "INNER JOIN Usuarios u_cliente ON c.ID_Cliente = u_cliente.ID_Usuario "
+                + "WHERE c.ID_Cita = ?";
+
+        try (Connection connection = ConexionDB.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, idCita);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                Cita cita = new Cita();
+                cita.setIdCita(resultSet.getInt("ID_Cita"));
+                cita.setFechaCita(resultSet.getDate("Fecha_Cita").toLocalDate());
+                cita.setHoraCita(resultSet.getTime("Hora_Cita").toLocalTime());
+                cita.setEstado(resultSet.getString("Estado"));
+                cita.setFacturaGenerada(resultSet.getBoolean("Factura_Generada"));
+
+                // Detalles del servicio
+                cita.setIdServicio(resultSet.getInt("ID_Servicio"));
+                cita.setNombreServicio(resultSet.getString("Nombre_Servicio"));
+                cita.setDescripcionServicio(resultSet.getString("Descripcion_Servicio"));
+                cita.setDuracionServicio(resultSet.getInt("Duración"));
+                cita.setPrecioServicio(resultSet.getDouble("Precio"));
+
+                // Detalles del cliente
+                cita.setIdCliente(resultSet.getInt("ID_Cliente"));
+                cita.setNombreCliente(resultSet.getString("Nombre_Cliente"));
+
+                return cita; // Retorna la cita encontrada
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null; 
+    }
+
 }

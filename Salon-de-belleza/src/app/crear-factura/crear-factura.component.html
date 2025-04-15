@@ -1,0 +1,20 @@
+<div class="container factura-detalles my-4">
+    <h2 class="text-center mb-4">Detalles de la Factura</h2>
+  
+    <!-- Mostrar datos de la factura -->
+    <p><strong>Cliente:</strong> {{ nombreCliente }}</p>
+    <p><strong>Servicio:</strong> {{ nombreServicio }}</p>
+    <p><strong>Duración:</strong> {{ duracionServicio }} minutos</p>
+    <p><strong>Precio:</strong> Q{{ precioServicio }}</p>
+  
+    <!-- Mensaje de estado -->
+    <div *ngIf="mensaje" class="alert alert-success text-center mt-3">
+      {{ mensaje }}
+    </div>
+  
+    <!-- Botón para confirmar la factura -->
+    <div class="text-center mt-4">
+      <button class="btn btn-primary" (click)="confirmarFactura()">Confirmar Factura</button>
+    </div>
+  </div>
+  
