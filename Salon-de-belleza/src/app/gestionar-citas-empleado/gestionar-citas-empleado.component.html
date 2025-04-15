@@ -41,7 +41,6 @@
             <select class="form-select" [disabled]="cita.estado !== 'Pendiente'" (change)="cambiarEstado(cita.idCita, $event)">
               <option [selected]="cita.estado === 'Pendiente'" value="Pendiente">Pendiente</option>
               <option [selected]="cita.estado === 'Atendida'" value="Atendida">Atendida</option>
-              <option [selected]="cita.estado === 'Cancelada'" value="Cancelada">Cancelada</option>
               <option [selected]="cita.estado === 'No Presentado'" value="No Presentado">No Presentado</option>
             </select>
           </td>
@@ -51,31 +50,27 @@
   </div>
 </div>
 
-<!-- Mensaje de error si no hay citas -->
+<!-- Mensaje si no hay citas -->
 <div *ngIf="!cargando && estados.length === 0" class="alert alert-info text-center mt-4">
   No hay citas asignadas para gestionar.
 </div>
 
-<!-- Modal para generar la factura -->
-<div *ngIf="mostrarFactura" class="modal fade show d-block" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Generar Factura</h5>
-        <button type="button" class="btn-close" (click)="mostrarFactura = false" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Componente CrearFactura -->
-        <app-crear-factura 
-          [idCita]="citaSeleccionada.idCita"
-          [nombreServicio]="citaSeleccionada.nombreServicio"
-          [duracionServicio]="citaSeleccionada.duracionServicio"
-          [precioServicio]="citaSeleccionada.precioServicio"
-          [nombreCliente]="citaSeleccionada.nombreCliente"
-          (facturaConfirmada)="confirmarFactura()">
-        </app-crear-factura>
-      </div>
-    </div>
+<!-- Sección fija para generar factura -->
+<div *ngIf="mostrarFactura" class="container my-5 border rounded p-4 bg-light">
+  <h3 class="text-center mb-4">Detalles de la Factura</h3>
+  
+  <!-- Componente CrearFactura -->
+  <app-crear-factura 
+    [idCita]="citaSeleccionada.idCita"
+    [nombreServicio]="citaSeleccionada.nombreServicio"
+    [duracionServicio]="citaSeleccionada.duracionServicio"
+    [precioServicio]="citaSeleccionada.precioServicio"
+    [nombreCliente]="citaSeleccionada.nombreCliente"
+    (facturaConfirmada)="confirmarFactura()">
+  </app-crear-factura>
+  
+  <!-- Botón para cerrar la sección -->
+  <div class="text-center mt-4">
+    <button class="btn btn-secondary" (click)="mostrarFactura = false">Cancelar</button>
   </div>
 </div>
-

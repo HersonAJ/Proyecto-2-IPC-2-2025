@@ -65,28 +65,31 @@ export class GestionarCitasEmpleadoComponent implements OnInit {
 
   cambiarEstado(idCita: number, event: Event): void {
     const nuevoEstado = (event.target as HTMLSelectElement).value;
-
-    // Confirmar antes de proceder
+  
     const confirmacion = window.confirm(`¿Está seguro de que desea cambiar el estado a "${nuevoEstado}"?`);
     if (!confirmacion) {
-      return; 
+      return;
     }
-
+  
     if (!this.token) {
       this.mensaje = 'Error: No se encontró un token válido.';
       return;
     }
-
+  
+    // Validación para evitar la cancelación de citas
+    if (nuevoEstado === 'Cancelada') {
+      this.mensaje = 'No tienes permiso para cancelar citas.';
+      return;
+    }
+  
     if (nuevoEstado === 'Atendida') {
-      // Buscar la cita seleccionada y preparar datos para el componente CrearFactura
       this.citaSeleccionada = this.buscarCitaPorId(idCita);
-      this.mostrarFactura = true; // Mostrar el componente CrearFactura
+      this.mostrarFactura = true;
     } else {
-      // Cambiar el estado directamente sin mostrar factura
       this.citaEmpleadoService.cambiarEstadoCita(this.token, idCita, nuevoEstado).subscribe({
         next: () => {
           this.mensaje = 'El estado de la cita se actualizó correctamente.';
-          this.obtenerCitas(); // Refrescar las citas después del cambio
+          this.obtenerCitas();
         },
         error: (error: HttpErrorResponse) => {
           this.mensaje = 'Error al cambiar el estado de la cita. Inténtelo nuevamente.';
@@ -94,7 +97,7 @@ export class GestionarCitasEmpleadoComponent implements OnInit {
         }
       });
     }
-  }
+  }  
 
   buscarCitaPorId(idCita: number): Cita {
     for (const citas of Object.values(this.citasPorEstado)) {
