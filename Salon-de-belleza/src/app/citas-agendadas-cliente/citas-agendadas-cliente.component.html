@@ -1,38 +1,42 @@
 <div *ngIf="cargando" class="d-flex justify-content-center align-items-center my-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Cargando...</span>
-    </div>
-    <p class="ms-3">Cargando citas agendadas...</p>
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Cargando...</span>
   </div>
-  
-  <div *ngIf="!cargando && citas.length > 0" class="container my-4">
-    <h2 class="text-center mb-4">Mis Citas Agendadas</h2>
-    <div class="row g-4">
-      <div *ngFor="let cita of citas" class="col-md-6 col-lg-4">
-        <div class="card border-primary shadow hover-effect"> 
-          <div class="card-header bg-primary text-white text-center">
-            <h5 class="mb-0">{{ cita.nombreServicio }}</h5>
-          </div>
-          <div class="card-body">
-            <h6 class="card-subtitle mb-2 text-muted">Empleado: {{ cita.nombreEmpleado }}</h6>
-            <p class="card-text">
-              <strong>Fecha:</strong> {{ transformarFecha(cita.fechaCita) }}<br>
-              <strong>Hora:</strong> {{ transformarHora(cita.horaCita) }}<br>
-              <strong>Descripción:</strong> {{ cita.descripcionServicio }}<br>
-              <strong>Duración:</strong> {{ cita.duracionServicio }} minutos<br>
-              <strong>Precio:</strong> Q{{ cita.precioServicio }}
-            </p>
-          </div>
+  <p class="ms-3">Cargando citas agendadas...</p>
+</div>
+
+<div *ngIf="!cargando && citas.length > 0" class="container my-4">
+  <h2 class="text-center mb-4">Mis Citas Agendadas</h2>
+  <div class="row g-4">
+    <div *ngFor="let cita of citas" class="col-md-6 col-lg-4">
+      <div class="card border-primary shadow hover-effect">
+        <div class="card-header bg-primary text-white text-center">
+          <h5 class="mb-0">{{ cita.nombreServicio }}</h5>
+        </div>
+        <div class="card-body">
+          <h6 class="card-subtitle mb-2 text-muted">Empleado: {{ cita.nombreEmpleado }}</h6>
+          <p class="card-text">
+            <strong>Fecha:</strong> {{ transformarFecha(cita.fechaCita) }}<br>
+            <strong>Hora:</strong> {{ transformarHora(cita.horaCita) }}<br>
+            <strong>Descripción:</strong> {{ cita.descripcionServicio }}<br>
+            <strong>Duración:</strong> {{ cita.duracionServicio }} minutos<br>
+            <strong>Precio:</strong> Q{{ cita.precioServicio }}
+          </p>
+
+          <!-- Botón para cancelar la cita -->
+          <button class="btn btn-danger w-100 mt-3" (click)="cancelarCita(cita.idCita)">
+            Cancelar Cita
+          </button>
         </div>
       </div>
     </div>
   </div>
-  
-  <div *ngIf="!cargando && citas.length === 0" class="alert alert-info text-center mt-4">
-    No tienes citas agendadas pendientes.
-  </div>
-  
-  <div *ngIf="mensaje" class="alert alert-danger text-center mt-4">
-    {{ mensaje }}
-  </div>
-  
+</div>
+
+<div *ngIf="!cargando && citas.length === 0" class="alert alert-info text-center mt-4">
+  No tienes citas agendadas pendientes.
+</div>
+
+<div *ngIf="mensaje" class="alert alert-danger text-center mt-4">
+  {{ mensaje }}
+</div>

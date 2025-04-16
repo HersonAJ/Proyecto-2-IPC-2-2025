@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ObtenerCitaService, Cita } from '../obtener-cita.service';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
+import { CancelarCitaService } from '../cancelar-cita.service';
 
 @Component({
   selector: 'app-citas-agendadas-cliente',
@@ -16,7 +17,7 @@ export class CitasAgendadasClienteComponent implements OnInit{
   mensaje: string = '';
   cargando: boolean = true;
 
-  constructor(private obtenerCitaService: ObtenerCitaService, private authService: AuthService) {
+  constructor(private obtenerCitaService: ObtenerCitaService, private authService: AuthService, private cancelarCitaService: CancelarCitaService) {
   }
 
   ngOnInit(): void {
@@ -55,4 +56,36 @@ export class CitasAgendadasClienteComponent implements OnInit{
     const [hour, minute] = hora; 
     return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
   }
+
+  cancelarCita(idCita: number): void {
+    const confirmacion = window.confirm('¿Estás seguro de que deseas cancelar esta cita?');
+    
+    if (!confirmacion) {
+      // Si el usuario cancela la acción,  detiene el flujo
+      return;
+    }
+  
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.mensaje = 'No se encontró un token válido.';
+      return;
+    }
+  
+    this.cancelarCitaService.cancelarCita(token, idCita).subscribe({
+      next: (response) => {
+        this.mensaje = response.message;
+        this.cargarCitasAgendadas(); 
+      },
+      error: (err) => {
+        if (err.status === 401) {
+          this.mensaje = 'Token inválido o vencido.';
+        } else if (err.status === 400) {
+          this.mensaje = 'No se pudo cancelar la cita. Verifica el ID de la cita.';
+        } else {
+          this.mensaje = 'Error al cancelar la cita. Inténtalo más tarde.';
+        }
+        console.error(err);
+      }
+    });
+  }  
 }
