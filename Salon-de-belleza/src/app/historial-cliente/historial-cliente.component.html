@@ -1,0 +1,62 @@
+<div class="container">
+    <h2>Historial de Citas</h2>
+  
+    <!-- Botones para alternar entre los historiales -->
+    <div class="buttons">
+      <button class="btn btn-primary" (click)="mostrarHistorialAtendidas()">Ver Citas Atendidas</button>
+      <button class="btn btn-secondary" (click)="mostrarHistorialCanceladas()">Ver Citas Canceladas</button>
+    </div>
+  
+    <hr />
+  
+    <!-- Sección para mostrar las citas atendidas -->
+    <div *ngIf="mostrarAtendidas">
+      <h3>Citas Atendidas</h3>
+      <div *ngIf="loadingAtendidas" class="spinner">
+        <p>Cargando citas atendidas...</p>
+      </div>
+      <div *ngIf="errorAtendidas" class="alert alert-danger">
+        {{ errorAtendidas }}
+      </div>
+      <div *ngIf="!loadingAtendidas && citasAtendidas.length === 0" class="alert alert-info">
+        No tienes citas atendidas.
+      </div>
+      <ul *ngIf="citasAtendidas.length > 0" class="list-group">
+        <li *ngFor="let cita of citasAtendidas" class="list-group-item">
+          <strong>Servicio:</strong> {{ cita.nombreServicio }}<br />
+          <strong>Empleado:</strong> {{ cita.nombreEmpleado }}<br />
+          <strong>Fecha:</strong> {{ cita.fechaCita | date: 'dd/MM/yyyy' }}<br />
+          <strong>Hora:</strong> {{ cita.horaCita }}<br />          
+          <strong>Total: </strong> {{cita.precioServicio |currency: 'Q' }} <br/>
+          <strong>Estado:</strong> {{ cita.estado }}<br />
+          <strong>Factura Asignada:</strong> {{cita.idFactura}}
+        </li>
+      </ul>
+    </div>
+  
+    <hr />
+  
+    <!-- Sección para mostrar las citas canceladas -->
+    <div *ngIf="mostrarCanceladas">
+      <h3>Citas Canceladas</h3>
+      <div *ngIf="loadingCanceladas" class="spinner">
+        <p>Cargando citas canceladas...</p>
+      </div>
+      <div *ngIf="errorCanceladas" class="alert alert-danger">
+        {{ errorCanceladas }}
+      </div>
+      <div *ngIf="!loadingCanceladas && citasCanceladas.length === 0" class="alert alert-info">
+        No tienes citas canceladas.
+      </div>
+      <ul *ngIf="citasCanceladas.length > 0" class="list-group">
+        <li *ngFor="let cita of citasCanceladas" class="list-group-item">
+          <strong>Servicio:</strong> {{ cita.nombreServicio }}<br />
+          <strong>Empleado:</strong> {{ cita.nombreEmpleado }}<br />
+          <strong>Fecha:</strong> {{ cita.fechaCita | date: 'dd/MM/yyyy' }}<br />
+          <strong>Hora:</strong> {{ cita.horaCita }}<br />          
+          <strong>Estado:</strong> {{ cita.estado }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  

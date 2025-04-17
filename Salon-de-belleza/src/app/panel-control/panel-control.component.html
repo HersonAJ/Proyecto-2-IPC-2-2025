@@ -14,15 +14,11 @@
       class="list-group-item list-group-item-action bg-primary text-white">
       <i class="bi bi-calendar-range me-2"></i>Citas Agendadas
     </a>
-    <a *ngIf="rolUsuario === 'Cliente'" routerLink="/cancelar-cita"
+    <a *ngIf="rolUsuario === 'Cliente'" routerLink="/factura-cliente"
       class="list-group-item list-group-item-action bg-primary text-white">
-      <i class="bi bi-x-circle me-2"></i>Cancelar Cita
+      <i class="bi bi-receipt me-2"></i>Facturas
     </a>
-  <a *ngIf="rolUsuario === 'Cliente'" routerLink="/factura-cliente"
-    class="list-group-item list-group-item-action bg-primary text-white">
-    <i class="bi bi-x-circle me-2"></i>Facturas
-  </a>    
-    <a *ngIf="rolUsuario === 'Cliente'" routerLink="/historial-citas"
+    <a *ngIf="rolUsuario === 'Cliente'" routerLink="/historial-cliente"
       class="list-group-item list-group-item-action bg-primary text-white">
       <i class="bi bi-clock-history me-2"></i>Historial
     </a>

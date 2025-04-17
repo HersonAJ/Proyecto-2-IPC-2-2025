@@ -11,6 +11,10 @@ export interface Cita {
   fechaCita: string;
   horaCita: string;
   estado: string;
+  nombreServicio?: string; 
+  nombreEmpleado?: string; 
+  precioServicio?: string;
+  idFactura?: string;
 }
 
 // Modelo para servicios
@@ -87,4 +91,18 @@ export class CitaService {
     const url = `${this.apiURL}facturas/cliente/${idCliente}`;
     return this.http.get<Factura[]>(url);
   }
+
+    //Método para obtener el historial de citas atendidas
+    obtenerHistorialCitasAtendidas(token: string): Observable<Cita[]> {
+      const url = `${this.apiURL}historial/atendidas`;
+      const headers = { Authorization: `Bearer ${token}` };
+      return this.http.get<Cita[]>(url, { headers });
+    }
+  
+    //Método para obtener el historial de citas canceladas
+    obtenerHistorialCitasCanceladas(token: string): Observable<Cita[]> {
+      const url = `${this.apiURL}historial/canceladas`;
+      const headers = { Authorization: `Bearer ${token}` };
+      return this.http.get<Cita[]>(url, { headers });
+    }
 }

@@ -34,6 +34,9 @@ public class Cita {
     
     //detalles del cliente
     private String nombreCliente;
+    
+    //factura asociada cuando la cita sea atendida
+    private Integer idFactura;
 
     public int getIdCita() {
         return idCita;
@@ -145,6 +148,14 @@ public class Cita {
 
     public void setNombreCliente(String nombreCliente) {
         this.nombreCliente = nombreCliente;
+    }
+
+    public Integer getIdFactura() {
+        return idFactura;
+    }
+
+    public void setIdFactura(Integer idFactura) {
+        this.idFactura = idFactura;
     }
     
     @Override
