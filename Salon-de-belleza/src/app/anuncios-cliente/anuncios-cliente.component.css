@@ -1,0 +1,49 @@
+.anuncios-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .anuncio {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  .anuncio-texto {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .anuncio-imagen img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .anuncio-video iframe {
+    width: 100%;
+    height: 200px;
+  }
+  
+  .paginacion {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  

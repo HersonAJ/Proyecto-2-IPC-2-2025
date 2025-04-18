@@ -1,0 +1,23 @@
+<div class="anuncios-container">
+  <!-- Mostrar lista de anuncios -->
+  <div *ngFor="let anuncio of anuncios" class="anuncio">
+    <!-- Anuncio de Texto -->
+    <div *ngIf="anuncio.tipo === 'Texto'" class="anuncio-texto">
+      <p>{{ anuncio.contenidoTexto }}</p>
+    </div>
+    <!-- Anuncio de Imagen -->
+    <div *ngIf="anuncio.tipo === 'Imagen'" class="anuncio-imagen">
+      <img [src]="anuncio.urlImagen" alt="Anuncio de Imagen">
+    </div>
+    <!-- Anuncio de Video -->
+    <div *ngIf="anuncio.tipo === 'Video'" class="anuncio-video">
+      <iframe [src]="anuncio.urlVideo" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- Controles de paginación -->
+  <div class="paginacion">
+    <button (click)="cargarPaginaAnterior()" [disabled]="paginaActual <= 1">Anterior</button>
+    <button (click)="cargarSiguientePagina()" [disabled]="paginaActual * anunciosPorPagina >= totalAnuncios">Siguiente</button>
+  </div>
+</div>

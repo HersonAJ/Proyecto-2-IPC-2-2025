@@ -19,4 +19,41 @@
     padding: 10px; /* Espaciado interno */
   }
   
-  
+  /* Estructura del layout general */
+.layout-container {
+  display: flex;
+  height: 100vh; /* Altura completa de la ventana */
+}
+
+/* Panel de control (izquierda) */
+.panel-control {
+  width: 20%; /* Ocupa el 20% del ancho total */
+  background-color: #f4f4f4; /* Color de fondo del panel */
+  border-right: 1px solid #ccc; /* Línea divisoria */
+}
+
+/* Contenido principal (centro) */
+.main-content {
+  width: 60%; /* Ocupa el 60% del ancho total */
+  padding: 20px; /* Espaciado interno */
+}
+
+/* Contenedor de anuncios (derecha) */
+.anuncios-lateral {
+  width: 20%; /* Ocupa el 20% del ancho total */
+  background-color: #f9f9f9; /* Color de fondo claro */
+  border-left: 1px solid #ccc; /* Línea divisoria */
+  overflow-y: auto; /* Permite desplazamiento vertical si hay muchos anuncios */
+  padding: 10px; /* Espaciado interno */
+}
+
+/* Ajustes generales */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+aside {
+  display: flex;
+  flex-direction: column;
+}

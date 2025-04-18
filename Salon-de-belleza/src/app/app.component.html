@@ -5,6 +5,8 @@
 <app-panel-control></app-panel-control>
 -->
 
+
+<!---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,12 +16,12 @@
 </head>
 <body>
   <div class="layout-container">
-    <!-- Panel de control (lateral izquierdo) -->
+    <!-- Panel de control (lateral izquierdo) --
     <aside class="panel-control">
       <app-panel-control></app-panel-control>
     </aside>
 
-    <!-- Contenido principal (derecha) -->
+    <!-- Contenido principal (derecha) --
     <main class="main-content">
       <app-header></app-header>
       <router-outlet></router-outlet>
@@ -27,3 +29,34 @@
   </div>
 </body>
 </html>
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salon de Belleza</title>
+  <link rel="stylesheet" href="app.component.css"> <!-- Archivo para estilos globales -->
+</head>
+<body>
+  <div class="layout-container">
+    <!-- Panel de control (lateral izquierdo) -->
+    <aside class="panel-control">
+      <app-panel-control></app-panel-control>
+    </aside>
+
+    <!-- Contenido principal (centro) -->
+    <main class="main-content">
+      <app-header></app-header>
+      <router-outlet></router-outlet>
+    </main>
+
+    <!-- Contenedor lateral de anuncios (derecha) -->
+    <aside class="anuncios-lateral">
+      <app-anuncios-cliente></app-anuncios-cliente> <!-- Componente para mostrar anuncios -->
+    </aside>
+  </div>
+</body>
+</html>
+

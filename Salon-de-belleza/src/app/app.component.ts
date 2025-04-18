@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { PanelControlComponent } from "./panel-control/panel-control.component";
+import { AnunciosClienteComponent } from './anuncios-cliente/anuncios-cliente.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, PanelControlComponent],
+  imports: [RouterOutlet, HeaderComponent, PanelControlComponent, AnunciosClienteComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
