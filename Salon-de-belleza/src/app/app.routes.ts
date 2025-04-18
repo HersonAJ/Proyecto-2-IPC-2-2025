@@ -16,6 +16,7 @@ import { CrearFacturaComponent } from './crear-factura/crear-factura.component';
 import { FacturaClienteComponent } from './factura-cliente/factura-cliente.component';
 import { HistorialClienteComponent } from './historial-cliente/historial-cliente.component';
 import { CrearAnunciosComponent } from './crear-anuncios/crear-anuncios.component';
+import { GestionAnunciosComponent } from './gestion-anuncios/gestion-anuncios.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -35,4 +36,5 @@ export const routes: Routes = [
     {path: 'factura-cliente', component: FacturaClienteComponent},
     {path: 'historial-cliente', component: HistorialClienteComponent},
     {path: 'crear-anuncio', component: CrearAnunciosComponent},
+    {path: 'gestion-anuncios', component: GestionAnunciosComponent}
 ];

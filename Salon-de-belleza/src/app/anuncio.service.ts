@@ -27,6 +27,43 @@ export class AnuncioService {
     });
     return this.http.get<any>(url, { headers });
   }
+
+  // Método para obtener todos los anuncios con token
+  obtenerTodosLosAnuncios(token: string): Observable<any> {
+    const url = this.restConstants.getApiURL() + 'gestion-anuncios/todos';
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`, // Token de autorización
+    });
+    return this.http.get<any>(url, { headers });
+  }
+
+  // Método para actualizar el estado de un anuncio
+  actualizarEstadoAnuncio(idAnuncio: number, nuevoEstado: string, token: string): Observable<any> {
+    const url = this.restConstants.getApiURL() + `gestion-anuncios/actualizar-estado/${idAnuncio}?estado=${nuevoEstado}`;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`, // Token de autorización
+      'Content-Type': 'application/json',
+    });
+    return this.http.put<any>(url, {}, { headers });
+  }
+
+  // Método para reactivar un anuncio
+  reactivarAnuncio(idAnuncio: number, token: string): Observable<any> {
+    const url = this.restConstants.getApiURL() + `gestion-anuncios/reactivar/${idAnuncio}`;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`, // Token de autorización
+      'Content-Type': 'application/json',
+    });
+    return this.http.put<any>(url, {}, { headers });
+  }
+
+  // Método para desactivar un anuncio
+  desactivarAnuncio(idAnuncio: number, token: string): Observable<any> {
+    const url = this.restConstants.getApiURL() + `gestion-anuncios/desactivar/${idAnuncio}`;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`, // Token de autorización
+      'Content-Type': 'application/json',
+    });
+    return this.http.put<any>(url, {}, { headers });
+  }
 }
-
-

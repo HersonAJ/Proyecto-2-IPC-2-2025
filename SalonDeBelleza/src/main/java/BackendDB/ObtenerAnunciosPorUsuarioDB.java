@@ -57,7 +57,7 @@ public List<Anuncio> obtenerAnunciosPorUsuario(int idUsuario, int limit, int off
                 anuncio.setUrlVideo(rs.getString("URL_Video"));
                 anuncio.setPrecioPorDia(rs.getDouble("Precio_Diario"));
                 anuncio.setDuracionDias(rs.getInt("Tiempo_Duración"));
-                anuncio.setActivo(rs.getString("Estado").equals("Activo"));
+                anuncio.setEstado(rs.getString("Estado"));
                 anuncio.setFechaInicio(rs.getDate("Fecha_Creacion").toLocalDate());
                 anuncio.setFechaFin(rs.getDate("Fecha_Fin").toLocalDate());
                 anuncios.add(anuncio);

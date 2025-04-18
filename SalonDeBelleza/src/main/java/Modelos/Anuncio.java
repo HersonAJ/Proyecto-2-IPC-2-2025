@@ -23,12 +23,20 @@ public class Anuncio {
     private List<String> hobbiesRelacionados; 
     private double precioPorDia;
     private int duracionDias;
-    private boolean activo;
     private int vecesMonstrado;
     private String ubicacionURL;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
+    private String estado;
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
     public int getIdAnuncio() {
         return idAnuncio;
     }
@@ -69,9 +77,6 @@ public class Anuncio {
         return duracionDias;
     }
 
-    public boolean isActivo() {
-        return activo;
-    }
 
     public int getVecesMonstrado() {
         return vecesMonstrado;
@@ -127,10 +132,6 @@ public class Anuncio {
 
     public void setDuracionDias(int duracionDias) {
         this.duracionDias = duracionDias;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
     }
 
     public void setVecesMonstrado(int vecesMonstrado) {
