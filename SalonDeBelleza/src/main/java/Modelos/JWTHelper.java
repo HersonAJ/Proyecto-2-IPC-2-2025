@@ -85,6 +85,24 @@ public class JWTHelper {
             throw new JWTVerificationException("Token inválido o vencido.");
         }
     }
+
+    public boolean validateToken2(String token) {
+        try {
+            String cleanedToken = cleanToken(token);
+            verifier.verify(cleanedToken); // Verifica el token
+            return true;
+        } catch (JWTVerificationException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    // Método auxiliar para limpiar el token
+
+    protected String cleanToken(String token) {
+        if (token.startsWith("Bearer ")) {
+            return token.substring(7).trim(); // Eliminar "Bearer " y limpiar espacios adicionales
+        }
+        return token.trim();
+    }
+
 }
-
-
