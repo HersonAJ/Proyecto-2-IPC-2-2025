@@ -13,6 +13,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -41,9 +42,9 @@ public class AnuncioController {
             // Validaciones opcionales
             if (anuncio.getNombreAnunciante() == null || anuncio.getNombreAnunciante().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST)
-                               .entity("{\"message\": \"El nombre del anunciante es obligatorio.\"}")
-                               .type(MediaType.APPLICATION_JSON)
-                               .build();
+                        .entity("{\"message\": \"El nombre del anunciante es obligatorio.\"}")
+                        .type(MediaType.APPLICATION_JSON)
+                        .build();
             }
 
             // Intentar insertar el anuncio en la base de datos
@@ -51,27 +52,27 @@ public class AnuncioController {
 
             if (resultado) {
                 return Response.status(Response.Status.CREATED)
-                               .entity("{\"message\": \"Anuncio creado exitosamente.\"}")
-                               .type(MediaType.APPLICATION_JSON)
-                               .build();
+                        .entity("{\"message\": \"Anuncio creado exitosamente.\"}")
+                        .type(MediaType.APPLICATION_JSON)
+                        .build();
             } else {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                               .entity("{\"message\": \"Error al insertar el anuncio en la base de datos.\"}")
-                               .type(MediaType.APPLICATION_JSON)
-                               .build();
+                        .entity("{\"message\": \"Error al insertar el anuncio en la base de datos.\"}")
+                        .type(MediaType.APPLICATION_JSON)
+                        .build();
             }
         } catch (JWTVerificationException e) {
             // Token inválido o vencido
             return Response.status(Response.Status.UNAUTHORIZED)
-                           .entity("{\"message\": \"Token inválido o vencido.\"}")
-                           .type(MediaType.APPLICATION_JSON)
-                           .build();
+                    .entity("{\"message\": \"Token inválido o vencido.\"}")
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
         } catch (Exception e) {
             // Error inesperado
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                           .entity("{\"message\": \"Error interno al crear el anuncio: " + e.getMessage() + "\"}")
-                           .type(MediaType.APPLICATION_JSON)
-                           .build();
+                    .entity("{\"message\": \"Error interno al crear el anuncio: " + e.getMessage() + "\"}")
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
         }
     }
 
@@ -90,15 +91,53 @@ public class AnuncioController {
         } catch (JWTVerificationException e) {
             // Token inválido o vencido
             return Response.status(Response.Status.UNAUTHORIZED)
-                           .entity("{\"message\": \"Token inválido o vencido.\"}")
-                           .type(MediaType.APPLICATION_JSON)
-                           .build();
+                    .entity("{\"message\": \"Token inválido o vencido.\"}")
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
         } catch (Exception e) {
             // Error inesperado
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                           .entity("{\"message\": \"Error al obtener los hobbies: " + e.getMessage() + "\"}")
-                           .type(MediaType.APPLICATION_JSON)
-                           .build();
+                    .entity("{\"message\": \"Error al obtener los hobbies: " + e.getMessage() + "\"}")
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+        }
+    }
+
+    @GET
+    @Path("/precio/{tipoAnuncio}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerPrecioPorTipo(@HeaderParam("Authorization") String token, @PathParam("tipoAnuncio") String tipoAnuncio) {
+        try {
+            // Validar el token
+            jwtHelper.validateToken2(token);
+
+            // Consultar el precio según el tipo de anuncio
+            double precioDiario = crearAnuncioDB.obtenerPrecioPorTipo(tipoAnuncio);
+
+            if (precioDiario != -1) {
+                // Retornar el precio en la respuesta
+                return Response.ok("{\"tipoAnuncio\": \"" + tipoAnuncio + "\", \"precioDiario\": " + precioDiario + "}")
+                        .type(MediaType.APPLICATION_JSON)
+                        .build();
+            } else {
+                // Si no se encuentra el precio para el tipo de anuncio
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\": \"No se encontró el precio para el tipo de anuncio seleccionado.\"}")
+                        .type(MediaType.APPLICATION_JSON)
+                        .build();
+            }
+        } catch (JWTVerificationException e) {
+            // Token inválido o vencido
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("{\"message\": \"Token inválido o vencido.\"}")
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+        } catch (Exception e) {
+            // Error inesperado
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"message\": \"Error al obtener el precio: " + e.getMessage() + "\"}")
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
         }
     }
 }

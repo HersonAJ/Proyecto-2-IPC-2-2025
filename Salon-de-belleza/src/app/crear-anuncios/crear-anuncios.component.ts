@@ -15,31 +15,29 @@ export class CrearAnunciosComponent implements OnInit {
   anuncio = {
     nombreAnunciante: '',
     contactoAnunciante: '',
-    tipo: 'Texto', 
+    tipo: 'Texto',
     contenidoTexto: '',
     urlImagen: '',
     urlVideo: '',
     precioPorDia: 0,
     duracionDias: 0,
     fechaInicio: '',
-    hobbiesRelacionados: [] as string[] // Arreglo para almacenar los hobbies seleccionados
+    hobbiesRelacionados: [] as string[]
   };
 
-  hobbies: string[] = []; // Lista de hobbies disponibles
-  idMarketing: number | null = null; 
+  total: number = 0; 
+  hobbies: string[] = [];
+  idMarketing: number | null = null;
 
-  constructor(private authService: AuthService, private anuncioService: AnuncioService) {}
+  constructor(private authService: AuthService, private anuncioService: AnuncioService) { }
 
   ngOnInit(): void {
-    // Obtener el ID del usuario (encargado de marketing) desde el token
     this.idMarketing = this.authService.getIdUsuarioFromToken();
-
-    // Obtener la lista de hobbies desde el backend
     const token = localStorage.getItem('token');
     if (token) {
       this.anuncioService.obtenerHobbies(token).subscribe(
         (response) => {
-          this.hobbies = response; // Almacenar los hobbies obtenidos
+          this.hobbies = response;
         },
         (error) => {
           console.error('Error al obtener los hobbies:', error);
@@ -48,6 +46,28 @@ export class CrearAnunciosComponent implements OnInit {
     } else {
       console.error('No se encontró el token para autenticar.');
     }
+    this.cambiarTipoAnuncio(); 
+  }
+
+  cambiarTipoAnuncio(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.anuncioService.obtenerPrecioPorTipo(this.anuncio.tipo, token).subscribe(
+        (response) => {
+          this.anuncio.precioPorDia = response.precioDiario;
+          this.calcularTotal(); // Actualizar el total
+        },
+        (error) => {
+          console.error('Error al obtener el precio por tipo de anuncio:', error);
+        }
+      );
+    } else {
+      console.error('No se encontró el token para autenticar.');
+    }
+  }
+
+  calcularTotal(): void {
+    this.total = this.anuncio.precioPorDia * this.anuncio.duracionDias;
   }
 
   crearAnuncio(): void {
@@ -59,13 +79,11 @@ export class CrearAnunciosComponent implements OnInit {
       alert('La duración debe ser al menos de 1 día.');
       return;
     }
-
     const token = localStorage.getItem('token');
     if (!token) {
       console.error('No se encontró el token para autenticar.');
       return;
     }
-  
     this.anuncioService.crearAnuncio(this.anuncio, token).subscribe(
       (response) => {
         alert(response.message || 'Anuncio creado exitosamente.');
@@ -76,13 +94,12 @@ export class CrearAnunciosComponent implements OnInit {
       }
     );
   }
-  
 
   limpiarFormulario(): void {
     this.anuncio = {
       nombreAnunciante: '',
       contactoAnunciante: '',
-      tipo: 'Texto', // Reiniciar al valor por defecto
+      tipo: 'Texto',
       contenidoTexto: '',
       urlImagen: '',
       urlVideo: '',
@@ -92,24 +109,23 @@ export class CrearAnunciosComponent implements OnInit {
       hobbiesRelacionados: []
     };
 
-    // Limpiar los checkboxes de hobbies
+    this.total = 0; // Reiniciar el total
     const checkboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
     checkboxes.forEach((checkbox) => {
       checkbox.checked = false;
     });
   }
 
-  // Manejar la selección y deselección de hobbies
   onHobbieChange(event: Event): void {
     const checkbox = event.target as HTMLInputElement;
     const hobbie = checkbox.value;
 
     if (checkbox.checked) {
-      this.anuncio.hobbiesRelacionados.push(hobbie); // Agregar hobby seleccionado
+      this.anuncio.hobbiesRelacionados.push(hobbie);
     } else {
       const index = this.anuncio.hobbiesRelacionados.indexOf(hobbie);
       if (index > -1) {
-        this.anuncio.hobbiesRelacionados.splice(index, 1); // Remover hobby deseleccionado
+        this.anuncio.hobbiesRelacionados.splice(index, 1);
       }
     }
   }

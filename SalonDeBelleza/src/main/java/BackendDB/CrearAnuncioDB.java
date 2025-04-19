@@ -25,53 +25,109 @@ public class CrearAnuncioDB {
 
         String sqlInsertAnuncioHobbies = "INSERT INTO Anuncio_Hobbies (ID_Anuncio, ID_Hobbie) VALUES (?, ?)";
 
-        try (Connection connection = ConexionDB.getConnection(); 
-                PreparedStatement stmtAnuncio = connection.prepareStatement(sqlInsertAnuncio, PreparedStatement.RETURN_GENERATED_KEYS); 
-                PreparedStatement stmtAnuncioHobbies = connection.prepareStatement(sqlInsertAnuncioHobbies)) {
+        String sqlInsertPagoAnuncio = "INSERT INTO Pagos_Anuncios (ID_Anuncio, Monto, Precio_Por_Dia_Aplicado, Fecha_Pago, Comprador) "
+                + "VALUES (?, ?, ?, ?, ?)";
 
-            // Asignar los valores del objeto Anuncio a los parámetros SQL
-            stmtAnuncio.setString(1, anuncio.getNombreAnunciante());
-            stmtAnuncio.setString(2, anuncio.getContactoAnunciante());
-            stmtAnuncio.setString(3, anuncio.getTipo());
-            stmtAnuncio.setString(4, anuncio.getContenidoTexto());
-            stmtAnuncio.setString(5, anuncio.getUrlImagen());
-            stmtAnuncio.setString(6, anuncio.getUrlVideo());
-            stmtAnuncio.setDouble(7, anuncio.getPrecioPorDia());
-            stmtAnuncio.setInt(8, anuncio.getDuracionDias());
-            stmtAnuncio.setDate(9, java.sql.Date.valueOf(anuncio.getFechaInicio()));
-            stmtAnuncio.setInt(10, anuncio.getIdAnuncio());
+        String sqlObtenerPrecioDiario = "SELECT Precio_Diario FROM Precio_Diario_Anuncios WHERE Tipo_Anuncio = ?";
 
-            // Ejecutar la inserción del anuncio
-            int filasInsertadas = stmtAnuncio.executeUpdate();
-            if (filasInsertadas > 0) {
-                // Obtener el ID generado del anuncio
-                try (ResultSet generatedKeys = stmtAnuncio.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        int idAnuncioGenerado = generatedKeys.getInt(1);
+        Connection connection = null; 
 
-                        // Insertar las relaciones con hobbies en la tabla Anuncio_Hobbies
-                        if (anuncio.getHobbiesRelacionados() != null && !anuncio.getHobbiesRelacionados().isEmpty()) {
-                            for (String hobbie : anuncio.getHobbiesRelacionados()) {
-                                int idHobbie = obtenerIdHobbiePorNombre(hobbie, connection); // Método para obtener ID del hobbie
-                                if (idHobbie != -1) {
-                                    stmtAnuncioHobbies.setInt(1, idAnuncioGenerado);
-                                    stmtAnuncioHobbies.setInt(2, idHobbie);
-                                    stmtAnuncioHobbies.addBatch(); // Usar batch para hacer la insercion en bloque
-                                }
-                            }
-                            stmtAnuncioHobbies.executeBatch(); // Ejecutar el batch de inserciones
-                        }
+        try {
+            connection = ConexionDB.getConnection(); 
+            connection.setAutoCommit(false); 
+
+            try (PreparedStatement stmtAnuncio = connection.prepareStatement(sqlInsertAnuncio, PreparedStatement.RETURN_GENERATED_KEYS); 
+                    PreparedStatement stmtAnuncioHobbies = connection.prepareStatement(sqlInsertAnuncioHobbies); 
+                    PreparedStatement stmtPagoAnuncio = connection.prepareStatement(sqlInsertPagoAnuncio); 
+                    PreparedStatement stmtObtenerPrecio = connection.prepareStatement(sqlObtenerPrecioDiario)) {
+
+                // Obtener el precio diario del tipo de anuncio
+                stmtObtenerPrecio.setString(1, anuncio.getTipo());
+                try (ResultSet rsPrecio = stmtObtenerPrecio.executeQuery()) {
+                    if (rsPrecio.next()) {
+                        double precioDiario = rsPrecio.getDouble("Precio_Diario");
+                        anuncio.setPrecioPorDia(precioDiario);
+                    } else {
+                        connection.rollback(); // Deshacer la transacción
+                        return false;
                     }
                 }
-                return true; // Inserción exitosa
-            } else {
-                return false; // Inserción fallida
+
+                // Asignar valores del anuncio
+                stmtAnuncio.setString(1, anuncio.getNombreAnunciante());
+                stmtAnuncio.setString(2, anuncio.getContactoAnunciante());
+                stmtAnuncio.setString(3, anuncio.getTipo());
+                stmtAnuncio.setString(4, anuncio.getContenidoTexto());
+                stmtAnuncio.setString(5, anuncio.getUrlImagen());
+                stmtAnuncio.setString(6, anuncio.getUrlVideo());
+                stmtAnuncio.setDouble(7, anuncio.getPrecioPorDia());
+                stmtAnuncio.setInt(8, anuncio.getDuracionDias());
+                stmtAnuncio.setDate(9, java.sql.Date.valueOf(anuncio.getFechaInicio()));
+                stmtAnuncio.setInt(10, anuncio.getIdAnuncio());
+
+                // Ejecutar la inserción del anuncio
+                int filasInsertadas = stmtAnuncio.executeUpdate();
+                if (filasInsertadas > 0) {
+                    try (ResultSet generatedKeys = stmtAnuncio.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            int idAnuncioGenerado = generatedKeys.getInt(1);
+
+                            // Insertar las relaciones con hobbies
+                            if (anuncio.getHobbiesRelacionados() != null && !anuncio.getHobbiesRelacionados().isEmpty()) {
+                                for (String hobbie : anuncio.getHobbiesRelacionados()) {
+                                    int idHobbie = obtenerIdHobbiePorNombre(hobbie, connection);
+                                    if (idHobbie != -1) {
+                                        stmtAnuncioHobbies.setInt(1, idAnuncioGenerado);
+                                        stmtAnuncioHobbies.setInt(2, idHobbie);
+                                        stmtAnuncioHobbies.addBatch();
+                                    }
+                                }
+                                stmtAnuncioHobbies.executeBatch(); 
+                            }
+
+                            // Registrar el pago en la tabla Pagos_Anuncios
+                            double montoTotal = anuncio.getPrecioPorDia() * anuncio.getDuracionDias();
+                            stmtPagoAnuncio.setInt(1, idAnuncioGenerado);
+                            stmtPagoAnuncio.setDouble(2, montoTotal);
+                            stmtPagoAnuncio.setDouble(3, anuncio.getPrecioPorDia());
+                            stmtPagoAnuncio.setDate(4, java.sql.Date.valueOf(anuncio.getFechaInicio()));
+                            stmtPagoAnuncio.setString(5, anuncio.getNombreAnunciante());
+                            stmtPagoAnuncio.executeUpdate(); // Insertar el registro del pago
+
+                        } else {
+                            connection.rollback(); 
+                            return false;
+                        }
+                    }
+                } else {
+                    connection.rollback(); 
+                    return false;
+                }
+
+                // Confirmar la transacción si todo salió bien
+                connection.commit();
+                return true;
+
             }
 
         } catch (SQLException e) {
-            System.out.println("Error al insertar el anuncio o hobbies: " + e.getMessage());
             e.printStackTrace();
+            if (connection != null) { 
+                try {
+                    connection.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
             return false;
+        } finally {
+            if (connection != null) { 
+                try {
+                    connection.close();
+                } catch (SQLException closeEx) {
+                    closeEx.printStackTrace();
+                }
+            }
         }
     }
 
@@ -109,5 +165,28 @@ public class CrearAnuncioDB {
             e.printStackTrace();
         }
         return hobbies;
+    }
+
+    public double obtenerPrecioPorTipo(String tipoAnuncio) {
+        String sqlObtenerPrecio = "SELECT Precio_Diario FROM Precio_Diario_Anuncios WHERE Tipo_Anuncio = ?";
+
+        try (Connection connection = ConexionDB.getConnection(); 
+                PreparedStatement stmtObtenerPrecio = connection.prepareStatement(sqlObtenerPrecio)) {
+            stmtObtenerPrecio.setString(1, tipoAnuncio);
+
+            try (ResultSet rsPrecio = stmtObtenerPrecio.executeQuery()) {
+                if (rsPrecio.next()) {
+                    // Obtener y retornar el precio diario
+                    return rsPrecio.getDouble("Precio_Diario");
+                } else {
+                    System.out.println("No se encontró el precio diario para el tipo de anuncio: " + tipoAnuncio);
+                    return -1; // Indica que no se encontró el precio
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener el precio diario: " + e.getMessage());
+            e.printStackTrace();
+            return -1; 
+        }
     }
 }

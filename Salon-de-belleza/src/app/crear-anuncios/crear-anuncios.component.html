@@ -1,163 +1,100 @@
 <div class="container mt-5">
-    <div class="card">
-      <div class="card-header bg-primary text-white">
-        <h2 class="text-center">Crear Anuncio</h2>
-      </div>
-      <div class="card-body">
-        <form (ngSubmit)="crearAnuncio()">
-          <!-- Nombre del Anunciante -->
-          <div class="form-group mb-3">
-            <label for="nombreAnunciante" class="form-label">Nombre del Anunciante:</label>
-            <input
-              id="nombreAnunciante"
-              type="text"
-              class="form-control"
-              [(ngModel)]="anuncio.nombreAnunciante"
-              name="nombreAnunciante"
-              placeholder="Ingrese el nombre del anunciante"
-              required
-            />
-          </div>
-  
-          <!-- Contacto del Anunciante -->
-          <div class="form-group mb-3">
-            <label for="contactoAnunciante" class="form-label">Contacto del Anunciante:</label>
-            <input
-              id="contactoAnunciante"
-              type="email"
-              class="form-control"
-              [(ngModel)]="anuncio.contactoAnunciante"
-              name="contactoAnunciante"
-              placeholder="Ingrese el correo o contacto del anunciante"
-              required
-            />
-          </div>
-  
-          <!-- Tipo de Anuncio -->
-          <div class="form-group mb-3">
-            <label for="tipo" class="form-label">Tipo de Anuncio:</label>
-            <select
-              id="tipo"
-              class="form-select"
-              [(ngModel)]="anuncio.tipo"
-              name="tipo"
-              required
-            >
-              <option value="Texto">Texto</option>
-              <option value="Imagen">Imagen</option>
-              <option value="Video">Video</option>
-            </select>
-          </div>
-  
-          <!-- Contenido de Anuncio -->
-          <div class="form-group mb-3" *ngIf="anuncio.tipo === 'Texto'">
-            <label for="contenidoTexto" class="form-label">Contenido (Texto):</label>
-            <textarea
-              id="contenidoTexto"
-              class="form-control"
-              rows="3"
-              [(ngModel)]="anuncio.contenidoTexto"
-              name="contenidoTexto"
-              placeholder="Ingrese el contenido del anuncio"
-            ></textarea>
-          </div>
-          <div class="form-group mb-3" *ngIf="anuncio.tipo === 'Imagen'">
-            <label for="urlImagen" class="form-label">URL de la Imagen:</label>
-            <input
-              id="urlImagen"
-              type="text"
-              class="form-control"
-              [(ngModel)]="anuncio.urlImagen"
-              name="urlImagen"
-              placeholder="Ingrese la URL de la imagen"
-            />
-          </div>
-          <div class="form-group mb-3" *ngIf="anuncio.tipo === 'Video'">
-            <label for="urlVideo" class="form-label">URL del Video:</label>
-            <input
-              id="urlVideo"
-              type="text"
-              class="form-control"
-              [(ngModel)]="anuncio.urlVideo"
-              name="urlVideo"
-              placeholder="Ingrese la URL del video"
-            />
-          </div>
-  
-          <!-- Precio por Día -->
-          <div class="form-group mb-3">
-            <label for="precioPorDia" class="form-label">Precio por Día:</label>
-            <input
-            id="precioPorDia"
-            type="number"
-            class="form-control"
-            [(ngModel)]="anuncio.precioPorDia"
-            name="precioPorDia"
-            placeholder="Ingrese el precio por día"
-            required
-            min="0"
-            step="0.01"
-            #precioPorDia="ngModel"
-          />
-          <div *ngIf="precioPorDia.invalid && precioPorDia.touched" class="text-danger">
-            El precio debe ser mayor o igual a 0 y puede tener hasta dos decimales.
-          </div>
-          </div>
-  
-          <!-- Duración en Días -->
-          <div class="form-group mb-3">
-            <label for="duracionDias" class="form-label">Duración (días):</label>
-            <input
-            id="duracionDias"
-            type="number"
-            class="form-control"
-            [(ngModel)]="anuncio.duracionDias"
-            name="duracionDias"
-            placeholder="Ingrese la duración en días"
-            required
-            min="1"
-            #duracionDias="ngModel"
-          />
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h2 class="text-center">Crear Anuncio</h2>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="crearAnuncio()">
+        <!-- Nombre del Anunciante -->
+        <div class="form-group mb-3">
+          <label for="nombreAnunciante" class="form-label">Nombre del Anunciante:</label>
+          <input id="nombreAnunciante" type="text" class="form-control" [(ngModel)]="anuncio.nombreAnunciante"
+            name="nombreAnunciante" placeholder="Ingrese el nombre del anunciante" required />
+        </div>
+
+        <!-- Contacto del Anunciante -->
+        <div class="form-group mb-3">
+          <label for="contactoAnunciante" class="form-label">Contacto del Anunciante:</label>
+          <input id="contactoAnunciante" type="email" class="form-control" [(ngModel)]="anuncio.contactoAnunciante"
+            name="contactoAnunciante" placeholder="Ingrese el correo o contacto del anunciante" required />
+        </div>
+
+        <!-- Tipo de Anuncio -->
+        <div class="form-group mb-3">
+          <label for="tipo" class="form-label">Tipo de Anuncio:</label>
+          <select id="tipo" class="form-select" [(ngModel)]="anuncio.tipo" name="tipo" (change)="cambiarTipoAnuncio()"
+            required>
+            <option value="Texto">Texto</option>
+            <option value="Imagen">Imagen</option>
+            <option value="Video">Video</option>
+          </select>
+        </div>
+
+
+        <!-- Contenido de Anuncio -->
+        <div class="form-group mb-3" *ngIf="anuncio.tipo === 'Texto'">
+          <label for="contenidoTexto" class="form-label">Contenido (Texto):</label>
+          <textarea id="contenidoTexto" class="form-control" rows="3" [(ngModel)]="anuncio.contenidoTexto"
+            name="contenidoTexto" placeholder="Ingrese el contenido del anuncio"></textarea>
+        </div>
+        <div class="form-group mb-3" *ngIf="anuncio.tipo === 'Imagen'">
+          <label for="urlImagen" class="form-label">URL de la Imagen:</label>
+          <input id="urlImagen" type="text" class="form-control" [(ngModel)]="anuncio.urlImagen" name="urlImagen"
+            placeholder="Ingrese la URL de la imagen" />
+        </div>
+        <div class="form-group mb-3" *ngIf="anuncio.tipo === 'Video'">
+          <label for="urlVideo" class="form-label">URL del Video:</label>
+          <input id="urlVideo" type="text" class="form-control" [(ngModel)]="anuncio.urlVideo" name="urlVideo"
+            placeholder="Ingrese la URL del video" />
+        </div>
+
+        <!-- Precio por Día -->
+        <div class="form-group mb-3">
+          <label for="precioPorDia" class="form-label">Precio por Día:</label>
+          <input id="precioPorDia" type="number" class="form-control" [(ngModel)]="anuncio.precioPorDia"
+            name="precioPorDia" readonly />
+        </div>
+
+
+        <!-- Duración en Días -->
+        <div class="form-group mb-3">
+          <label for="duracionDias" class="form-label">Duración (días):</label>
+          <input id="duracionDias" type="number" class="form-control" [(ngModel)]="anuncio.duracionDias"
+            name="duracionDias" (blur)="calcularTotal()" required min="1" #duracionDias="ngModel" />
           <div *ngIf="duracionDias.invalid && duracionDias.touched" class="text-danger">
             La duración debe ser un número entero mayor o igual a 1.
           </div>
-          
+        </div>
+
+        <!-- Fecha de Inicio -->
+        <div class="form-group mb-3">
+          <label for="fechaInicio" class="form-label">Fecha de Inicio:</label>
+          <input id="fechaInicio" type="date" class="form-control" [(ngModel)]="anuncio.fechaInicio" name="fechaInicio"
+            required />
+        </div>
+
+        <!-- Total Calculado -->
+        <div class="form-group mb-3">
+          <label for="total" class="form-label">Total a Pagar:</label>
+          <input id="total" type="text" class="form-control" [value]="total | currency:'Q'" readonly />
+        </div>
+
+
+        <!-- Hobbies -->
+        <div class="form-group mb-3">
+          <label for="hobbies" class="form-label">Relacionar con Hobbies:</label>
+          <div class="form-check" *ngFor="let hobbie of hobbies">
+            <input id="{{ hobbie }}" type="checkbox" class="form-check-input" [value]="hobbie"
+              (change)="onHobbieChange($event)" />
+            <label class="form-check-label" for="{{ hobbie }}">{{ hobbie }}</label>
           </div>
-  
-          <!-- Fecha de Inicio -->
-          <div class="form-group mb-3">
-            <label for="fechaInicio" class="form-label">Fecha de Inicio:</label>
-            <input
-              id="fechaInicio"
-              type="date"
-              class="form-control"
-              [(ngModel)]="anuncio.fechaInicio"
-              name="fechaInicio"
-              required
-            />
-          </div>
-  
-          <!-- Hobbies -->
-          <div class="form-group mb-3">
-            <label for="hobbies" class="form-label">Relacionar con Hobbies:</label>
-            <div class="form-check" *ngFor="let hobbie of hobbies">
-              <input
-                id="{{ hobbie }}"
-                type="checkbox"
-                class="form-check-input"
-                [value]="hobbie"
-                (change)="onHobbieChange($event)"
-              />
-              <label class="form-check-label" for="{{ hobbie }}">{{ hobbie }}</label>
-            </div>
-          </div>
-  
-          <!-- Botón Crear -->
-          <div class="form-group text-center">
-            <button type="submit" class="btn btn-success btn-lg">Crear Anuncio</button>
-          </div>
-        </form>
-      </div>
+        </div>
+
+        <!-- Botón Crear -->
+        <div class="form-group text-center">
+          <button type="submit" class="btn btn-success btn-lg">Crear Anuncio</button>
+        </div>
+      </form>
     </div>
   </div>
-  
+</div>

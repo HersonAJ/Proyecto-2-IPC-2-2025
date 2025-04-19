@@ -66,4 +66,13 @@ export class AnuncioService {
     });
     return this.http.put<any>(url, {}, { headers });
   }
+  
+  obtenerPrecioPorTipo(tipoAnuncio: string, token: string): Observable<any> {
+    const url = this.restConstants.getApiURL() + `anuncios/precio/${tipoAnuncio}`;
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get<any>(url, { headers });
+  }
 }
