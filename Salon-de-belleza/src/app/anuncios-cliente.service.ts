@@ -24,23 +24,27 @@ export interface Anuncio {
   providedIn: 'root'
 })
 export class AnunciosClienteService {
-  private readonly apiURL: string; // URL base
+  private readonly apiURL: string; 
 
   constructor(private http: HttpClient, private restConstants: RestConstants) {
-    this.apiURL = this.restConstants.getApiURL(); // Obtener la URL base
+    this.apiURL = this.restConstants.getApiURL(); 
   }
 
-// Método para obtener anuncios paginados según los hobbies del usuario
-obtenerAnuncios(token: string, page: number, pageSize: number): Observable<any> {
-  const url = `${this.apiURL}anunciosParaClientes/obtener`; // Construir la URL del endpoint
+  // Método para obtener anuncios paginados según los hobbies del usuario
+  obtenerAnuncios(token: string, page: number, pageSize: number): Observable<any> {
+    const url = `${this.apiURL}anunciosParaClientes/obtener`; 
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    const params = { page: page.toString(), pageSize: pageSize.toString() };
+    return this.http.get<any>(url, { headers, params });
+  }
 
-  // Asegurarnos de incluir el prefijo "Bearer" en el token
-  const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
-
-  const params = { page: page.toString(), pageSize: pageSize.toString() }; // Parámetros de consulta
-
-  return this.http.get<any>(url, { headers, params }); // Hacer la solicitud GET
+  registrarVisualizacion(token: string, idAnuncio: number, urlMostrada: string): Observable<any> {
+    const url = `${this.apiURL}historial-anuncios/registrar`;
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    const body = {
+      idAnuncio: idAnuncio,
+      urlMostrada: urlMostrada
+    };
+    return this.http.post<any>(url, body, { headers });
+  }
 }
-
-}
-

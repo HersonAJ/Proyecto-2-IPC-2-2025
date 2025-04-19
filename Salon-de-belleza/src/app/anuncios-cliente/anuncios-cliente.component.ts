@@ -5,6 +5,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { Anuncio } from '../anuncios-cliente.service';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router'; 
 
 @Component({
   selector: 'app-anuncios-cliente',
@@ -17,14 +18,15 @@ export class AnunciosClienteComponent implements OnInit, OnDestroy {
 
   anuncios: Anuncio[] = []; 
   paginaActual: number = 1; 
-  anunciosPorPagina: number = 5; // Número de anuncios por página
-  totalAnuncios: number = 0; // Total de anuncios disponibles
+  anunciosPorPagina: number = 5; 
+  totalAnuncios: number = 0; 
   private loginSubscription: Subscription = new Subscription; 
 
   constructor(
     private authService: AuthService,
     private anunciosClienteService: AnunciosClienteService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private router: Router 
   ) {}
 
   ngOnInit(): void {
@@ -64,6 +66,7 @@ export class AnunciosClienteComponent implements OnInit, OnDestroy {
           return anuncio;
         });
         this.totalAnuncios = response.totalAnuncios; 
+        this.reportarAnunciosMostrados();
       },
       (error) => {
         console.error('Error al cargar anuncios:', error);
@@ -77,6 +80,7 @@ export class AnunciosClienteComponent implements OnInit, OnDestroy {
       const token = localStorage.getItem('token');
       if (token) {
         this.cargarAnuncios(token);
+        this.reportarAnunciosMostrados(); // Reportar la URL y los IDs de los anuncios al avanzar
       }
     }
   }
@@ -87,7 +91,25 @@ export class AnunciosClienteComponent implements OnInit, OnDestroy {
       const token = localStorage.getItem('token');
       if (token) {
         this.cargarAnuncios(token);
+        this.reportarAnunciosMostrados(); // Reportar la URL y los IDs de los anuncios al retroceder
       }
     }
+  }
+
+  reportarAnunciosMostrados(): void {
+    const urlActual = this.router.url;
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No se encontró un token de autorización.');
+      return;
+    }
+    this.anuncios.forEach(anuncio => {
+      const idAnuncio = anuncio.idAnuncio;
+      const urlMostrada = `http://localhost:4200${urlActual}`;
+      this.anunciosClienteService.registrarVisualizacion(token, idAnuncio, urlMostrada).subscribe({
+        next: () => {},
+        error: (err) => console.error(`Error al registrar la visualización del anuncio con ID ${idAnuncio}:`, err)
+      });
+    });
   }
 }
