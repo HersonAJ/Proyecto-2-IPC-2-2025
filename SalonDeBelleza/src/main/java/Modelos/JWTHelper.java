@@ -98,11 +98,11 @@ public class JWTHelper {
     }
     // Método auxiliar para limpiar el token
 
-    protected String cleanToken(String token) {
+    public String cleanToken(String token) {
         if (token.startsWith("Bearer ")) {
-            return token.substring(7).trim(); // Eliminar "Bearer " y limpiar espacios adicionales
+            String cleanedToken = token.substring(7).trim();
+            return cleanedToken;
         }
         return token.trim();
     }
-
 }

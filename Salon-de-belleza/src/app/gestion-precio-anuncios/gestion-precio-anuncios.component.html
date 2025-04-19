@@ -1,0 +1,45 @@
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Gestión de Precios de Anuncios</h1>
+  
+    <!-- Mensaje de estado -->
+    <div *ngIf="mensaje" class="alert alert-info text-center" role="alert">
+      {{ mensaje }}
+    </div>
+  
+    <!-- Tabla de precios -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Tipo de Anuncio</th>
+            <th scope="col">Precio Diario Actual</th>
+            <th scope="col">Nuevo Precio</th>
+            <th scope="col">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let precio of precios">
+            <td>{{ precio.tipo }}</td>
+            <td>{{ precio.precioPorDia | currency: 'Q' }}</td>
+            <td>
+              <input
+                [(ngModel)]="precio.nuevoPrecio"
+                type="number"
+                class="form-control"
+                placeholder="Nuevo Precio"
+                min="0.01"
+              />
+            </td>
+            <td>
+              <button
+                class="btn btn-success"
+                (click)="actualizarPrecio(precio.tipo, precio.nuevoPrecio)">
+                Actualizar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
