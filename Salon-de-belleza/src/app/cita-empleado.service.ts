@@ -58,4 +58,11 @@ export class CitaEmpleadoService {
       return this.http.post<Factura>(url, null, { headers });
     }
   
+ // Agregar cliente a la lista negra
+  agregarAListaNegra(token: string, idCliente: number, idCita: number, motivo: string): Observable<any> {
+    const url = `${this.apiURL}lista-negra/agregar`;
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const body = { idCliente, idCita, motivo };
+    return this.http.post(url, body, { headers });
+  } 
 }

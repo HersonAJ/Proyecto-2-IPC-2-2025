@@ -1,0 +1,83 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package BackendDB;
+
+import Modelos.ListaNegra;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+/**
+ *
+ * @author herson
+ */
+public class GestionListaNegraDB {
+
+    public boolean agregarAListaNegra(ListaNegra listaNegra) {
+        String query = "INSERT INTO Lista_Negra (ID_Cliente, ID_Cita, Motivo, Estado) VALUES (?, ?, ?, 'En Lista')";
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            connection = ConexionDB.getConnection();
+            statement = connection.prepareStatement(query);
+
+            statement.setInt(1, listaNegra.getIdCliente());
+            statement.setInt(2, listaNegra.getIdCita());
+            statement.setString(3, listaNegra.getMotivo());
+            statement.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public boolean cambiarEstadoListaNegra(int idLista, String nuevoEstado) {
+        String query = "UPDATE Lista_Negra SET Estado = ? WHERE ID_Lista = ?";
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            connection = ConexionDB.getConnection();
+            statement = connection.prepareStatement(query);
+
+            statement.setString(1, nuevoEstado);
+            statement.setInt(2, idLista);
+            statement.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+}

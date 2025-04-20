@@ -82,6 +82,33 @@ export class GestionarCitasEmpleadoComponent implements OnInit {
       return;
     }
   
+    // Lógica especial para "No Presentado"
+    if (nuevoEstado === 'No Presentado') {
+      const cita = this.buscarCitaPorId(idCita);
+      const motivo = 'No presentado';
+  
+      this.citaEmpleadoService.cambiarEstadoCita(this.token, idCita, nuevoEstado).subscribe({
+        next: () => {
+          this.citaEmpleadoService.agregarAListaNegra(this.token, cita.idCliente, idCita, motivo).subscribe({
+            next: () => {
+              this.mensaje = 'El cliente se agregó a la lista negra exitosamente y el estado de la cita se actualizó.';
+              this.obtenerCitas(); // Refrescar las citas después de ambas acciones
+            },
+            error: (error: HttpErrorResponse) => {
+              this.mensaje = 'Error al agregar el cliente a la lista negra. Inténtelo nuevamente.';
+              console.error(error);
+            }
+          });
+        },
+        error: (error: HttpErrorResponse) => {
+          this.mensaje = 'Error al cambiar el estado de la cita. Inténtelo nuevamente.';
+          console.error(error);
+        }
+      });
+  
+      return; 
+    }
+  
     if (nuevoEstado === 'Atendida') {
       this.citaSeleccionada = this.buscarCitaPorId(idCita);
       this.mostrarFactura = true;
@@ -97,7 +124,7 @@ export class GestionarCitasEmpleadoComponent implements OnInit {
         }
       });
     }
-  }  
+}   
 
   buscarCitaPorId(idCita: number): Cita {
     for (const citas of Object.values(this.citasPorEstado)) {
