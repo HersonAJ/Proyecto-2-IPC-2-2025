@@ -1,0 +1,40 @@
+<div *ngIf="cargando" class="d-flex justify-content-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando lista negra...</span>
+    </div>
+  </div>
+  
+  <div *ngIf="!cargando && listaNegra.length > 0" class="container my-4">
+    <h2 class="text-center mb-4">Gestión de Lista Negra</h2>
+    <table class="table table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Cliente</th>
+          <th>Motivo</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cliente of listaNegra; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ cliente.nombreCliente }}</td>
+          <td>{{ cliente.motivo }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="sacarDeListaNegra(cliente.idLista)">
+              Sacar de Lista Negra
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div *ngIf="!cargando && listaNegra.length === 0 && !mensaje" class="alert alert-info text-center mt-4">
+    No hay clientes en la lista negra.
+  </div>
+  
+  <div *ngIf="mensaje" class="alert alert-success text-center mt-4">
+    {{ mensaje }}
+  </div>
+  

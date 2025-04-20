@@ -8,6 +8,7 @@ import BackendDB.GestionListaNegraDB;
 import Modelos.JWTHelper;
 import Modelos.ListaNegra;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -16,6 +17,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
 
 /**
  *
@@ -28,49 +30,49 @@ public class GestionListaNegraController {
     private final JWTHelper jwtHelper = new JWTHelper();
 
     // Endpoint para agregar un cliente a la lista negra
-@POST
-@Path("/agregar")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public Response agregarAListaNegra(@HeaderParam("Authorization") String token, ListaNegra listaNegra) {
-    try {
-        // Depurar el token recibido
-        System.out.println("Token recibido: " + token);
+    @POST
+    @Path("/agregar")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response agregarAListaNegra(@HeaderParam("Authorization") String token, ListaNegra listaNegra) {
+        try {
+            // Depurar el token recibido
+            System.out.println("Token recibido: " + token);
 
-        // Validar y limpiar el token
-        if (!jwtHelper.validateToken2(token)) {
-            System.err.println("Error: Token inválido tras validación.");
-            return Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("{\"message\":\"Token inválido\"}")
-                    .build();
-        }
+            // Validar y limpiar el token
+            if (!jwtHelper.validateToken2(token)) {
+                System.err.println("Error: Token inválido tras validación.");
+                return Response.status(Response.Status.UNAUTHORIZED)
+                        .entity("{\"message\":\"Token inválido\"}")
+                        .build();
+            }
 
-        String cleanedToken = jwtHelper.cleanToken(token);
-        String rol = jwtHelper.getRolFromToken(cleanedToken);
-   
-        if (!"Empleado".equals(rol)) {
-            return Response.status(Response.Status.FORBIDDEN)
-                    .entity("{\"message\":\"Acceso denegado\"}")
-                    .build();
-        }
+            String cleanedToken = jwtHelper.cleanToken(token);
+            String rol = jwtHelper.getRolFromToken(cleanedToken);
 
-        // Agregar a la lista negra
-        boolean exito = gestionListaNegraDB.agregarAListaNegra(listaNegra);
-        if (exito) {
-            return Response.ok("{\"message\":\"Cliente agregado a la lista negra exitosamente.\"}").build();
-        } else {
+            if (!"Empleado".equals(rol)) {
+                return Response.status(Response.Status.FORBIDDEN)
+                        .entity("{\"message\":\"Acceso denegado\"}")
+                        .build();
+            }
+
+            // Agregar a la lista negra
+            boolean exito = gestionListaNegraDB.agregarAListaNegra(listaNegra);
+            if (exito) {
+                return Response.ok("{\"message\":\"Cliente agregado a la lista negra exitosamente.\"}").build();
+            } else {
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                        .entity("{\"message\":\"Error al agregar cliente a la lista negra.\"}")
+                        .build();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("{\"message\":\"Error al agregar cliente a la lista negra.\"}")
+                    .entity("{\"message\":\"Ocurrió un error interno.\"}")
                     .build();
         }
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("{\"message\":\"Ocurrió un error interno.\"}")
-                .build();
     }
-}
 
     // Endpoint para cambiar el estado de un cliente en la lista negra
     @PUT
@@ -82,21 +84,24 @@ public Response agregarAListaNegra(@HeaderParam("Authorization") String token, L
             @PathParam("nuevoEstado") String nuevoEstado) {
 
         try {
-            // Validar token y rol
-            if (!jwtHelper.validateToken(token)) {
+            // Validar y limpiar el token
+            if (!jwtHelper.validateToken2(token)) {
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity("{\"message\":\"Token inválido\"}")
                         .build();
             }
 
-            String rol = jwtHelper.getRolFromToken(token);
+            String cleanedToken = jwtHelper.cleanToken(token);
+            String rol = jwtHelper.getRolFromToken(cleanedToken);
+
+            // Verificar el rol
             if (!"Administrador".equals(rol)) {
                 return Response.status(Response.Status.FORBIDDEN)
                         .entity("{\"message\":\"Acceso denegado\"}")
                         .build();
             }
 
-            // Cambiar el estado
+            // Cambiar el estado en la lista negra
             boolean exito = gestionListaNegraDB.cambiarEstadoListaNegra(idLista, nuevoEstado);
             if (exito) {
                 return Response.ok("{\"message\":\"Estado actualizado exitosamente.\"}").build();
@@ -113,4 +118,44 @@ public Response agregarAListaNegra(@HeaderParam("Authorization") String token, L
                     .build();
         }
     }
+
+    @GET
+    @Path("/clientes-en-lista")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerClientesEnListaNegra(@HeaderParam("Authorization") String token) {
+        try {
+            // Validar token y rol
+            if (!jwtHelper.validateToken2(token)) {
+                return Response.status(Response.Status.UNAUTHORIZED)
+                        .entity("{\"message\":\"Token inválido\"}")
+                        .build();
+            }
+
+            String cleanedToken = jwtHelper.cleanToken(token);
+            String rol = jwtHelper.getRolFromToken(cleanedToken);
+
+            if (!"Administrador".equals(rol)) {
+                return Response.status(Response.Status.FORBIDDEN)
+                        .entity("{\"message\":\"Acceso denegado\"}")
+                        .build();
+            }
+
+            // Obtener clientes en lista negra
+            List<ListaNegra> listaNegra = gestionListaNegraDB.obtenerClientesEnListaNegra();
+            if (listaNegra.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\":\"No hay clientes en la lista negra.\"}")
+                        .build();
+            }
+
+            return Response.ok(listaNegra).build();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"message\":\"Ocurrió un error interno.\"}")
+                    .build();
+        }
+    }
+
 }

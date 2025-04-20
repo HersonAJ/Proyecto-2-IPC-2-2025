@@ -15,6 +15,16 @@ public class ListaNegra {
     private int idCita;
     private String motivo;
     private String estado;
+    
+    private String nombreCliente;
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
 
     public int getIdLista() {
         return idLista;
