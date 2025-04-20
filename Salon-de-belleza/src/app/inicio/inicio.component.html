@@ -1,60 +1,76 @@
 <div class="container mt-4">
-    <!-- Hero Section -->
-    <section class="hero position-relative mb-4">
+  <!-- Hero Section -->
+  <section class="hero position-relative mb-4">
       <img src="https://picsum.photos/1200/400" 
            class="img-fluid w-100"
            alt="Salón de Belleza" 
            crossorigin="anonymous">
       <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-white">
-        <h1 class="display-4 fw-bold">Bienvenido al Salón de Belleza</h1>
-        <p class="lead">Reserva tu cita hoy mismo</p>
-        <button class="btn btn-primary btn-lg mt-3">Agendar Cita</button>
+          <h1 class="display-4 fw-bold">Bienvenido al Salón de Belleza</h1>
+          <p class="lead">Reserva tu cita hoy mismo</p>
+          <button class="btn btn-primary btn-lg mt-3">Agendar Cita</button>
       </div>
-    </section>
-  
-    <!-- Servicios Destacados -->
-    <div class="container mt-4">
-      <!-- Servicios Destacados -->
+  </section>
+
+  <!-- Servicios Destacados -->
+  <div class="container mt-4">
       <section class="servicios mb-4">
-        <h2 class="mb-3">Servicios Destacados</h2>
-        <div class="row">
-          <div class="col-md-4 mb-3" *ngFor="let servicio of servicios; let i = index">
-            <div class="card h-100 uniform-card">
-              <!-- Imagen -->
-              <div class="uniform-image-container">
-                <img [src]="servicio.imagen" 
-                     alt="Imagen de {{ servicio.nombreServicio }}" 
-                     class="card-img-top"
-                     *ngIf="servicio.imagen">
+          <h2 class="mb-3">Servicios Destacados</h2>
+          <div class="row">
+              <div class="col-md-4 mb-3" *ngFor="let servicio of servicios; let i = index">
+                  <div class="card h-100 uniform-card">
+                      <!-- Imagen -->
+                      <div class="uniform-image-container">
+                          <img [src]="servicio.imagen" 
+                               alt="Imagen de {{ servicio.nombreServicio }}" 
+                               class="card-img-top"
+                               *ngIf="servicio.imagen">
+                      </div>
+
+                      <!-- Título -->
+                      <div class="card-body">
+                          <h5 class="card-title text-center">{{ servicio.nombreServicio }}</h5>
+                      </div>
+
+                      <!-- Botón para mostrar detalles -->
+                      <div class="card-footer text-center">
+                          <button class="btn btn-outline-primary" 
+                                  type="button" 
+                                  data-bs-toggle="collapse" 
+                                  [attr.data-bs-target]="'#detalle-' + i">
+                              Ver Detalles
+                          </button>
+                      </div>
+
+                      <!-- Contenido adicional (detalles) -->
+                      <div [id]="'detalle-' + i" class="collapse">
+                          <div class="card-body">
+                              <p class="card-text"><strong>Descripción:</strong> {{ servicio.descripcion }}</p>
+                              <p class="card-text"><strong>Duración:</strong> {{ servicio.duracion }} minutos</p>
+                              <p class="card-text"><strong>Precio:</strong> {{ servicio.precio | currency: 'Q' }}</p>
+
+                              <!-- Catálogo PDF: Visualización y Descarga -->
+                              <div *ngIf="servicio.catalogoPdf">
+                                  <p><strong>Catálogo PDF:</strong></p>
+                                  
+                                  <!-- Botón para visualizar el PDF -->
+                                  <button 
+                                      class="btn btn-outline-primary"
+                                      (click)="visualizarPdf(servicio.catalogoPdf)">
+                                      Visualizar PDF
+                                  </button>
+                                  
+                                  <!-- Botón para descargar el PDF -->
+                                  <a [href]="servicio.catalogoPdf" 
+                                     class="btn btn-outline-secondary" 
+                                     download="catalogo.pdf" 
+                                     target="_blank">Descargar PDF</a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
-    
-              <!-- Título -->
-              <div class="card-body">
-                <h5 class="card-title text-center">{{ servicio.nombreServicio }}</h5>
-              </div>
-    
-              <!-- Botón para mostrar detalles -->
-              <div class="card-footer text-center">
-                <button class="btn btn-outline-primary" 
-                        type="button" 
-                        data-bs-toggle="collapse" 
-                        [attr.data-bs-target]="'#detalle-' + i">
-                  Ver Detalles
-                </button>
-              </div>
-    
-              <!-- Contenido adicional (detalles) -->
-              <div [id]="'detalle-' + i" class="collapse">
-                <div class="card-body">
-                  <p class="card-text"><strong>Descripción:</strong> {{ servicio.descripcion }}</p>
-                  <p class="card-text"><strong>Duración:</strong> {{ servicio.duracion }} minutos</p>
-                  <p class="card-text"><strong>Precio:</strong> {{ servicio.precio | currency: 'Q' }}</p>
-                </div>
-              </div>
-            </div>
           </div>
-        </div>
       </section>
-    </div>
-    
-  
+  </div>
+</div>

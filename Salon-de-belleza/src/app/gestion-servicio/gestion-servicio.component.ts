@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GestionServiciosService } from '../gestion-servicio.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'; 
 
 @Component({
   selector: 'app-gestion-servicio',
@@ -13,15 +14,16 @@ import { GestionServiciosService } from '../gestion-servicio.service';
 })
 export class GestionServicioComponent implements OnInit {
   servicios: any[] = []; // Lista de servicios
-  empleadosAsignados: any[] = []; // Empleados asignados al servicio
-  empleadosNoAsignados: any[] = []; // Empleados no asignados al servicio
-  gestionForm: FormGroup; // Formulario para editar/gestionar servicios
-  servicioSeleccionado: any = null; // Servicio seleccionado para gestionar
-  selectedServiceIndex: number | null = null; // Índice del servicio colapsado
+  empleadosAsignados: any[] = []; 
+  empleadosNoAsignados: any[] = []; 
+  gestionForm: FormGroup;
+  servicioSeleccionado: any = null; 
+  selectedServiceIndex: number | null = null; 
 
   constructor(
     private gestionServicioService: GestionServiciosService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private sanitizer: DomSanitizer 
   ) {
     this.gestionForm = this.fb.group({
       nombreServicio: [''],
@@ -29,7 +31,9 @@ export class GestionServicioComponent implements OnInit {
       duracion: [''],
       precio: [''],
       estado: [''],
-      empleadosIds: [[]] // Lista de IDs de empleados asignados
+      empleadosIds: [[]], 
+      catalogoPdf: [null], 
+      catalogoPdfFile: [null]
     });
   }
 
@@ -41,7 +45,21 @@ export class GestionServicioComponent implements OnInit {
   cargarServicios(): void {
     this.gestionServicioService.obtenerServicios().subscribe({
       next: (data) => {
-        this.servicios = data;
+        this.servicios = data.map(servicio => {
+          // Convertir Base64 a Blob y generar una URL segura
+          let catalogoPdfUrl = null;
+          if (servicio.catalogoPdf) {
+            const byteCharacters = atob(servicio.catalogoPdf);
+            const byteNumbers = Array.from(byteCharacters).map(char => char.charCodeAt(0));
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf' });
+            catalogoPdfUrl = URL.createObjectURL(blob);
+          }
+          return {
+            ...servicio,
+            catalogoPdf: catalogoPdfUrl ? this.sanitizer.bypassSecurityTrustResourceUrl(catalogoPdfUrl) : null
+          };
+        });
       },
       error: (err) => {
         console.error('Error al cargar servicios:', err);
@@ -66,7 +84,6 @@ export class GestionServicioComponent implements OnInit {
       console.error('Servicio inválido seleccionado.');
       return;
     }
-
     this.servicioSeleccionado = servicio;
     this.gestionForm.patchValue({
       nombreServicio: servicio.nombreServicio,
@@ -74,9 +91,9 @@ export class GestionServicioComponent implements OnInit {
       duracion: servicio.duracion,
       precio: servicio.precio,
       estado: servicio.estado,
-      empleadosIds: []
+      empleadosIds: [],
+      catalogoPdf: servicio.catalogoPdf 
     });
-
     this.cargarEmpleadosPorEstado(servicio.idServicio);
   }
 
@@ -100,26 +117,32 @@ export class GestionServicioComponent implements OnInit {
       return;
     }
   
-    const datosGestion = {
-      servicio: {
-        nombreServicio: this.gestionForm.value.nombreServicio,
-        descripcion: this.gestionForm.value.descripcion,
-        duracion: this.gestionForm.value.duracion,
-        precio: this.gestionForm.value.precio
-      },
-      nuevaImagen: this.servicioSeleccionado.imagen, // Enviar la nueva imagen
-      nuevoEstado: this.gestionForm.value.estado,
-      empleadosIds: this.gestionForm.value.empleadosIds
+    const servicio = {
+      nombreServicio: this.gestionForm.value.nombreServicio,
+      descripcion: this.gestionForm.value.descripcion,
+      duracion: this.gestionForm.value.duracion,
+      precio: this.gestionForm.value.precio
     };
   
-    this.gestionServicioService.actualizarServicio(this.servicioSeleccionado.idServicio, datosGestion).subscribe({
+    const nuevoEstado = this.gestionForm.value.estado;
+    const empleadosIds = this.gestionForm.value.empleadosIds;
+  
+    const nuevaImagen = this.servicioSeleccionado.imagenFile || null;
+    const catalogoPdf = this.gestionForm.value.catalogoPdfFile || null;
+  
+    this.gestionServicioService.actualizarServicio(
+      this.servicioSeleccionado.idServicio,
+      servicio,
+      nuevaImagen,
+      catalogoPdf,
+      nuevoEstado,
+      empleadosIds
+    ).subscribe({
       next: () => {
         alert('El servicio ha sido actualizado con éxito.');
-        const index = this.servicios.findIndex(s => s.idServicio === this.servicioSeleccionado.idServicio);
-        if (index !== -1) {
-          this.servicios[index] = { ...this.servicioSeleccionado, ...datosGestion.servicio, estado: datosGestion.nuevoEstado };
-        }
-        this.cargarEmpleadosPorEstado(this.servicioSeleccionado.idServicio);
+        this.cargarServicios();
+        this.servicioSeleccionado = null;
+        this.selectedServiceIndex = null;
       },
       error: (err) => {
         console.error('Error al actualizar el servicio:', err);
@@ -142,15 +165,19 @@ export class GestionServicioComponent implements OnInit {
       });
     }
   }
-  onFileChange(event: any): void {
+
+  // Método para manejar cambios en el archivo PDF
+  onFileChange(event: any, tipo: 'imagen' | 'catalogoPdf'): void {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.servicioSeleccionado.imagen = reader.result?.toString().split(',')[1]; // Convertir a base64
-      };
-      reader.readAsDataURL(file);
+      if (tipo === 'imagen') {
+        this.servicioSeleccionado.imagenFile = file;
+      } else if (tipo === 'catalogoPdf') {
+        this.gestionForm.patchValue({
+          catalogoPdfFile: file 
+        });
+      }
+    } else {
     }
   }
 }
-

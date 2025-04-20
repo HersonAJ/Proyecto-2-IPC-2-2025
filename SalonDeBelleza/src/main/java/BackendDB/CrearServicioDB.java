@@ -40,12 +40,12 @@ public class CrearServicioDB {
                 statementServicio.setString(5, servicio.getEstado());
                 statementServicio.setBytes(6, servicio.getImagen());
                 statementServicio.setInt(7, servicio.getIdEncargado());
-                statementServicio.setBytes(8, servicio.getCatalogoPdf()); 
+                statementServicio.setBytes(8, servicio.getCatalogoPdf());
 
                 int rowsAffected = statementServicio.executeUpdate();
                 if (rowsAffected == 0) {
                     connection.rollback();
-                    return false; // Si no se inserta el servicio, cancelar la operación
+                    return false; 
                 }
 
                 // Obtener el ID del servicio recién insertado
@@ -64,7 +64,7 @@ public class CrearServicioDB {
                     }
                 } else {
                     connection.rollback();
-                    return false; 
+                    return false;
                 }
             }
 
@@ -73,7 +73,7 @@ public class CrearServicioDB {
 
         } catch (Exception e) {
             e.printStackTrace();
-            if (connection != null) { 
+            if (connection != null) {
                 try {
                     connection.rollback(); // Revertir cambios en caso de error
                 } catch (SQLException rollbackEx) {
@@ -85,7 +85,7 @@ public class CrearServicioDB {
         } finally {
             if (connection != null) {
                 try {
-                    connection.close(); 
+                    connection.close();
                 } catch (SQLException closeEx) {
                     closeEx.printStackTrace();
                 }
@@ -93,11 +93,11 @@ public class CrearServicioDB {
         }
     }
 
-    // Método para obtener todos los servicios
+// Método para obtener todos los servicios
     public List<Servicio> obtenerServicios() {
         List<Servicio> servicios = new ArrayList<>();
         String query = "SELECT s.ID_Servicio, s.Nombre_Servicio, s.Descripción, s.Duración, "
-                + "s.Precio, s.Estado, s.Imagen, s.ID_Encargado, "
+                + "s.Precio, s.Estado, s.Imagen, s.Catalogo_PDF, s.ID_Encargado, "
                 + "GROUP_CONCAT(u.Nombre) AS EmpleadosAsignados "
                 + "FROM Servicios s "
                 + "LEFT JOIN Trabajadores_Servicios ts ON s.ID_Servicio = ts.ID_Servicio "
@@ -114,7 +114,8 @@ public class CrearServicioDB {
                 servicio.setDuracion(resultSet.getInt("Duración"));
                 servicio.setPrecio(resultSet.getDouble("Precio"));
                 servicio.setEstado(resultSet.getString("Estado"));
-                servicio.setImagen(resultSet.getBytes("Imagen"));
+                servicio.setImagen(resultSet.getBytes("Imagen")); 
+                servicio.setCatalogoPdf(resultSet.getBytes("Catalogo_PDF")); 
                 servicio.setIdEncargado(resultSet.getInt("ID_Encargado"));
 
                 // Agregar empleados asignados

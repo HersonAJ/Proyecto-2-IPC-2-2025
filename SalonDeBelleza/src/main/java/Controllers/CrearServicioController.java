@@ -83,8 +83,8 @@ public class CrearServicioController {
             byte[] imagenBytes = imagenInputStream != null ? imagenInputStream.readAllBytes() : null;
             byte[] catalogoPdfBytes = catalogoPdfInputStream != null ? catalogoPdfInputStream.readAllBytes() : null;
 
-            servicio.setImagen(imagenBytes); 
-            servicio.setCatalogoPdf(catalogoPdfBytes); 
+            servicio.setImagen(imagenBytes);
+            servicio.setCatalogoPdf(catalogoPdfBytes);
 
             // Convertir el JSON de empleados a una lista de IDs
             ObjectMapper objectMapper = new ObjectMapper();
@@ -121,8 +121,7 @@ public class CrearServicioController {
         try {
             List<Servicio> servicios = crearServicioDB.obtenerServicios();
 
-            // Convertir imágenes de byte[] a Base64 y enviarlas como parte de la respuesta
-            List<Map<String, Object>> serviciosConImagenes = new ArrayList<>();
+            List<Map<String, Object>> serviciosConDatos = new ArrayList<>();
             for (Servicio servicio : servicios) {
                 Map<String, Object> servicioMap = new HashMap<>();
                 servicioMap.put("idServicio", servicio.getIdServicio());
@@ -133,20 +132,27 @@ public class CrearServicioController {
                 servicioMap.put("estado", servicio.getEstado());
                 servicioMap.put("idEncargado", servicio.getIdEncargado());
 
-                // Convertir imagen
+                // Convertir imagen a Base64
                 if (servicio.getImagen() != null) {
                     String imagenBase64 = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(servicio.getImagen());
-                    servicioMap.put("imagen", imagenBase64); // Enviar como String
+                    servicioMap.put("imagen", imagenBase64);
                 } else {
                     servicioMap.put("imagen", null);
                 }
 
-                serviciosConImagenes.add(servicioMap);
+                // Convertir PDF a Base64
+                if (servicio.getCatalogoPdf() != null) {
+                    String pdfBase64 = "data:application/pdf;base64," + Base64.getEncoder().encodeToString(servicio.getCatalogoPdf());
+                    servicioMap.put("catalogoPdf", pdfBase64); 
+                } else {
+                    servicioMap.put("catalogoPdf", null);
+                }
+
+                serviciosConDatos.add(servicioMap);
             }
 
-            return Response.ok(serviciosConImagenes).build();
+            return Response.ok(serviciosConDatos).build();
         } catch (Exception e) {
-            e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("{\"message\": \"Ocurrió un error al obtener los servicios.\"}")
                     .build();
@@ -179,7 +185,6 @@ public class CrearServicioController {
             return Response.ok(empleados).build();
 
         } catch (Exception e) {
-            e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("{\"message\": \"Ocurrió un error al obtener los empleados.\"}")
                     .build();

@@ -5,9 +5,10 @@
 package Controllers;
 
 import BackendDB.GestionServicioDB;
-import Modelos.GestionServicio;
 import Modelos.Servicio;
 import Modelos.Usuario;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PUT;
@@ -16,9 +17,12 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  *
@@ -44,7 +48,6 @@ public class GestionServicioController {
                 return Response.ok(servicios).build();
             }
         } catch (Exception e) {
-            e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("{\"message\": \"Ocurrió un error al obtener los servicios.\"}")
                     .build();
@@ -54,20 +57,38 @@ public class GestionServicioController {
     // Método para gestionar un servicio (editar, cambiar estado, actualizar imagen, empleados)
     @PUT
     @Path("/{idServicio}")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public Response gestionarServicio(
             @PathParam("idServicio") int idServicio,
-            GestionServicio request) {
+            @FormDataParam("servicio") String servicioJson,
+            @FormDataParam("nuevaImagen") InputStream nuevaImagenInputStream,
+            @FormDataParam("catalogoPdf") InputStream catalogoPdfInputStream,
+            @FormDataParam("nuevoEstado") String nuevoEstado,
+            @FormDataParam("empleadosIds") String empleadosIdsJson) {
 
         try {
-            boolean exito = gestionServicioDB.gestionarServicio(
-                    idServicio,
-                    request.getServicio(),
-                    request.getNuevaImagen(),
-                    request.getNuevoEstado(),
-                    request.getEmpleadosIds()
-            );
+            // Convertir JSON de 'servicio' a objeto Servicio
+            ObjectMapper objectMapper = new ObjectMapper();
+            Servicio servicio = servicioJson != null
+                    ? objectMapper.readValue(servicioJson, Servicio.class)
+                    : null;
+
+            byte[] nuevaImagen = nuevaImagenInputStream != null
+                    ? nuevaImagenInputStream.readAllBytes()
+                    : null;
+
+            byte[] catalogoPdf = catalogoPdfInputStream != null
+                    ? catalogoPdfInputStream.readAllBytes()
+                    : null;
+
+            // Convertir JSON de 'empleadosIds' a lista de enteros
+            List<Integer> empleadosIds = empleadosIdsJson != null
+                    ? objectMapper.readValue(empleadosIdsJson, new TypeReference<List<Integer>>() {
+                    })
+                    : null;
+
+            boolean exito = gestionServicioDB.gestionarServicio(idServicio, servicio, nuevaImagen, catalogoPdf, nuevoEstado, empleadosIds);
 
             if (exito) {
                 return Response.ok("{\"message\": \"Servicio actualizado con éxito.\"}").build();
@@ -76,8 +97,7 @@ public class GestionServicioController {
                         .entity("{\"message\": \"No se pudo actualizar el servicio.\"}")
                         .build();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("{\"message\": \"Ocurrió un error interno al gestionar el servicio.\"}")
                     .build();
@@ -100,7 +120,6 @@ public class GestionServicioController {
                 return Response.ok(empleados).build();
             }
         } catch (Exception e) {
-            e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("{\"message\": \"Ocurrió un error interno al obtener los empleados.\"}")
                     .build();
@@ -125,7 +144,6 @@ public class GestionServicioController {
 
             return Response.ok(empleadosPorEstado).build();
         } catch (Exception e) {
-            e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("{\"message\": \"Ocurrió un error al obtener la información de los empleados.\"}")
                     .build();

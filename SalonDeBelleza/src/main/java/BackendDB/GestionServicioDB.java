@@ -9,6 +9,7 @@ import Modelos.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.util.List;
 public class GestionServicioDB {
 
     // Método para gestionar un servicio (dinámico: edición, actualización de estado, asignaciones)
-    public boolean gestionarServicio(int idServicio, Servicio servicio, byte[] nuevaImagen, String nuevoEstado, List<Integer> empleadosIds) {
+    public boolean gestionarServicio(int idServicio, Servicio servicio, byte[] nuevaImagen, byte[] nuevoCatalogoPdf, String nuevoEstado, List<Integer> empleadosIds) {
         Connection connection = null;
 
         try {
@@ -44,6 +45,16 @@ public class GestionServicioDB {
                 String queryActualizarImagen = "UPDATE Servicios SET Imagen = ? WHERE ID_Servicio = ?";
                 try (PreparedStatement statement = connection.prepareStatement(queryActualizarImagen)) {
                     statement.setBytes(1, nuevaImagen);
+                    statement.setInt(2, idServicio);
+                    statement.executeUpdate();
+                }
+            }
+
+            // Actualizar el catálogo PDF del servicio
+            if (nuevoCatalogoPdf != null) {
+                String queryActualizarCatalogoPdf = "UPDATE Servicios SET Catalogo_PDF = ? WHERE ID_Servicio = ?";
+                try (PreparedStatement statement = connection.prepareStatement(queryActualizarCatalogoPdf)) {
+                    statement.setBytes(1, nuevoCatalogoPdf);
                     statement.setInt(2, idServicio);
                     statement.executeUpdate();
                 }
@@ -81,13 +92,11 @@ public class GestionServicioDB {
             connection.commit(); // Confirmar transacción
             return true;
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
             if (connection != null) {
                 try {
                     connection.rollback(); // Revertir cambios en caso de error
-                } catch (Exception rollbackEx) {
-                    rollbackEx.printStackTrace();
+                } catch (SQLException rollbackEx) {
                 }
             }
             return false;
@@ -96,8 +105,7 @@ public class GestionServicioDB {
             if (connection != null) {
                 try {
                     connection.close(); // Cerrar conexión
-                } catch (Exception closeEx) {
-                    closeEx.printStackTrace();
+                } catch (SQLException closeEx) {
                 }
             }
         }
@@ -109,7 +117,7 @@ public class GestionServicioDB {
         String query = "SELECT u.ID_Usuario, u.Nombre, u.Descripción "
                 + "FROM Usuarios u "
                 + "JOIN Trabajadores_Servicios ts ON u.ID_Usuario = ts.ID_Empleado "
-                + "WHERE ts.ID_Servicio = ?";
+                + "WHERE ts.ID_Servicio = ? AND u.Estado = 'Activo'";
 
         try (Connection connection = ConexionDB.getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
 
@@ -134,7 +142,7 @@ public class GestionServicioDB {
 
     public List<Servicio> obtenerTodosLosServicios() {
         List<Servicio> servicios = new ArrayList<>();
-        String query = "SELECT ID_Servicio, Nombre_Servicio, Descripción, Duración, Precio, Estado, Imagen, ID_Encargado FROM Servicios";
+        String query = "SELECT ID_Servicio, Nombre_Servicio, Descripción, Duración, Precio, Estado, Imagen, Catalogo_PDF, ID_Encargado FROM Servicios";
 
         try (Connection connection = ConexionDB.getConnection(); PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
 
@@ -147,6 +155,7 @@ public class GestionServicioDB {
                 servicio.setPrecio(resultSet.getDouble("Precio"));
                 servicio.setEstado(resultSet.getString("Estado"));
                 servicio.setImagen(resultSet.getBytes("Imagen"));
+                servicio.setCatalogoPdf(resultSet.getBytes("Catalogo_PDF"));
                 servicio.setIdEncargado(resultSet.getInt("ID_Encargado"));
 
                 servicios.add(servicio);
@@ -166,7 +175,7 @@ public class GestionServicioDB {
                 + "FROM Usuarios u "
                 + "LEFT JOIN Trabajadores_Servicios ts "
                 + "ON u.ID_Usuario = ts.ID_Empleado AND ts.ID_Servicio = ? "
-                + "WHERE ts.ID_Servicio IS NULL AND u.Rol = 'Empleado'";
+                + "WHERE ts.ID_Servicio IS NULL AND u.Rol = 'Empleado' AND u.Estado = 'Activo'";
 
         try (Connection connection = ConexionDB.getConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
 
