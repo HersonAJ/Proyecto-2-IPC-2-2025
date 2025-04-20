@@ -17,11 +17,12 @@ export class CrearServicioComponent implements OnInit {
     duracion: 0,
     precio: 0,
     estado: 'Visible',
-    imagen: null as string | ArrayBuffer | null,
-    empleados: [] as number[] // Lista de IDs de empleados seleccionados
+    empleados: [] as number[] 
   };
 
-  empleados: any[] = []; // Almacenar el listado de empleados
+  imagenFile: File | null = null; 
+  catalogoPdfFile: File | null = null;
+  empleados: any[] = [];
 
   constructor(private servicioService: ServiciosService) {}
 
@@ -50,25 +51,25 @@ export class CrearServicioComponent implements OnInit {
       // Eliminar ID del empleado desmarcado
       this.servicio.empleados = this.servicio.empleados.filter(id => id !== idEmpleado);
     }
-    console.log('Empleados seleccionados:', this.servicio.empleados);
   }
 
   // Método para manejar el cambio del archivo de imagen
-  onFileChange(event: any): void {
+  onFileChange(event: any, fileType: string): void {
     const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64String = (reader.result as string).split(',')[1]; 
-        this.servicio.imagen = base64String; // Solo enviar la parte base64
-      };
-      reader.readAsDataURL(file);
+    if (fileType === 'imagen') {
+      this.imagenFile = file; 
+    } else if (fileType === 'catalogoPdf') {
+      this.catalogoPdfFile = file;
     }
   }
 
   crearServicio(): void {
-    console.log('Datos enviados:', this.servicio);
-    this.servicioService.crearServicio(this.servicio).subscribe({
+    // Validar que ambos archivos estén seleccionados
+    if (!this.imagenFile || !this.catalogoPdfFile) {
+      alert('Debe seleccionar tanto una imagen como un archivo PDF.');
+      return;
+    }
+    this.servicioService.crearServicio(this.servicio, this.catalogoPdfFile, this.imagenFile).subscribe({
       next: (response) => {
         alert('Servicio creado exitosamente');
         console.log(response);
@@ -88,9 +89,9 @@ export class CrearServicioComponent implements OnInit {
       duracion: 0,
       precio: 0,
       estado: 'Visible',
-      imagen: null,
       empleados: []
     };
+    this.imagenFile = null; 
+    this.catalogoPdfFile = null;
   }
 }
-

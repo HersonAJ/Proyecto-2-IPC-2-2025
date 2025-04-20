@@ -20,11 +20,11 @@ import java.util.List;
  */
 public class CrearServicioDB {
 
-    // Método para crear un servicio
+// Método para crear un servicio
     public boolean crearServicio(Servicio servicio, List<Integer> empleadosIds) {
         Connection connection = null;
-        String queryServicio = "INSERT INTO Servicios (Nombre_Servicio, Descripción, Duración, Precio, Estado, Imagen, ID_Encargado) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String queryServicio = "INSERT INTO Servicios (Nombre_Servicio, Descripción, Duración, Precio, Estado, Imagen, ID_Encargado, Catalogo_PDF) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         String queryAsociacion = "INSERT INTO Trabajadores_Servicios (ID_Empleado, ID_Servicio) VALUES (?, ?)";
 
         try {
@@ -40,6 +40,7 @@ public class CrearServicioDB {
                 statementServicio.setString(5, servicio.getEstado());
                 statementServicio.setBytes(6, servicio.getImagen());
                 statementServicio.setInt(7, servicio.getIdEncargado());
+                statementServicio.setBytes(8, servicio.getCatalogoPdf()); 
 
                 int rowsAffected = statementServicio.executeUpdate();
                 if (rowsAffected == 0) {
@@ -57,13 +58,13 @@ public class CrearServicioDB {
                         for (Integer idEmpleado : empleadosIds) {
                             statementAsociacion.setInt(1, idEmpleado);
                             statementAsociacion.setInt(2, idServicio);
-                            statementAsociacion.addBatch(); // Agregar a batch para ejecutar múltiples inserciones
+                            statementAsociacion.addBatch(); // multiples inserciones
                         }
                         statementAsociacion.executeBatch(); // Ejecutar batch de inserciones
                     }
                 } else {
                     connection.rollback();
-                    return false; // Si no se obtiene el ID del servicio, cancelar la operación
+                    return false; 
                 }
             }
 
@@ -72,7 +73,7 @@ public class CrearServicioDB {
 
         } catch (Exception e) {
             e.printStackTrace();
-            if (connection != null) { // Verificar si la conexión no es nula antes de intentar rollback
+            if (connection != null) { 
                 try {
                     connection.rollback(); // Revertir cambios en caso de error
                 } catch (SQLException rollbackEx) {
@@ -84,7 +85,7 @@ public class CrearServicioDB {
         } finally {
             if (connection != null) {
                 try {
-                    connection.close(); // Cerrar la conexión
+                    connection.close(); 
                 } catch (SQLException closeEx) {
                     closeEx.printStackTrace();
                 }

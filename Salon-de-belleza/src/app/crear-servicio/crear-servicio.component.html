@@ -72,9 +72,20 @@
       <label for="imagen" class="form-label">Imagen del Servicio</label>
       <input 
         type="file" 
-        (change)="onFileChange($event)" 
+        (change)="onFileChange($event, 'imagen')" 
         name="imagen" 
         id="imagen" 
+        class="form-control">
+    </div>
+
+    <!-- PDF del Catálogo -->
+    <div class="mb-3">
+      <label for="catalogoPdf" class="form-label">Catálogo PDF</label>
+      <input 
+        type="file" 
+        (change)="onFileChange($event, 'catalogoPdf')" 
+        name="catalogoPdf" 
+        id="catalogoPdf" 
         class="form-control">
     </div>
 

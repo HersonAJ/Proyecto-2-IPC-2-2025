@@ -8,6 +8,8 @@ import BackendDB.CrearServicioDB;
 import Modelos.JWTHelper;
 import Modelos.Servicio;
 import Modelos.Usuario;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
@@ -16,11 +18,14 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  *
@@ -34,21 +39,19 @@ public class CrearServicioController {
 
     @POST
     @Path("/crear")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response crearServicio(Map<String, Object> requestBody, @HeaderParam("Authorization") String authToken) {
+    public Response crearServicio(
+            @FormDataParam("nombreServicio") String nombreServicio,
+            @FormDataParam("descripcion") String descripcion,
+            @FormDataParam("duracion") int duracion,
+            @FormDataParam("precio") double precio,
+            @FormDataParam("estado") String estado,
+            @FormDataParam("imagen") InputStream imagenInputStream,
+            @FormDataParam("catalogoPdf") InputStream catalogoPdfInputStream,
+            @FormDataParam("empleados") String empleadosJson,
+            @HeaderParam("Authorization") String authToken) {
         try {
-            // Extraer el servicio y la lista de empleados del cuerpo de la solicitud
-            Servicio servicio = new Servicio();
-            servicio.setNombreServicio((String) requestBody.get("nombreServicio"));
-            servicio.setDescripcion((String) requestBody.get("descripcion"));
-            servicio.setDuracion((Integer) requestBody.get("duracion"));
-            servicio.setPrecio(Double.valueOf(requestBody.get("precio").toString()));
-            servicio.setEstado((String) requestBody.get("estado"));
-            servicio.setImagen(Base64.getDecoder().decode((String) requestBody.get("imagen")));
-
-            List<Integer> empleadosIds = (List<Integer>) requestBody.get("empleados");
-
             // Validar el token JWT
             if (authToken == null || !jwtHelper.validateToken(authToken.replace("Bearer ", ""))) {
                 return Response.status(Response.Status.UNAUTHORIZED)
@@ -66,7 +69,27 @@ public class CrearServicioController {
 
             // Extraer el ID del usuario desde el token y asignarlo al servicio
             int idEncargado = jwtHelper.getIdUsuarioFromToken(authToken.replace("Bearer ", ""));
+
+            // Crear el objeto Servicio y asignar los datos principales
+            Servicio servicio = new Servicio();
+            servicio.setNombreServicio(nombreServicio);
+            servicio.setDescripcion(descripcion);
+            servicio.setDuracion(duracion);
+            servicio.setPrecio(precio);
+            servicio.setEstado(estado);
             servicio.setIdEncargado(idEncargado);
+
+            // Leer la imagen y el PDF como bytes
+            byte[] imagenBytes = imagenInputStream != null ? imagenInputStream.readAllBytes() : null;
+            byte[] catalogoPdfBytes = catalogoPdfInputStream != null ? catalogoPdfInputStream.readAllBytes() : null;
+
+            servicio.setImagen(imagenBytes); 
+            servicio.setCatalogoPdf(catalogoPdfBytes); 
+
+            // Convertir el JSON de empleados a una lista de IDs
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<Integer> empleadosIds = objectMapper.readValue(empleadosJson, new TypeReference<List<Integer>>() {
+            });
 
             // Crear el servicio en la base de datos
             boolean creado = crearServicioDB.crearServicio(servicio, empleadosIds);
@@ -79,6 +102,11 @@ public class CrearServicioController {
                         .entity("{\"message\": \"No se pudo crear el servicio.\"}")
                         .build();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("{\"message\": \"Error al procesar los archivos (imagen o PDF).\"}")
+                    .build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)

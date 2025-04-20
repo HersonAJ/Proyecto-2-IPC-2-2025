@@ -19,6 +19,15 @@ public class Servicio {
     private byte[] imagen;
     private int idEncargado;
     private String [] empleadosAsignados;
+    private byte [] catalogoPdf;
+
+    public byte[] getCatalogoPdf() {
+        return catalogoPdf;
+    }
+
+    public void setCatalogoPdf(byte[] catalogoPdf) {
+        this.catalogoPdf = catalogoPdf;
+    }
 
     public String[] getEmpleadosAsignados() {
         return empleadosAsignados;

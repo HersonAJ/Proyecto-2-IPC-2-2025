@@ -13,16 +13,26 @@ export class ServiciosService {
     this.apiURL = this.restConstant.getApiURL() + 'serviciosNuevos';
   }
 
-  // Método para crear un servicio
-  crearServicio(servicio: any): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      'Content-Type': 'application/json'
-    });
-    
-    return this.http.post(`${this.apiURL}/crear`, servicio, { headers });
-  }
+// Método para crear un servicio
+crearServicio(servicio: any, catalogoPdf: File, imagen: File): Observable<any> {
+  const token = localStorage.getItem('token');
+  const formData = new FormData();
+
+  // Agregar campos al FormData
+  formData.append('nombreServicio', servicio.nombreServicio);
+  formData.append('descripcion', servicio.descripcion);
+  formData.append('duracion', servicio.duracion.toString());
+  formData.append('precio', servicio.precio.toString());
+  formData.append('estado', servicio.estado);
+  formData.append('imagen', imagen, imagen.name); 
+  formData.append('catalogoPdf', catalogoPdf, catalogoPdf.name); 
+  formData.append('empleados', JSON.stringify(servicio.empleados)); 
+
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+  });
+  return this.http.post(`${this.apiURL}/crear`, formData, { headers });
+}
 
   // Método para obtener todos los servicios
   obtenerServicios(): Observable<any[]> {

@@ -78,7 +78,7 @@ public class ConexionDB {
             p.setTestOnReturn(false);
             p.setValidationInterval(30000);
             p.setTimeBetweenEvictionRunsMillis(30000);
-            p.setMaxActive(100);
+            p.setMaxActive(200);
             p.setInitialSize(10);
             p.setMaxWait(10000);
             p.setRemoveAbandonedTimeout(60);
