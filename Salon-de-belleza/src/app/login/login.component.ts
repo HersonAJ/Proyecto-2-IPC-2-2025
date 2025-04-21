@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router'; 
 import { UsuarioService } from '../usuario.service';
 import { AuthService } from '../auth.service';
 
@@ -16,7 +17,8 @@ export class LoginComponent {
 
   constructor(
     private usuarioService: UsuarioService, 
-    private authService: AuthService  
+    private authService: AuthService,
+    private router: Router 
   ) { }
 
   login(): void {
@@ -35,7 +37,7 @@ export class LoginComponent {
               this.authService.login(response.token);
             }
             alert("Bienvenido!");
-            // Opcionalmente, redirige a otra ruta
+            this.router.navigate(['/']); // Redirigir al inicio
           } else {
             alert("Respuesta inesperada");
           }

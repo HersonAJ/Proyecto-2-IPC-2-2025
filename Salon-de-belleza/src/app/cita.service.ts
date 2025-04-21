@@ -105,4 +105,11 @@ export class CitaService {
       const headers = { Authorization: `Bearer ${token}` };
       return this.http.get<Cita[]>(url, { headers });
     }
+
+    // Método para validar si el cliente puede agendar una cita
+    validarClientePermitido(token: string): Observable<{ permitido: boolean; message: string }> {
+      const url = `${this.apiURL}validacion/permitido`;
+      const headers = { Authorization: `Bearer ${token}` };
+      return this.http.get<{ permitido: boolean; message: string }>(url, { headers });
+    }
 }

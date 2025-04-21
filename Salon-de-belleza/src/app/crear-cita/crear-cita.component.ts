@@ -25,19 +25,20 @@ export class CrearCitaComponent implements OnInit {
   };
   mensaje: string = '';
   servicioSeleccionado: Servicio | null = null;
+  permitido: boolean = false; 
 
   constructor(private citaService: CitaService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.cargarServicios();
+    this.verificarPermisoCliente(); // Verificar si el cliente está permitido
   }
 
   cargarServicios(): void {
     this.citaService.obtenerServicios().subscribe({
       next: (data) => {
-        this.servicios = data.map(servicio => ({
+        this.servicios = data.map((servicio) => ({
           ...servicio,
-          imagen: servicio.imagen ? `data:image/jpeg;base64,${servicio.imagen}` : null
+          imagen: servicio.imagen ? `data:image/jpeg;base64,${servicio.imagen}` : null,
         }));
       },
       error: () => {
@@ -47,14 +48,14 @@ export class CrearCitaComponent implements OnInit {
   }
 
   onServicioChange(): void {
-    this.servicioSeleccionado = this.servicios.find(s => s.idServicio === this.cita.idServicio) || null;
+    this.servicioSeleccionado = this.servicios.find((s) => s.idServicio === this.cita.idServicio) || null;
     this.cargarEmpleadosPorServicio();
   }
 
   cargarEmpleadosPorServicio(): void {
-    this.empleados = []; // Vaciar el array de empleados al cambiar de servicio
-    this.cita.idEmpleado = 0; // Reiniciar el empleado seleccionado
-  
+    this.empleados = [];
+    this.cita.idEmpleado = 0;
+
     if (this.cita.idServicio) {
       this.citaService.obtenerEmpleadosPorServicio(this.cita.idServicio).subscribe({
         next: (data) => {
@@ -62,7 +63,7 @@ export class CrearCitaComponent implements OnInit {
           if (this.empleados.length === 0) {
             this.mensaje = 'No se encontraron empleados para este servicio.';
           } else {
-            this.mensaje = ''; // Limpiar mensajes si hay empleados disponibles
+            this.mensaje = '';
           }
         },
         error: () => {
@@ -90,13 +91,13 @@ export class CrearCitaComponent implements OnInit {
   }
 
   crearCita(): void {
-    const idCliente = this.authService.getIdUsuarioFromToken(); // Obtener el ID del cliente desde el token
+    const idCliente = this.authService.getIdUsuarioFromToken();
     if (!idCliente) {
       this.mensaje = 'Error: No se pudo identificar al cliente autenticado.';
       return;
     }
 
-    this.cita.idCliente = idCliente; // Asignar el ID del cliente a la cita
+    this.cita.idCliente = idCliente;
 
     if (this.validarCita()) {
       this.citaService.crearCita(this.cita).subscribe({
@@ -105,11 +106,10 @@ export class CrearCitaComponent implements OnInit {
           this.resetFormulario();
         },
         error: (err) => {
-          console.error('Error desde el backend:', err); // Mostrar el error recibido
+          console.error('Error desde el backend:', err);
           this.mensaje = err.error?.message || 'Ocurrió un error al crear la cita.';
         },
         complete: () => {
-          // Mensaje de respaldo
           if (!this.mensaje) {
             this.mensaje = 'La cita fue creada exitosamente.';
           }
@@ -123,20 +123,43 @@ export class CrearCitaComponent implements OnInit {
       this.mensaje = 'Por favor, completa todos los campos antes de enviar.';
       return false;
     }
-    return true; 
+    return true;
   }
 
   resetFormulario(): void {
     this.cita = {
       idServicio: 0,
-      idCliente: 0, 
+      idCliente: 0,
       idEmpleado: 0,
       fechaCita: '',
       horaCita: '',
       estado: 'Pendiente',
     };
     this.horariosOcupados = [];
-    this.empleados = []; // Limpiar los empleados al reiniciar el formulario
-    this.mensaje = ''; // Limpiar los mensajes
+    this.empleados = [];
+    this.mensaje = '';
+  }
+
+  verificarPermisoCliente(): void {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.mensaje = 'Error: No se pudo identificar al cliente autenticado.';
+      return;
+    }
+
+    this.citaService.validarClientePermitido(token).subscribe({
+      next: (respuesta) => {
+        this.permitido = respuesta.permitido; // Asignar el resultado de la validación
+        if (!this.permitido) {
+          this.mensaje = respuesta.message || 'No puede agendar citas debido a restricciones.';
+        } else {
+          this.cargarServicios(); 
+        }
+      },
+      error: (err) => {
+        console.error('Error al validar permisos del cliente:', err);
+        this.mensaje = err.error?.message || 'Ocurrió un error al validar los permisos del cliente.';
+      },
+    });
   }
 }

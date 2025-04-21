@@ -1,6 +1,13 @@
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Crear Cita</h1>
-  
+  <h1 class="text-center mb-4">Crear Cita</h1>
+
+  <!-- Mensaje de Restricción -->
+  <div *ngIf="!permitido" class="alert alert-danger text-center" role="alert">
+    {{ mensaje }}
+  </div>
+
+  <!-- Formulario de Citas -->
+  <div *ngIf="permitido">
     <!-- Mensaje de feedback -->
     <div *ngIf="mensaje" class="alert alert-info" role="alert">
       {{ mensaje }}
@@ -86,4 +93,4 @@
       </div>
     </form>
   </div>
-  
+</div>

@@ -19,19 +19,41 @@ import java.util.List;
 public class GestionListaNegraDB {
 
     public boolean agregarAListaNegra(ListaNegra listaNegra) {
-        String query = "INSERT INTO Lista_Negra (ID_Cliente, ID_Cita, Motivo, Estado) VALUES (?, ?, ?, 'En Lista')";
+        String verificarQuery = "SELECT ID_Lista FROM Lista_Negra WHERE ID_Cliente = ?";
+        String actualizarQuery = "UPDATE Lista_Negra SET ID_Cita = ?, Motivo = ?, Estado = 'En Lista' WHERE ID_Cliente = ?";
+        String insertarQuery = "INSERT INTO Lista_Negra (ID_Cliente, ID_Cita, Motivo, Estado) VALUES (?, ?, ?, 'En Lista')";
         Connection connection = null;
-        PreparedStatement statement = null;
+        PreparedStatement verificarStmt = null;
+        PreparedStatement actualizarStmt = null;
+        PreparedStatement insertarStmt = null;
+        ResultSet resultSet = null;
 
         try {
             connection = ConexionDB.getConnection();
-            statement = connection.prepareStatement(query);
 
-            statement.setInt(1, listaNegra.getIdCliente());
-            statement.setInt(2, listaNegra.getIdCita());
-            statement.setString(3, listaNegra.getMotivo());
-            statement.executeUpdate();
-            return true;
+            // Verificar si ya existe un registro para el cliente
+            verificarStmt = connection.prepareStatement(verificarQuery);
+            verificarStmt.setInt(1, listaNegra.getIdCliente());
+            resultSet = verificarStmt.executeQuery();
+
+            if (resultSet.next()) {
+                // Actualizar el registro existente
+                actualizarStmt = connection.prepareStatement(actualizarQuery);
+                actualizarStmt.setInt(1, listaNegra.getIdCita());
+                actualizarStmt.setString(2, listaNegra.getMotivo());
+                actualizarStmt.setInt(3, listaNegra.getIdCliente());
+                int rowsUpdated = actualizarStmt.executeUpdate();
+                return rowsUpdated > 0; 
+
+            } else {
+                // Insertar un nuevo registro
+                insertarStmt = connection.prepareStatement(insertarQuery);
+                insertarStmt.setInt(1, listaNegra.getIdCliente());
+                insertarStmt.setInt(2, listaNegra.getIdCita());
+                insertarStmt.setString(3, listaNegra.getMotivo());
+                int rowsInserted = insertarStmt.executeUpdate();
+                return rowsInserted > 0; 
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -39,8 +61,17 @@ public class GestionListaNegraDB {
 
         } finally {
             try {
-                if (statement != null) {
-                    statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (verificarStmt != null) {
+                    verificarStmt.close();
+                }
+                if (actualizarStmt != null) {
+                    actualizarStmt.close();
+                }
+                if (insertarStmt != null) {
+                    insertarStmt.close();
                 }
                 if (connection != null) {
                     connection.close();
