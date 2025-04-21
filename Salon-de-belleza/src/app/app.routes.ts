@@ -19,6 +19,7 @@ import { CrearAnunciosComponent } from './crear-anuncios/crear-anuncios.componen
 import { GestionAnunciosComponent } from './gestion-anuncios/gestion-anuncios.component';
 import { GestionPrecioAnunciosComponent } from './gestion-precio-anuncios/gestion-precio-anuncios.component';
 import { GestionListaNegraComponent } from './gestion-lista-negra/gestion-lista-negra.component';
+import { ReporteGananciasComponent } from './reporte-ganancias/reporte-ganancias.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -40,5 +41,6 @@ export const routes: Routes = [
     {path: 'crear-anuncio', component: CrearAnunciosComponent},
     {path: 'gestion-anuncios', component: GestionAnunciosComponent},
     {path: 'gestion-precio-anuncios', component: GestionPrecioAnunciosComponent},
-    {path: 'gestion-lista-negra', component: GestionListaNegraComponent}
+    {path: 'gestion-lista-negra', component: GestionListaNegraComponent},
+    {path: 'reporte-ganancias-admin', component: ReporteGananciasComponent}
 ];
