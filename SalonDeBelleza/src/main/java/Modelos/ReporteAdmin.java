@@ -52,12 +52,14 @@ public class ReporteAdmin {
     }
 // Constructor para reportes de clientes 
 
-    public ReporteAdmin(Integer idCliente, String nombreCliente, Integer totalReservas, BigDecimal totalGastado, String clienteTipo) {
-        this.idCliente = idCliente;
-        this.nombreCliente = nombreCliente;
-        this.totalReservas = totalReservas;
-        this.totalGastado = totalGastado;
-    }
+// Constructor para clientes con más citas reservadas
+public ReporteAdmin(Integer idCliente, String nombreCliente, Integer totalCitas, String detalleCitas) {
+    this.idCliente = idCliente;
+    this.nombreCliente = nombreCliente;
+    this.totalCitas = totalCitas;
+    this.descripcion = detalleCitas;
+}
+
 
     // Constructor para reportes de anuncios
     public ReporteAdmin(Integer idAnuncio, String urlMostrada, Integer vecesMostrado, String tipoAnuncio, String anunciante) {
