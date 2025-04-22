@@ -23,5 +23,11 @@ export class ReportesAdminService {
       const url = `${this.apiURL}admin/reportes/listado`;
       return this.http.get<any[]>(url);
     }
+  
+  // Método para obtener el reporte de anuncios más mostrados
+  obtenerAnunciosMasMostrados(params: any): Observable<any[]> {
+    const url = `${this.apiURL}admin/reportes/anuncios-mas-mostrados`;
+    return this.http.get<any[]>(url, { params });
+  }
 }
 

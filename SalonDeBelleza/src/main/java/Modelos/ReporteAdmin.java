@@ -36,6 +36,8 @@ public class ReporteAdmin {
     private Integer idAnuncio;
     private String urlMostrada;
     private Integer vecesMostrado;
+    private String tipoAnuncio;
+    private String anunciante;
 
     public ReporteAdmin() {
     }
@@ -58,11 +60,31 @@ public class ReporteAdmin {
     }
 
     // Constructor para reportes de anuncios
-    public ReporteAdmin(Integer idAnuncio, String urlMostrada, Integer vecesMostrado) {
+    public ReporteAdmin(Integer idAnuncio, String urlMostrada, Integer vecesMostrado, String tipoAnuncio, String anunciante) {
         this.idAnuncio = idAnuncio;
         this.urlMostrada = urlMostrada;
         this.vecesMostrado = vecesMostrado;
+        this.tipoAnuncio = tipoAnuncio;
+        this.anunciante = anunciante;
     }
+
+    public String getTipoAnuncio() {
+        return tipoAnuncio;
+    }
+
+    public void setTipoAnuncio(String tipoAnuncio) {
+        this.tipoAnuncio = tipoAnuncio;
+    }
+
+    public String getAnunciante() {
+        return anunciante;
+    }
+
+    public void setAnunciante(String anunciante) {
+        this.anunciante = anunciante;
+    }
+    
+    
 
     public BigDecimal getPrecioFactura() {
         return precioFactura;
