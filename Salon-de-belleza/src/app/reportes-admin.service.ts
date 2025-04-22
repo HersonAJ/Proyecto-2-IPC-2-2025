@@ -41,5 +41,12 @@ export class ReportesAdminService {
     const url = `${this.apiURL}admin/reportes/clientes-menos-citas`;
     return this.http.get<any[]>(url, { params });
   }
+
+  // Método para obtener el reporte de menos citas
+  obtenerReporteListaNegra(params: any): Observable<any[]> {
+    const url = `${this.apiURL}admin/reportes/clientes-lista-negra`;
+    return this.http.get<any[]>(url, { params });
+  }
+
 }
 
