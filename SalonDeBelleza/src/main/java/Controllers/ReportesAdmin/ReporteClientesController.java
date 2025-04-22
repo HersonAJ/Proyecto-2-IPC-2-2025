@@ -28,7 +28,7 @@ public class ReporteClientesController {
     @Path("/clientes-mas-citas")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerClientesConMasCitas(@QueryParam("fechaInicio") Date fechaInicio,
-                                               @QueryParam("fechaFin") Date fechaFin) {
+            @QueryParam("fechaFin") Date fechaFin) {
         try {
             List<ReporteClientes> reportes = reporteDB.obtenerClientesConMasCitas(fechaInicio, fechaFin);
 
@@ -47,5 +47,29 @@ public class ReporteClientesController {
                     .build();
         }
     }
-}
 
+    @GET
+    @Path("/clientes-menos-citas")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerClientesConMenosCitas(@QueryParam("fechaInicio") Date fechaInicio,
+            @QueryParam("fechaFin") Date fechaFin) {
+        try {
+            List<ReporteClientes> reportes = reporteDB.obtenerClientesConMenosCitas(fechaInicio, fechaFin);
+
+            // Manejo si no hay resultados
+            if (reportes.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\":\"No se encontraron registros para el reporte solicitado.\"}")
+                        .build();
+            }
+
+            return Response.ok(reportes).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"message\":\"Ocurrió un error al obtener el reporte.\"}")
+                    .build();
+        }
+    }
+
+}
