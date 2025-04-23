@@ -28,7 +28,7 @@ public class ReporteAnunciosController {
     @Path("/anuncios-mas-mostrados")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerAnunciosMasMostrados(@QueryParam("fechaInicio") Date fechaInicio,
-                                                @QueryParam("fechaFin") Date fechaFin) {
+            @QueryParam("fechaFin") Date fechaFin) {
         try {
             List<ReporteAnuncios> reportes = reporteDB.obtenerAnunciosMasMostrados(fechaInicio, fechaFin);
 
@@ -46,5 +46,50 @@ public class ReporteAnunciosController {
                     .build();
         }
     }
-}
 
+    @GET
+    @Path("/anuncios-menos-mostrados")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerAnunciosMenosMostrados(@QueryParam("fechaInicio") Date fechaInicio,
+            @QueryParam("fechaFin") Date fechaFin) {
+        try {
+            List<ReporteAnuncios> reportes = reporteDB.obtenerAnunciosMenosMostrados(fechaInicio, fechaFin);
+
+            if (reportes.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\":\"No se encontraron registros para el reporte solicitado.\"}")
+                        .build();
+            }
+
+            return Response.ok(reportes).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"message\":\"Ocurrió un error al obtener el reporte.\"}")
+                    .build();
+        }
+    }
+
+    @GET
+    @Path("/anuncios-mas-comprados")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerHistorialAnunciosMasComprados(@QueryParam("fechaInicio") Date fechaInicio,
+            @QueryParam("fechaFin") Date fechaFin) {
+        try {
+            List<ReporteAnuncios> reportes = reporteDB.obtenerHistorialAnunciosMasComprados(fechaInicio, fechaFin);
+
+            if (reportes.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\":\"No se encontraron registros para el reporte solicitado.\"}")
+                        .build();
+            }
+
+            return Response.ok(reportes).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"message\":\"Ocurrió un error al obtener el reporte.\"}")
+                    .build();
+        }
+    }
+}
