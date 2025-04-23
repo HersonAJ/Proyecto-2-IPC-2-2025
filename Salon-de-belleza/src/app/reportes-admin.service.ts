@@ -48,5 +48,17 @@ export class ReportesAdminService {
     return this.http.get<any[]>(url, { params });
   }
 
+  // Método para obtener el reporte del cliente que mas gasto
+  obtenerReporteClienteMasGasto(params: any): Observable<any[]> {
+    const url = `${this.apiURL}admin/reportes/clientes-mas-gastadores`;
+    return this.http.get<any[]>(url, { params });
+  }
+  
+  // Método para obtener el reporte del cliente que menos gasto
+  obtenerReporteClienteMenosGasto(params: any): Observable<any[]> {
+    const url = `${this.apiURL}admin/reportes/clientes-menos-gasto`;
+    return this.http.get<any[]>(url, { params });
+  }
+
 }
 
