@@ -71,5 +71,11 @@ export class ReportesAdminService {
     const url = `${this.apiURL}admin/reportes/ganancias-por-empleado`;
     return this.http.get<any[]>(url, { params });
   }
+
+  // Método para obtener el reporte de ganancias por empleado
+  obtenerReporteClientesMasCitasAtendidas(params: any): Observable<any[]> {
+    const url = `${this.apiURL}admin/reportes/clientes-mas-citas-atendidas`;
+    return this.http.get<any[]>(url, { params });
+  }  
 }
 

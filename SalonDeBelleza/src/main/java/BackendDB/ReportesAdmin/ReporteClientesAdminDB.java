@@ -36,7 +36,8 @@ public class ReporteClientesAdminDB {
                 + "FROM Usuarios u "
                 + "JOIN Citas c ON u.ID_Usuario = c.ID_Cliente "
                 + "JOIN Servicios s ON c.ID_Servicio = s.ID_Servicio "
-                + "WHERE u.Rol = 'Cliente' ";
+                + "WHERE u.Rol = 'Cliente' "
+                + "AND c.Estado = 'Pendiente'";
         String fechaFilter = "AND c.Fecha_Cita BETWEEN ? AND ? ";
         String groupOrderBy = "GROUP BY u.ID_Usuario "
                 + "ORDER BY Total_Citas DESC "
@@ -110,7 +111,8 @@ public class ReporteClientesAdminDB {
                 + "FROM Usuarios u "
                 + "JOIN Citas c ON u.ID_Usuario = c.ID_Cliente "
                 + "JOIN Servicios s ON c.ID_Servicio = s.ID_Servicio "
-                + "WHERE u.Rol = 'Cliente' ";
+                + "WHERE u.Rol = 'Cliente' "
+                + "AND c.Estado = 'Pendiente'";
         String fechaFilter = "AND c.Fecha_Cita BETWEEN ? AND ? ";
         String groupOrderBy = "GROUP BY u.ID_Usuario "
                 + "ORDER BY Total_Citas ASC " // Ordenar por menos citas
