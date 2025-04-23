@@ -60,5 +60,16 @@ export class ReportesAdminService {
     return this.http.get<any[]>(url, { params });
   }
 
+  // Método para obtener los empleados activos
+  obtenerEmpleadosActivos(params: any): Observable<any[]> {
+    const url = `${this.apiURL}admin/reportes/empleados-activos`;
+    return this.http.get<any[]>(url, { params });
+  }
+
+  // Método para obtener el reporte de ganancias por empleado
+  obtenerReporteGanaciasPorEmpleado(params: any): Observable<any[]> {
+    const url = `${this.apiURL}admin/reportes/ganancias-por-empleado`;
+    return this.http.get<any[]>(url, { params });
+  }
 }
 

@@ -26,6 +26,7 @@ import { ReporteClienteMenosCitasComponent } from './reporte-cliente-menos-citas
 import { ReporteListaNegraComponent } from './reporte-lista-negra/reporte-lista-negra.component';
 import { ReporteClienteMasGastoComponent } from './reporte-cliente-mas-gasto/reporte-cliente-mas-gasto.component';
 import { ReporteClienteMenosGastoComponent } from './reporte-cliente-menos-gasto/reporte-cliente-menos-gasto.component';
+import { ReporteGananciasPorEmpleadoComponent } from './reporte-ganancias-por-empleado/reporte-ganancias-por-empleado.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -55,4 +56,5 @@ export const routes: Routes = [
     {path: 'reporte-lista-negra', component: ReporteListaNegraComponent},
     {path: 'reporte-clientes-mas-gasto', component: ReporteClienteMasGastoComponent},
     {path: 'reporte-clientes-menos-gasto', component: ReporteClienteMenosGastoComponent},
+    {path: 'reporte-empleado-mas-ganancia', component: ReporteGananciasPorEmpleadoComponent},
 ]
