@@ -109,10 +109,28 @@
       class="list-group-item list-group-item-action bg-info text-white">
       <i class="bi bi-gear me-2"></i>Gestionar Anuncios
     </a>
-    <a *ngIf="rolUsuario === 'Marketing'" routerLink="/reportes-marketing"
-      class="list-group-item list-group-item-action bg-info text-white">
-      <i class="bi bi-pie-chart me-2"></i>Reportes Marketing
-    </a>
+    <div *ngIf="rolUsuario === 'Marketing'">
+      <h5 class="text-info">Reportes de Marketing</h5>
+      
+      <!-- Reporte: Top 5 anuncios más mostrados -->
+      <a routerLink="/reporte-marketing-anuncios-mas-mostrados"
+         class="list-group-item list-group-item-action bg-info text-white">
+        <i class="bi bi-bar-chart-line me-2"></i>Top 5 Anuncios Más Mostrados
+      </a>
+      
+      <!-- Reporte: Top 5 anuncios menos mostrados -->
+      <a routerLink="/reporte-anuncios-menos-mostrados"
+         class="list-group-item list-group-item-action bg-info text-white">
+        <i class="bi bi-bar-chart me-2"></i>Top 5 Anuncios Menos Mostrados
+      </a>
+      
+      <!-- Reporte: Historial de anuncios más comprados -->
+      <a routerLink="/reporte-anuncios-mas-comprados"
+         class="list-group-item list-group-item-action bg-info text-white">
+        <i class="bi bi-file-earmark-text me-2"></i>Historial de Anuncios Más Comprados
+      </a>
+    </div>
+    
 
     <!-- Opciones para Servicios -->
     <a *ngIf="rolUsuario === 'Servicios'" routerLink="/crear-servicio"
