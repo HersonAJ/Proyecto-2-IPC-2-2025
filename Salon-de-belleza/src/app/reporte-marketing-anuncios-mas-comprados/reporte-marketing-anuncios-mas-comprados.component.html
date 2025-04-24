@@ -32,17 +32,15 @@
     <table class="table table-striped table-bordered" *ngIf="reportes.length > 0">
       <thead class="table-dark">
         <tr>
-          <th>ID Anuncio</th>
-          <th>Nombre del Anunciante</th>
+          <th>#</th> 
           <th>Tipo de Anuncio</th>
-          <th>Total de Usos</th>
-          <th>Detalles de Usos</th>
+          <th>Cantidad de Anuncios</th> 
+          <th>Detalles de Anuncios</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let reporte of reportes">
-          <td>{{ reporte.idAnuncio }}</td>
-          <td>{{ reporte.nombreAnunciante }}</td>
+        <tr *ngFor="let reporte of reportes; let i = index"> 
+          <td>{{ i + 1 }}</td> 
           <td>{{ reporte.tipoAnuncio }}</td>
           <td>{{ reporte.totalVisualizaciones }}</td>
           <td>
@@ -55,4 +53,4 @@
         </tr>
       </tbody>
     </table>
-  </div>  
+  </div>

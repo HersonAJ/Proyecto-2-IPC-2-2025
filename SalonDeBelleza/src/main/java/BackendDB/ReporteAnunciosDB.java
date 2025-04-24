@@ -156,15 +156,13 @@ public class ReporteAnunciosDB {
         ResultSet resultSet = null;
         List<ReporteAnuncios> reportes = new ArrayList<>();
 
-        String query = "SELECT a.ID_Anuncio, "
-                + "a.Tipo_Anuncio, "
-                + "a.Nombre_Anunciante, "
+        String query = "SELECT a.Tipo_Anuncio, "
                 + "COUNT(p.ID_Pago) AS Total_Usos, "
                 + "GROUP_CONCAT(CONCAT('Comprador: ', p.Comprador, ', Fecha de Pago: ', p.Fecha_Pago, ', Monto: ', p.Monto) SEPARATOR '; ') AS Detalles_Usos "
                 + "FROM Anuncios a "
                 + "JOIN Pagos_Anuncios p ON a.ID_Anuncio = p.ID_Anuncio "
                 + "WHERE (p.Fecha_Pago BETWEEN ? AND ? OR (? IS NULL AND ? IS NULL)) "
-                + "GROUP BY a.ID_Anuncio, a.Tipo_Anuncio, a.Nombre_Anunciante "
+                + "GROUP BY a.Tipo_Anuncio "
                 + "ORDER BY Total_Usos DESC";
 
         try {
@@ -186,11 +184,9 @@ public class ReporteAnunciosDB {
 
             while (resultSet.next()) {
                 ReporteAnuncios reporte = new ReporteAnuncios();
-                reporte.setIdAnuncio(resultSet.getInt("ID_Anuncio"));
-                reporte.setTipoAnuncio(resultSet.getString("Tipo_Anuncio"));
-                reporte.setNombreAnunciante(resultSet.getString("Nombre_Anunciante"));
-                reporte.setTotalVisualizaciones(resultSet.getInt("Total_Usos"));
-                reporte.setUrlsMostradas(resultSet.getString("Detalles_Usos"));
+                reporte.setTipoAnuncio(resultSet.getString("Tipo_Anuncio")); // Tipo de anuncio
+                reporte.setTotalVisualizaciones(resultSet.getInt("Total_Usos")); // Total de usos por tipo de anuncio
+                reporte.setUrlsMostradas(resultSet.getString("Detalles_Usos")); // Detalles concatenados
                 reportes.add(reporte);
             }
         } catch (SQLException e) {
