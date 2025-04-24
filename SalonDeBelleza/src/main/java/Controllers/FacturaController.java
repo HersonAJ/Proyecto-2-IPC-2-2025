@@ -18,7 +18,6 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -68,7 +67,7 @@ public class FacturaController {
                     idEmpleado,
                     cita.getIdServicio(),
                     cita.getPrecioServicio(),
-                    LocalDate.now(),
+                    cita.getFechaCita(),
                     detallesFactura
             );
 

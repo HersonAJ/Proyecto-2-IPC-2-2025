@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class FacturaDB {
 
-    //metodo para crear una factura en la base de datos 
+    // metodo para crear una factura en la base de datos
     public boolean crearFactura(Factura factura) {
         String sqlFactura = "INSERT INTO Facturas (ID_Cita, ID_Cliente, ID_Empleado, ID_Servicio, Total, Fecha_Factura, Detalles) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -26,7 +26,6 @@ public class FacturaDB {
 
         try (Connection connection = ConexionDB.getConnection(); PreparedStatement stmtFactura = connection.prepareStatement(sqlFactura); PreparedStatement stmtActualizarCita = connection.prepareStatement(sqlActualizarCita)) {
 
-            // Insertar la factura
             stmtFactura.setInt(1, factura.getIdCita());
             stmtFactura.setInt(2, factura.getIdCliente());
             stmtFactura.setInt(3, factura.getIdEmpleado());
