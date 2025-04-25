@@ -1,12 +1,16 @@
-<div *ngIf="cargando" class="d-flex justify-content-center align-items-center my-5">
-  <div class="spinner-border text-primary" role="status">
-    <span class="visually-hidden">Cargando...</span>
-  </div>
-  <p class="ms-3">Cargando citas agendadas...</p>
-</div>
-
 <div *ngIf="!cargando && citas.length > 0" class="container my-4">
   <h2 class="text-center mb-4">Mis Citas Agendadas</h2>
+  
+  <!-- Selector para el criterio de ordenación -->
+  <div class="mb-3">
+    <label for="ordenSelector" class="form-label">Ordenar por:</label>
+    <select id="ordenSelector" class="form-select" [(ngModel)]="selectedOrden" (change)="ordenarCitas()">
+      <option value="Fecha">Fecha</option>
+      <option value="Hora">Hora</option>
+      <option value="Precio">Precio</option>
+    </select>
+  </div>
+
   <div class="row g-4">
     <div *ngFor="let cita of citas" class="col-md-6 col-lg-4">
       <div class="card border-primary shadow hover-effect">
@@ -31,12 +35,4 @@
       </div>
     </div>
   </div>
-</div>
-
-<div *ngIf="!cargando && citas.length === 0" class="alert alert-info text-center mt-4">
-  No tienes citas agendadas pendientes.
-</div>
-
-<div *ngIf="mensaje" class="alert alert-danger text-center mt-4">
-  {{ mensaje }}
 </div>
