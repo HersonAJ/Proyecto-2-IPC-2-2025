@@ -37,17 +37,11 @@ public class AnunciosClienteController {
             @QueryParam("page") int page,
             @QueryParam("pageSize") int pageSize) {
         try {
-            // Validar el token y obtener el ID del usuario
             int idUsuario = jwtHelper.validateAndGetId(token);
-
-            // Calcular el OFFSET
             int offset = (page - 1) * pageSize;
-
-            // Obtener los anuncios paginados
             List<Anuncio> anuncios = obtenerAnunciosDB.obtenerAnunciosPorUsuario(idUsuario, pageSize, offset);
             int total = obtenerAnunciosDB.contarAnunciosPorUsuario(idUsuario);
 
-            // Crear la respuesta paginada
             Map<String, Object> respuesta = new HashMap<>();
             respuesta.put("anuncios", anuncios);
             respuesta.put("totalAnuncios", total);

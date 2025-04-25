@@ -184,9 +184,9 @@ public class ReporteAnunciosDB {
 
             while (resultSet.next()) {
                 ReporteAnuncios reporte = new ReporteAnuncios();
-                reporte.setTipoAnuncio(resultSet.getString("Tipo_Anuncio")); // Tipo de anuncio
-                reporte.setTotalVisualizaciones(resultSet.getInt("Total_Usos")); // Total de usos por tipo de anuncio
-                reporte.setUrlsMostradas(resultSet.getString("Detalles_Usos")); // Detalles concatenados
+                reporte.setTipoAnuncio(resultSet.getString("Tipo_Anuncio")); 
+                reporte.setTotalVisualizaciones(resultSet.getInt("Total_Usos"));
+                reporte.setUrlsMostradas(resultSet.getString("Detalles_Usos"));
                 reportes.add(reporte);
             }
         } catch (SQLException e) {

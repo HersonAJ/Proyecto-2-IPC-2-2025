@@ -30,10 +30,8 @@ public class CancelarCitaController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response cancelarCita(@HeaderParam("Authorization") String token, @PathParam("idCita") int idCita) {
         try {
-            // Validar el token y obtener el ID del usuario
             int idCliente = jwtHelper.validateAndGetId(token);
 
-            // Cancelar la cita
             boolean resultado = cancelarCitaDB.cancelarCita(idCita);
 
             if (resultado) {
@@ -47,13 +45,11 @@ public class CancelarCitaController {
                                .build();
             }
         } catch (JWTVerificationException e) {
-            // Token inválido o vencido
             return Response.status(Response.Status.UNAUTHORIZED)
                            .entity("{\"message\": \"Token inválido o vencido.\"}")
                            .type(MediaType.APPLICATION_JSON)
                            .build();
         } catch (Exception e) {
-            // Error general
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                            .entity("{\"message\": \"Error al cancelar la cita: " + e.getMessage() + "\"}")
                            .type(MediaType.APPLICATION_JSON)

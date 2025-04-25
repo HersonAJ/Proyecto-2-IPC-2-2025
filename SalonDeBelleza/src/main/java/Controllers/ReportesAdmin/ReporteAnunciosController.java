@@ -38,10 +38,8 @@ public class ReporteAnunciosController {
     public Response obtenerAnunciosMasMostrados(@QueryParam("fechaInicio") Date fechaInicio,
             @QueryParam("fechaFin") Date fechaFin) {
         try {
-            // Llamar al método para obtener los anuncios más mostrados
             List<ReporteAdmin> reportes = reporteDB.obtenerAnunciosMasMostrados(fechaInicio, fechaFin);
 
-            // Verificar si hay resultados
             if (reportes.isEmpty()) {
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity("{\"message\":\"No se encontraron registros para el reporte solicitado.\"}")
@@ -63,7 +61,6 @@ public class ReporteAnunciosController {
     public Response descargarReporteAnunciosMasMostrados(@QueryParam("fechaInicio") Date fechaInicio,
             @QueryParam("fechaFin") Date fechaFin) {
         try {
-            // Obtener los datos para el reporte
             List<ReporteAdmin> reportes = reporteDB.obtenerAnunciosMasMostrados(fechaInicio, fechaFin);
 
             if (reportes.isEmpty()) {

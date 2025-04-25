@@ -52,14 +52,12 @@ public class CrearServicioController {
             @FormDataParam("empleados") String empleadosJson,
             @HeaderParam("Authorization") String authToken) {
         try {
-            // Validar el token JWT
             if (authToken == null || !jwtHelper.validateToken(authToken.replace("Bearer ", ""))) {
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity("{\"message\": \"Token inválido o no proporcionado.\"}")
                         .build();
             }
 
-            // Validar si el rol del usuario es 'Servicios'
             String rol = jwtHelper.getRolFromToken(authToken.replace("Bearer ", ""));
             if (!"Servicios".equals(rol)) {
                 return Response.status(Response.Status.FORBIDDEN)
@@ -67,10 +65,8 @@ public class CrearServicioController {
                         .build();
             }
 
-            // Extraer el ID del usuario desde el token y asignarlo al servicio
             int idEncargado = jwtHelper.getIdUsuarioFromToken(authToken.replace("Bearer ", ""));
 
-            // Crear el objeto Servicio y asignar los datos principales
             Servicio servicio = new Servicio();
             servicio.setNombreServicio(nombreServicio);
             servicio.setDescripcion(descripcion);
@@ -79,19 +75,16 @@ public class CrearServicioController {
             servicio.setEstado(estado);
             servicio.setIdEncargado(idEncargado);
 
-            // Leer la imagen y el PDF como bytes
             byte[] imagenBytes = imagenInputStream != null ? imagenInputStream.readAllBytes() : null;
             byte[] catalogoPdfBytes = catalogoPdfInputStream != null ? catalogoPdfInputStream.readAllBytes() : null;
 
             servicio.setImagen(imagenBytes);
             servicio.setCatalogoPdf(catalogoPdfBytes);
 
-            // Convertir el JSON de empleados a una lista de IDs
             ObjectMapper objectMapper = new ObjectMapper();
             List<Integer> empleadosIds = objectMapper.readValue(empleadosJson, new TypeReference<List<Integer>>() {
             });
 
-            // Crear el servicio en la base de datos
             boolean creado = crearServicioDB.crearServicio(servicio, empleadosIds);
             if (creado) {
                 return Response.status(Response.Status.CREATED)
@@ -132,7 +125,6 @@ public class CrearServicioController {
                 servicioMap.put("estado", servicio.getEstado());
                 servicioMap.put("idEncargado", servicio.getIdEncargado());
 
-                // Convertir imagen a Base64
                 if (servicio.getImagen() != null) {
                     String imagenBase64 = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(servicio.getImagen());
                     servicioMap.put("imagen", imagenBase64);
@@ -140,7 +132,6 @@ public class CrearServicioController {
                     servicioMap.put("imagen", null);
                 }
 
-                // Convertir PDF a Base64
                 if (servicio.getCatalogoPdf() != null) {
                     String pdfBase64 = "data:application/pdf;base64," + Base64.getEncoder().encodeToString(servicio.getCatalogoPdf());
                     servicioMap.put("catalogoPdf", pdfBase64); 
@@ -171,7 +162,6 @@ public class CrearServicioController {
                         .build();
             }
 
-            // Validar si el rol del usuario es 'Servicios' (solo ellos pueden obtener la lista de empleados)
             String rol = jwtHelper.getRolFromToken(authToken.replace("Bearer ", ""));
             if (!"Servicios".equals(rol)) {
                 return Response.status(Response.Status.FORBIDDEN)
@@ -179,7 +169,6 @@ public class CrearServicioController {
                         .build();
             }
 
-            // Obtener la lista de empleados
             List<Usuario> empleados = crearServicioDB.obtenerEmpleados();
 
             return Response.ok(empleados).build();

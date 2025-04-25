@@ -100,8 +100,8 @@ public class HistorialClienteDB {
             datosCita.put("idCita", cita.getIdCita());
             datosCita.put("nombreServicio", cita.getNombreServicio());
             datosCita.put("precioServicio", cita.getPrecioServicio());
-            datosCita.put("fechaCita", cita.getFechaCita().format(FECHA_FORMATTER)); // Formatear fecha
-            datosCita.put("horaCita", cita.getHoraCita().format(HORA_FORMATTER));   // Formatear hora
+            datosCita.put("fechaCita", cita.getFechaCita().format(FECHA_FORMATTER)); 
+            datosCita.put("horaCita", cita.getHoraCita().format(HORA_FORMATTER));   
             datosCita.put("estado", cita.getEstado());
             datosCita.put("nombreEmpleado", cita.getNombreEmpleado());
             datosCita.put("idFactura", cita.getIdFactura());

@@ -32,7 +32,6 @@ public class ReporteClientesGastoController {
         try {
             List<ReporteClientesGastos> reportes = reporteDB.obtenerClientesMasGastadores(fechaInicio, fechaFin);
 
-            // Verificar si no hay resultados
             if (reportes.isEmpty()) {
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity("{\"message\":\"No se encontraron registros para el reporte solicitado.\"}")
@@ -56,7 +55,6 @@ public class ReporteClientesGastoController {
         try {
             List<ReporteClientesGastos> reportes = reporteDB.obtenerClientesConMenosGasto(fechaInicio, fechaFin);
 
-            // Verificar si no hay resultados
             if (reportes.isEmpty()) {
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity("{\"message\":\"No se encontraron registros para el reporte solicitado.\"}")

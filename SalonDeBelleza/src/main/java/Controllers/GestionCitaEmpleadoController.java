@@ -34,9 +34,8 @@ public class GestionCitaEmpleadoController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerCitasAsignadas(@HeaderParam("Authorization") String token) {
         try {
-            int idEmpleado = jwtHelper.validateAndGetId(token); // Validar el token y obtener el ID del empleado
+            int idEmpleado = jwtHelper.validateAndGetId(token);
 
-            // Obtener las citas asignadas desde la base de datos
             List<Cita> citasAsignadas = gestionCitaEmpleadoDB.obtenerCitasAsignadas(idEmpleado);
 
             if (citasAsignadas.isEmpty()) {
@@ -65,7 +64,7 @@ public class GestionCitaEmpleadoController {
     @Path("/cambiarEstado/{idCita}")
     public Response cambiarEstadoCita(@HeaderParam("Authorization") String token, @PathParam("idCita") int idCita, @QueryParam("nuevoEstado") String nuevoEstado) {
         try {
-            int idEmpleado = jwtHelper.validateAndGetId(token); // Validar el token y obtener el ID del empleado
+            int idEmpleado = jwtHelper.validateAndGetId(token); 
 
             boolean cambioExitoso = gestionCitaEmpleadoDB.cambiarEstadoCita(idCita, nuevoEstado);
 

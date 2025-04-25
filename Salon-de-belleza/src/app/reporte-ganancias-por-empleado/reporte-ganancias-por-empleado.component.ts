@@ -74,4 +74,33 @@ export class ReporteGananciasPorEmpleadoComponent implements OnInit {
     this.idEmpleado = null;
     this.obtenerReporte(); 
   }
+
+  exportarReportePDF(): void {
+    const params: any = {};
+
+    if (this.fechaInicio.trim()) {
+      params.fechaInicio = this.fechaInicio;
+    }
+    if (this.fechaFin.trim()) {
+      params.fechaFin = this.fechaFin;
+    }
+    if (this.idEmpleado !== null) {
+      params.idEmpleado = this.idEmpleado;
+    }
+
+    this.reportesAdminService.exportarReporteGananciasPorEmpleadoPDF(params).subscribe({
+      next: (pdf: Blob) => {
+        const url = window.URL.createObjectURL(pdf);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'reporte_ganancias_por_empleado.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url); // Limpia el recurso después de usarlo
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error al exportar el reporte en PDF:', error);
+        this.mensaje = 'Ocurrió un error al exportar el reporte en PDF.';
+      },
+    });
+  }
 }

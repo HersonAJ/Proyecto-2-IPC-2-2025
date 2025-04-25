@@ -42,7 +42,6 @@ public class UsuarioController {
         @FormDataParam("Descripcion") String descripcion
     ) {
         try {
-            // Convertir la foto de perfil a byte[] si se envió
             byte[] fotoBytes = null;
             if (fotoPerfil != null) {
                 try {
@@ -58,7 +57,6 @@ public class UsuarioController {
             Codificador codificador = new Codificador();
             String contrasenaCodificada = codificador.codificar(contrasena);
             
-            // Crear el objeto Usuario con los datos recibidos
             Usuario usuario = new Usuario();
             usuario.setNombre(nombre);
             usuario.setCorreo(correo);
@@ -69,10 +67,9 @@ public class UsuarioController {
             usuario.setRol(rol);
             usuario.setEstado(estado);
             usuario.setFotoPerfil(fotoBytes);
-            usuario.setHobbies(hobbies);           // Cadena separada por comas
-            usuario.setDescripcion(descripcion);   // Descripción textual
+            usuario.setHobbies(hobbies);          
+            usuario.setDescripcion(descripcion);
             
-            // Llamada al método de inserción de la base de datos
             boolean exito = RegistroDB.insertarUsuario(usuario);
 
             if (exito) {

@@ -95,12 +95,10 @@ public class EditarPerfilController {
             
             int idUsuario = jwtHelper.getIdUsuarioFromToken(token);
             
-            // Si la contraseña nueva está vacía o es nula, obtener la contraseña actual
             if (usuario.getContrasena() == null || usuario.getContrasena().trim().isEmpty()) {
                 String contrasenaActual = EditarPerfilDB.obtenerContrasenaById(idUsuario);
                 usuario.setContrasena(contrasenaActual);
             } else {
-                // Si se ingresa una nueva contraseña, codificarla
                 Codificador codificador = new Codificador();
                 usuario.setContrasena(codificador.codificar(usuario.getContrasena()));
             }

@@ -28,18 +28,15 @@ public class ValidacionListaNegraController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response esClientePermitido(@HeaderParam("Authorization") String token) {
         try {
-            // Validar el token y limpiarlo
             if (!jwtHelper.validateToken2(token)) {
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity("{\"message\":\"Token inválido\"}")
                         .build();
             }
 
-            // Obtener el ID del cliente desde el token
             String cleanedToken = jwtHelper.cleanToken(token);
             int idCliente = jwtHelper.getIdUsuarioFromToken(cleanedToken);
 
-            // Validar si el cliente está permitido
             boolean permitido = validacionListaNegraDB.esClientePermitidoParaCita(idCliente);
             if (permitido) {
                 return Response.ok("{\"permitido\": true, \"message\": \"El cliente puede agendar citas.\"}").build();

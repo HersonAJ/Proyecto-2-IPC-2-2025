@@ -43,7 +43,6 @@ public class CrearCitaController {
                         .build();
             }
 
-            // Validación de disponibilidad del trabajador
             if (!citaDB.validarDisponibilidadTrabajador(cita.getIdEmpleado(), cita.getFechaCita(), cita.getHoraCita())) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("{\"message\": \"El trabajador seleccionado no está disponible en la fecha y hora seleccionada.\"}")
@@ -51,7 +50,6 @@ public class CrearCitaController {
                         .build();
             }
 
-            // Intentar crear la cita
             boolean resultado = citaDB.crearCita(cita);
 
             if (resultado) {

@@ -40,12 +40,4 @@ public class HorarioGeneral {
         this.horaCierre = horaCierre;
     }
     
-    @Override
-    public String toString() {
-        return "HorarioGeneral {" + 
-                "diaSemana=" + diaSemana + 
-                ", horaApertura=" + horaApertura +
-                ", horaCierre=" + horaCierre +
-                '}';
-    }
 }

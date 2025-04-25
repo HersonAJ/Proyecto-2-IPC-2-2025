@@ -34,10 +34,8 @@ public class HistorialClienteController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerHistorialCitasAtendidas(@HeaderParam("Authorization") String token) {
         try {
-            // Validar el token y obtener el ID del usuario
             int idCliente = jwtHelper.validateAndGetId(token);
 
-            // Obtener las citas atendidas
             List<Cita> citasAtendidas = historialClienteDB.obtenerHistorialCitasAtendidas(idCliente);
 
             if (citasAtendidas.isEmpty()) {
@@ -69,10 +67,8 @@ public class HistorialClienteController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerHistorialCitasCanceladas(@HeaderParam("Authorization") String token) {
         try {
-            // Validar el token y obtener el ID del usuario
             int idCliente = jwtHelper.validateAndGetId(token);
 
-            // Obtener las citas canceladas
             List<Cita> citasCanceladas = historialClienteDB.obtenerHistorialCitasCanceladas(idCliente);
 
             if (citasCanceladas.isEmpty()) {

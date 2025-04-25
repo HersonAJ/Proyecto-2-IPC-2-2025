@@ -33,7 +33,6 @@ public class GestionServicioController {
 
     private final GestionServicioDB gestionServicioDB = new GestionServicioDB();
 
-    // Método para obtener todos los servicios
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerTodosLosServicios() {
@@ -54,7 +53,6 @@ public class GestionServicioController {
         }
     }
 
-    // Método para gestionar un servicio (editar, cambiar estado, actualizar imagen, empleados)
     @PUT
     @Path("/{idServicio}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -68,7 +66,6 @@ public class GestionServicioController {
             @FormDataParam("empleadosIds") String empleadosIdsJson) {
 
         try {
-            // Convertir JSON de 'servicio' a objeto Servicio
             ObjectMapper objectMapper = new ObjectMapper();
             Servicio servicio = servicioJson != null
                     ? objectMapper.readValue(servicioJson, Servicio.class)
@@ -82,7 +79,6 @@ public class GestionServicioController {
                     ? catalogoPdfInputStream.readAllBytes()
                     : null;
 
-            // Convertir JSON de 'empleadosIds' a lista de enteros
             List<Integer> empleadosIds = empleadosIdsJson != null
                     ? objectMapper.readValue(empleadosIdsJson, new TypeReference<List<Integer>>() {
                     })
@@ -104,7 +100,6 @@ public class GestionServicioController {
         }
     }
 
-    // Método para obtener empleados asignados a un servicio
     @GET
     @Path("/{idServicio}/empleados")
     @Produces(MediaType.APPLICATION_JSON)
@@ -126,7 +121,6 @@ public class GestionServicioController {
         }
     }
 
-    // Método para obtener empleados asignados y no asignados a un servicio
     @GET
     @Path("/{idServicio}/empleados/estado")
     @Produces(MediaType.APPLICATION_JSON)
@@ -134,11 +128,9 @@ public class GestionServicioController {
         try {
             Map<String, List<Usuario>> empleadosPorEstado = new HashMap<>();
 
-            // Empleados asignados
             List<Usuario> empleadosAsignados = gestionServicioDB.obtenerEmpleadosPorServicio(idServicio);
             empleadosPorEstado.put("asignados", empleadosAsignados);
 
-            // Empleados no asignados
             List<Usuario> empleadosNoAsignados = gestionServicioDB.obtenerEmpleadosNoAsignados(idServicio);
             empleadosPorEstado.put("no_asignados", empleadosNoAsignados);
 

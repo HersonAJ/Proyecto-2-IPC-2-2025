@@ -58,7 +58,7 @@ public class CrearServicioDB {
                         for (Integer idEmpleado : empleadosIds) {
                             statementAsociacion.setInt(1, idEmpleado);
                             statementAsociacion.setInt(2, idServicio);
-                            statementAsociacion.addBatch(); // multiples inserciones
+                            statementAsociacion.addBatch(); 
                         }
                         statementAsociacion.executeBatch(); // Ejecutar batch de inserciones
                     }
@@ -75,7 +75,7 @@ public class CrearServicioDB {
             e.printStackTrace();
             if (connection != null) {
                 try {
-                    connection.rollback(); // Revertir cambios en caso de error
+                    connection.rollback(); 
                 } catch (SQLException rollbackEx) {
                     rollbackEx.printStackTrace();
                 }

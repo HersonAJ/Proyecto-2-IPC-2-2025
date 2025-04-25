@@ -30,13 +30,11 @@ public class GestionAnunciosController {
     private final GestionAnunciosDB gestionAnunciosDB = new GestionAnunciosDB();
     private final JWTHelper jwtHelper = new JWTHelper(); 
 
-    // Endpoint para obtener todos los anuncios sin filtros
     @GET
     @Path("/todos")
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerTodosLosAnuncios(@Context HttpHeaders headers) {
         try {
-            // Validar el token
             String token = headers.getHeaderString("Authorization");
             if (!jwtHelper.validateToken2(token)) {
                 return Response.status(Response.Status.UNAUTHORIZED)
@@ -45,7 +43,6 @@ public class GestionAnunciosController {
                         .build();
             }
 
-            // Obtener anuncios si el token es válido
             List<Anuncio> anuncios = gestionAnunciosDB.obtenerTodosLosAnuncios();
             return Response.ok(anuncios).build();
         } catch (Exception e) {
@@ -56,7 +53,6 @@ public class GestionAnunciosController {
         }
     }
 
-    // Endpoint para actualizar el estado de un anuncio
     @PUT
     @Path("/actualizar-estado/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -72,7 +68,6 @@ public class GestionAnunciosController {
                         .build();
             }
 
-            // Actualizar el estado si el token es válido
             boolean actualizado = gestionAnunciosDB.actualizarEstadoAnuncio(idAnuncio, nuevoEstado);
 
             if (actualizado) {
@@ -91,13 +86,11 @@ public class GestionAnunciosController {
         }
     }
 
-    // Endpoint para reactivar un anuncio (cambiar a "Activo")
     @PUT
     @Path("/reactivar/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response reactivarAnuncio(@PathParam("id") int idAnuncio, @Context HttpHeaders headers) {
         try {
-            // Validar el token
             String token = headers.getHeaderString("Authorization");
             if (!jwtHelper.validateToken2(token)) {
                 return Response.status(Response.Status.UNAUTHORIZED)
@@ -106,7 +99,6 @@ public class GestionAnunciosController {
                         .build();
             }
 
-            // Reactivar anuncio si el token es válido
             boolean reactivado = gestionAnunciosDB.reactivarAnuncio(idAnuncio);
 
             if (reactivado) {
@@ -125,13 +117,11 @@ public class GestionAnunciosController {
         }
     }
 
-    // Endpoint para desactivar un anuncio (cambiar a "Inactivo")
     @PUT
     @Path("/desactivar/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response desactivarAnuncio(@PathParam("id") int idAnuncio, @Context HttpHeaders headers) {
         try {
-            // Validar el token
             String token = headers.getHeaderString("Authorization");
             if (!jwtHelper.validateToken2(token)) {
                 return Response.status(Response.Status.UNAUTHORIZED)
@@ -140,7 +130,6 @@ public class GestionAnunciosController {
                         .build();
             }
 
-            // Desactivar anuncio si el token es válido
             boolean desactivado = gestionAnunciosDB.desactivarAnuncio(idAnuncio);
 
             if (desactivado) {

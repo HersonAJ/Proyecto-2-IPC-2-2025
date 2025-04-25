@@ -38,7 +38,7 @@ public class FacturaDB {
 
             // Si la factura fue insertada correctamente, actualizar la cita
             if (filasInsertadas > 0) {
-                stmtActualizarCita.setBoolean(1, true); // Cambiar Factura_Generada a true
+                stmtActualizarCita.setBoolean(1, true); 
                 stmtActualizarCita.setInt(2, factura.getIdCita());
                 int filasActualizadas = stmtActualizarCita.executeUpdate();
 

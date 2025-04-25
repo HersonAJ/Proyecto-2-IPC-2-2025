@@ -90,5 +90,12 @@ exportarReporteGananciasPDF(params: any): Observable<Blob> {
     return this.http.get(url, { params, responseType: 'blob' }); 
   }
 
+  // Método para generar el reporte de ganancias por empleado en PDF
+exportarReporteGananciasPorEmpleadoPDF(params: any): Observable<Blob> {
+  const url = `${this.apiURL}admin/reportes/ganancias-por-empleado/pdf`;
+  return this.http.get(url, { params, responseType: 'blob' });
+}
+
+
 }
 

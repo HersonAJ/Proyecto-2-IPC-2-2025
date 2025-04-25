@@ -18,13 +18,11 @@ import java.sql.Statement;
 public class RegistroDB {
 
     public static boolean insertarUsuario(Usuario usuario) {
-        // Consulta para insertar en Usuarios (incluye Descripción)
         String query = "INSERT INTO Usuarios (Nombre, DPI, Telefono, Direccion, Correo, Contraseña, Foto_Perfil, Descripción, Rol, Estado) " +
                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConexionDB.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            // Asignar parámetros usando los getters de Usuario
             stmt.setString(1, usuario.getNombre());
             stmt.setString(2, usuario.getDpi());
             stmt.setString(3, usuario.getTelefono());
@@ -36,7 +34,7 @@ public class RegistroDB {
             } else {
                 stmt.setNull(7, java.sql.Types.BLOB);
             }
-            stmt.setString(8, usuario.getDescripcion()); // Agregamos la descripción
+            stmt.setString(8, usuario.getDescripcion());
             stmt.setString(9, usuario.getRol());
             stmt.setString(10, usuario.getEstado());
 
@@ -54,7 +52,6 @@ public class RegistroDB {
                                 if (!hobbyName.isEmpty()) {
                                     int idHobbie = getOrInsertHobbie(conn, hobbyName);
                                     if (idHobbie > 0) {
-                                        // Insertar la asociación en la tabla Usuario_Hobbies
                                         String queryRelation = "INSERT INTO Usuario_Hobbies (ID_Usuario, ID_Hobbie) VALUES (?, ?)";
                                         try (PreparedStatement stmtRel = conn.prepareStatement(queryRelation)) {
                                             stmtRel.setInt(1, idUsuario);
@@ -76,9 +73,7 @@ public class RegistroDB {
         return false;
     }
 
-    // Método auxiliar para obtener (o insertar) un hobbie en la tabla Hobbies
     private static int getOrInsertHobbie(Connection conn, String hobbyName) throws SQLException {
-        // Primero, intenta seleccionar el hobbie si ya existe
         String querySelect = "SELECT ID_Hobbie FROM Hobbies WHERE Nombre = ?";
         try (PreparedStatement stmtSelect = conn.prepareStatement(querySelect)) {
             stmtSelect.setString(1, hobbyName);
@@ -101,7 +96,7 @@ public class RegistroDB {
                 }
             }
         }
-        return -1;  // Indica error si no se pudo insertar o recuperar el ID
+        return -1;
     }
 }
 

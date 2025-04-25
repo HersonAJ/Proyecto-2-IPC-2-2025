@@ -33,7 +33,6 @@ public class ReporteClientesMasCitasController {
         try {
             List<ReporteClientes> reportes = reporteDB.obtenerClientesConMasCitasAtendidas(fechaInicio, fechaFin, idEmpleado);
 
-            // Verificar si no hay resultados
             if (reportes.isEmpty()) {
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity("{\"message\":\"No se encontraron registros para el reporte solicitado.\"}")

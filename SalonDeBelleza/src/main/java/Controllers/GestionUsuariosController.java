@@ -34,14 +34,12 @@ public class GestionUsuariosController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerUsuarios(@HeaderParam("Authorization") String authToken) {
         try {
-            // Validar el token recibido
             if (authToken == null || !jwtHelper.validateToken(authToken.replace("Bearer ", ""))) {
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity("Token inválido o no proporcionado. Acceso denegado.")
                         .build();
             }
 
-            // Extraer el rol del token
             String rol = jwtHelper.getRolFromToken(authToken.replace("Bearer ", ""));
             if (!"Administrador".equals(rol)) {
                 return Response.status(Response.Status.FORBIDDEN)
@@ -49,7 +47,6 @@ public class GestionUsuariosController {
                         .build();
             }
 
-            // Token válido y rol autorizado: obtener usuarios
             List<Usuario> usuarios = gestionUsuariosDB.obtenerUsuarios();
             return Response.ok(usuarios).build();
 
@@ -67,14 +64,12 @@ public class GestionUsuariosController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response modificarEstadoUsuario(@PathParam("idUsuario") int idUsuario, Map<String, String> estadoData, @HeaderParam("Authorization") String authToken) {
         try {
-            // Validar el token JWT
             if (authToken == null || !jwtHelper.validateToken(authToken.replace("Bearer ", ""))) {
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity("{\"message\": \"Token inválido o no proporcionado.\"}")
                         .build();
             }
 
-            // Validar permisos de administrador
             String rol = jwtHelper.getRolFromToken(authToken.replace("Bearer ", ""));
             if (!"Administrador".equals(rol)) {
                 return Response.status(Response.Status.FORBIDDEN)
@@ -82,7 +77,6 @@ public class GestionUsuariosController {
                         .build();
             }
 
-            // Actualizar el estado en la base de datos
             String nuevoEstado = estadoData.get("estado");
             boolean actualizado = gestionUsuariosDB.modificarEstadoUsuario(idUsuario, nuevoEstado);
 

@@ -33,7 +33,7 @@ public class GestionarUsuariosDB {
                 usuario.setTelefono(resultSet.getString("Telefono"));
                 usuario.setDireccion(resultSet.getString("Direccion"));
                 usuario.setCorreo(resultSet.getString("Correo"));
-                usuario.setFotoPerfil(resultSet.getBytes("Foto_Perfil")); // Foto en bytes
+                usuario.setFotoPerfil(resultSet.getBytes("Foto_Perfil")); 
                 usuario.setDescripcion(resultSet.getString("Descripción"));
                 usuario.setRol(resultSet.getString("Rol"));
                 usuario.setEstado(resultSet.getString("Estado"));
@@ -55,7 +55,7 @@ public class GestionarUsuariosDB {
             statement.setString(1, nuevoEstado);
             statement.setInt(2, idUsuario);
 
-            return statement.executeUpdate() > 0; // Devuelve true si se actualizó al menos una fila
+            return statement.executeUpdate() > 0; 
         } catch (Exception e) {
             e.printStackTrace();
             return false;

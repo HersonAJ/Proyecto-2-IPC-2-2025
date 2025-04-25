@@ -13,13 +13,11 @@ public class ServicioParaReportes {
     private int idServicio;
     private String nombreServicio;
 
-    // Constructor
     public ServicioParaReportes(int idServicio, String nombreServicio) {
         this.idServicio = idServicio;
         this.nombreServicio = nombreServicio;
     }
 
-    // Getters y Setters
     public int getIdServicio() {
         return idServicio;
     }

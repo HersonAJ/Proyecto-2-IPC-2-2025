@@ -77,10 +77,10 @@ public class GestionCitaEmpleadoDB {
 
                 // Validar que el estado no haya sido modificado previamente
                 if (!estadoActual.equals("Pendiente")) {
-                    return false; // No se permite cambiar el estado una vez que ya no es "Pendiente"
+                    return false; 
                 }
             } else {
-                return false; // La cita no existe
+                return false; 
             }
 
             // Actualizar el estado de la cita
@@ -130,7 +130,7 @@ public class GestionCitaEmpleadoDB {
                 cita.setIdCliente(resultSet.getInt("ID_Cliente"));
                 cita.setNombreCliente(resultSet.getString("Nombre_Cliente"));
 
-                return cita; // Retorna la cita encontrada
+                return cita; 
             }
 
         } catch (Exception e) {

@@ -29,17 +29,13 @@ public class GestionListaNegraController {
     private final GestionListaNegraDB gestionListaNegraDB = new GestionListaNegraDB();
     private final JWTHelper jwtHelper = new JWTHelper();
 
-    // Endpoint para agregar un cliente a la lista negra
     @POST
     @Path("/agregar")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response agregarAListaNegra(@HeaderParam("Authorization") String token, ListaNegra listaNegra) {
         try {
-            // Depurar el token recibido
-            System.out.println("Token recibido: " + token);
 
-            // Validar y limpiar el token
             if (!jwtHelper.validateToken2(token)) {
                 System.err.println("Error: Token inválido tras validación.");
                 return Response.status(Response.Status.UNAUTHORIZED)
@@ -56,7 +52,6 @@ public class GestionListaNegraController {
                         .build();
             }
 
-            // Agregar a la lista negra
             boolean exito = gestionListaNegraDB.agregarAListaNegra(listaNegra);
             if (exito) {
                 return Response.ok("{\"message\":\"Cliente agregado a la lista negra exitosamente.\"}").build();
@@ -74,7 +69,6 @@ public class GestionListaNegraController {
         }
     }
 
-    // Endpoint para cambiar el estado de un cliente en la lista negra
     @PUT
     @Path("/cambiar-estado/{idLista}/{nuevoEstado}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -84,7 +78,6 @@ public class GestionListaNegraController {
             @PathParam("nuevoEstado") String nuevoEstado) {
 
         try {
-            // Validar y limpiar el token
             if (!jwtHelper.validateToken2(token)) {
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity("{\"message\":\"Token inválido\"}")
@@ -94,14 +87,12 @@ public class GestionListaNegraController {
             String cleanedToken = jwtHelper.cleanToken(token);
             String rol = jwtHelper.getRolFromToken(cleanedToken);
 
-            // Verificar el rol
             if (!"Administrador".equals(rol)) {
                 return Response.status(Response.Status.FORBIDDEN)
                         .entity("{\"message\":\"Acceso denegado\"}")
                         .build();
             }
 
-            // Cambiar el estado en la lista negra
             boolean exito = gestionListaNegraDB.cambiarEstadoListaNegra(idLista, nuevoEstado);
             if (exito) {
                 return Response.ok("{\"message\":\"Estado actualizado exitosamente.\"}").build();
@@ -124,7 +115,6 @@ public class GestionListaNegraController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerClientesEnListaNegra(@HeaderParam("Authorization") String token) {
         try {
-            // Validar token y rol
             if (!jwtHelper.validateToken2(token)) {
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity("{\"message\":\"Token inválido\"}")
@@ -140,7 +130,6 @@ public class GestionListaNegraController {
                         .build();
             }
 
-            // Obtener clientes en lista negra
             List<ListaNegra> listaNegra = gestionListaNegraDB.obtenerClientesEnListaNegra();
             if (listaNegra.isEmpty()) {
                 return Response.status(Response.Status.NOT_FOUND)

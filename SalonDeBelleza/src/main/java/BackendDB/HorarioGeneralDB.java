@@ -24,14 +24,13 @@ public class HorarioGeneralDB {
         String queryInsertar = "INSERT INTO Horarios (Hora_Apertura, Hora_Cierre, Día_Semana, ID_Empleado) VALUES(?, ?, ?, NULL)";
         boolean exito = true;
         
-        //elimiar horarios anteriores
         try (Connection connection = ConexionDB.getConnection();
                 PreparedStatement eliminarStmt = connection.prepareStatement(queryEliminar)) {
             
             eliminarStmt.executeUpdate();
         }catch (SQLException e) {
             e.printStackTrace();
-            exito = false;// si hay error se marca el fallo
+            exito = false;
         }
         
         //insertar los nuevos horarios
@@ -46,7 +45,7 @@ public class HorarioGeneralDB {
                 
             } catch (SQLException e) {
                 e.printStackTrace();
-                exito = false; //hi hay error se marca el fallo 
+                exito = false; 
             }
         }
         return exito;
@@ -61,7 +60,6 @@ public class HorarioGeneralDB {
                 PreparedStatement stmt = connection.prepareStatement(query);
                 ResultSet resultSet = stmt.executeQuery()) {
             
-            //leer los datos del resultSet y construir los objetos Horario
             while (resultSet.next()) {
                 HorarioGeneral horario = new HorarioGeneral();
                 horario.setDiaSemana(resultSet.getInt("Día_Semana"));

@@ -22,7 +22,6 @@ public class ReporteListaNegra {
     private String motivoListaNegra;
     private String estadoListaNegra;
 
-    // Constructor
     public ReporteListaNegra(Integer idCliente, String nombreCliente, Integer idCita, Date fechaCita, Time horaCita,
                              String estadoCita, String nombreServicio, String motivoListaNegra, String estadoListaNegra) {
         this.idCliente = idCliente;

@@ -19,7 +19,6 @@ import java.util.List;
  */
 public class GestionServicioDB {
 
-    // Método para gestionar un servicio (dinámico: edición, actualización de estado, asignaciones)
     public boolean gestionarServicio(int idServicio, Servicio servicio, byte[] nuevaImagen, byte[] nuevoCatalogoPdf, String nuevoEstado, List<Integer> empleadosIds) {
         Connection connection = null;
 
@@ -83,19 +82,19 @@ public class GestionServicioDB {
                     for (Integer idEmpleado : empleadosIds) {
                         statement.setInt(1, idEmpleado);
                         statement.setInt(2, idServicio);
-                        statement.addBatch(); // Batch para múltiples inserciones
+                        statement.addBatch(); 
                     }
                     statement.executeBatch();
                 }
             }
 
-            connection.commit(); // Confirmar transacción
+            connection.commit(); 
             return true;
 
         } catch (SQLException e) {
             if (connection != null) {
                 try {
-                    connection.rollback(); // Revertir cambios en caso de error
+                    connection.rollback(); 
                 } catch (SQLException rollbackEx) {
                 }
             }
@@ -104,7 +103,7 @@ public class GestionServicioDB {
         } finally {
             if (connection != null) {
                 try {
-                    connection.close(); // Cerrar conexión
+                    connection.close(); 
                 } catch (SQLException closeEx) {
                 }
             }

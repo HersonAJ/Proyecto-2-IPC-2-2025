@@ -32,20 +32,16 @@ public class PerfilController {
                         .entity("{\"mensaje\": \"Token no proporcionado\"}")
                         .build();
             }
-            // Extraer el token eliminando el prefijo "Bearer "
             String token = authHeader.substring("Bearer ".length());
 
-            // Validar el token usando JWTHelper
             JWTHelper jwtHelper = new JWTHelper();
             if (!jwtHelper.validateToken(token)) {
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity("{\"mensaje\": \"Token no válido\"}")
                         .build();
             }
-            // Extraer el correo del token
             String correo = jwtHelper.getCorreoFromToken(token);
 
-            // Obtener el usuario desde la base de datos
             Usuario usuario = MiPerfilDB.getPerfilByCorreo(correo);
             if (usuario == null) {
                 return Response.status(Response.Status.NOT_FOUND)
@@ -53,13 +49,11 @@ public class PerfilController {
                         .build();
             }
             
-            // Convertir la foto de perfil a Base64 si existe
             String fotoBase64 = "";
             if (usuario.getFotoPerfil() != null) {
                 fotoBase64 = Base64.getEncoder().encodeToString(usuario.getFotoPerfil());
             }
 
-            // Preparar el JSON de respuesta incluyendo todos los datos, incluidos hobbies y foto
             String jsonResponse = String.format(
                 "{\"idUsuario\": %d, \"nombre\": \"%s\", \"dpi\": \"%s\", \"telefono\": \"%s\", " +
                 "\"direccion\": \"%s\", \"correo\": \"%s\", \"descripcion\": \"%s\", \"rol\": \"%s\", " +

@@ -68,7 +68,7 @@ public class GestionAnunciosDB {
 
         try (Connection connection = ConexionDB.getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
 
-            stmt.setString(1, nuevoEstado); // Nuevo estado ('Activo', 'Inactivo', 'Caducado')
+            stmt.setString(1, nuevoEstado); 
             stmt.setInt(2, idAnuncio);
 
             int rowsUpdated = stmt.executeUpdate();

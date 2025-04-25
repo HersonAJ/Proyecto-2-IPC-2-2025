@@ -36,9 +36,8 @@ public class FacturaController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response crearFactura(@HeaderParam("Authorization") String token, @PathParam("idCita") int idCita) {
         try {
-            int idEmpleado = jwtHelper.validateAndGetId(token); // Validar el token y obtener el ID del empleado
+            int idEmpleado = jwtHelper.validateAndGetId(token); 
 
-            // Obtener la cita para validar el estado y generar la factura
             Cita cita = gestionCitaEmpleadoDB.obtenerCitaPorId(idCita);
             if (cita == null) {
                 return Response.status(Response.Status.NOT_FOUND)
@@ -54,14 +53,12 @@ public class FacturaController {
                         .build();
             }
 
-            // Construir descripción detallada de la factura
             String detallesFactura = "Servicio: " + cita.getNombreServicio()
                     + ", Duración: " + cita.getDuracionServicio() + " minutos"
                     + ", Precio: Q" + String.format("%.2f", cita.getPrecioServicio());
 
-            // Crear el objeto Factura
             Factura nuevaFactura = new Factura(
-                    0, // ID_Factura será autogenerado por la base de datos
+                    0,
                     cita.getIdCita(),
                     cita.getIdCliente(),
                     idEmpleado,
@@ -71,7 +68,6 @@ public class FacturaController {
                     detallesFactura
             );
 
-            // Insertar la factura en la base de datos
             boolean resultado = facturaDB.crearFactura(nuevaFactura);
 
             if (resultado) {

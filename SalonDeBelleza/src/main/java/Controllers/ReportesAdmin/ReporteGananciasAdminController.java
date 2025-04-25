@@ -40,10 +40,8 @@ public class ReporteGananciasAdminController {
             @QueryParam("fechaFin") Date fechaFin,
             @QueryParam("idServicio") Integer idServicio) {
         try {
-            // Obtener el reporte de ganancias
             List<ReporteAdmin> reportes = reporteGananciasDB.obtenerGananciasPorServicio(fechaInicio, fechaFin, idServicio);
 
-            // Verificar si hay resultados
             if (reportes.isEmpty()) {
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity("{\"message\":\"No se encontraron registros para el reporte solicitado.\"}")
@@ -64,7 +62,6 @@ public class ReporteGananciasAdminController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerListadoServicios() {
         try {
-            // Obtener el listado de servicios desde la base de datos
             List<ServicioParaReportes> servicios = reporteGananciasDB.obtenerListadoServicios();
 
             return Response.ok(servicios).build();
@@ -85,7 +82,6 @@ public class ReporteGananciasAdminController {
             @QueryParam("fechaFin") Date fechaFin,
             @QueryParam("idServicio") Integer idServicio) {
         try {
-            // Obtener datos para el reporte
             List<ReporteAdmin> reportes = reporteGananciasDB.obtenerGananciasPorServicio(fechaInicio, fechaFin, idServicio);
 
             if (reportes.isEmpty()) {

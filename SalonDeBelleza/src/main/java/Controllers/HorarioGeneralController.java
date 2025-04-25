@@ -24,7 +24,6 @@ public class HorarioGeneralController {
     
     private final HorarioGeneralDB horarioGeneralDB = new HorarioGeneralDB();
     
-    //endpoint para obtener el horario general
     @GET
     @Path("/general")
     @Produces(MediaType.APPLICATION_JSON)
@@ -47,7 +46,6 @@ public class HorarioGeneralController {
         }
     }
     
-    //endopoint para establecer o actualizar el horario generao
     @PUT
     @Path("/general")
     @Consumes(MediaType.APPLICATION_JSON)

@@ -14,7 +14,6 @@ public class ReporteClientesGastos {
     private Double totalGastado;
     private String detalleCitas;
 
-    // Constructor
     public ReporteClientesGastos(Integer idCliente, String nombreCliente, Double totalGastado, String detalleCitas) {
         this.idCliente = idCliente;
         this.nombreCliente = nombreCliente;

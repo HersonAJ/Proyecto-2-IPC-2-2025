@@ -26,19 +26,15 @@ public class LoginController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(LoginRequest loginRequest) {
         try {
-            // Instanciar codificador y codificar la contraseña recibida
             Codificador codificador = new Codificador();
             String contrasenaCodificada = codificador.codificar(loginRequest.getContrasena());
 
-            // Autenticar el usuario y obtener el objeto Usuario (si existe)
             Usuario usuario = LoginDB.autenticarUsuario(loginRequest.getCorreo(), contrasenaCodificada);
 
             if (usuario != null) {
-                // Generar el token JWT usando toda la información que retorna el objeto usuario
                 JWTHelper jwtHelper = new JWTHelper();
                 String token = jwtHelper.generateToken(usuario.getCorreo(), usuario.getRol(), usuario.getNombre(), usuario.getIdUsuario());
 
-                // Generar la respuesta JSON 
                 String jsonResponse = String.format(
                         "{\"mensaje\": \"Usuario válido\", \"token\": \"%s\", \"usuario\": {\"idUsuario\": %d, \"correo\": \"%s\", \"nombre\": \"%s\", \"rol\": \"%s\"}}",
                         token, usuario.getIdUsuario(), usuario.getCorreo(), usuario.getNombre(), usuario.getRol()

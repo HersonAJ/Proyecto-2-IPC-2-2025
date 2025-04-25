@@ -34,7 +34,6 @@ public class ObtenerCitaController {
             @PathParam("idCliente") int idCliente) {
 
         try {
-            // Validar que el token no sea nulo y eliminar el prefijo "Bearer "
             if (token == null || !token.startsWith("Bearer ")) {
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity("{\"message\": \"Token inválido o ausente.\"}")
@@ -42,9 +41,8 @@ public class ObtenerCitaController {
                         .build();
             }
 
-            token = token.substring(7); // Remover "Bearer " del token
+            token = token.substring(7);
 
-            // Validar que el token sea válido y no esté vencido
             if (!jwtHelper.validateToken(token)) {
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity("{\"message\": \"Token inválido o vencido.\"}")
@@ -52,7 +50,6 @@ public class ObtenerCitaController {
                         .build();
             }
 
-            // Verificar que el ID del cliente coincide con el token
             int idUsuarioDelToken = jwtHelper.getIdUsuarioFromToken(token);
             if (idCliente != idUsuarioDelToken) {
                 return Response.status(Response.Status.FORBIDDEN)
@@ -61,7 +58,6 @@ public class ObtenerCitaController {
                         .build();
             }
 
-            // Obtener las citas pendientes desde la base de datos
             List<Cita> citasPendientes = obtenerCitaDB.obtenerCitasPendientesPorCliente(idCliente);
 
             if (citasPendientes.isEmpty()) {

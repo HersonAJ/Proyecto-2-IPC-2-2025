@@ -158,17 +158,4 @@ public class Cita {
         this.idFactura = idFactura;
     }
     
-    @Override
-    public String toString() {
-        return "Cita{" +
-                "idCita=" + idCita +
-                ", idServicio=" + idServicio +
-                ", idCliente=" + idCliente +
-                ", idEmpleado=" + idEmpleado +
-                ", fechaCita='" + fechaCita + '\'' +
-                ", horaCita='" + horaCita + '\'' +
-                ", estado='" + estado + '\'' +
-                ", facturaGenerada=" + facturaGenerada +
-                '}';
-    }
 }

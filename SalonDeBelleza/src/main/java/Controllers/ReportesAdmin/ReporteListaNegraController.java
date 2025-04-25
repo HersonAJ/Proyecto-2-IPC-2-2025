@@ -32,7 +32,6 @@ public class ReporteListaNegraController {
         try {
             List<ReporteListaNegra> reportes = reporteDB.obtenerClientesListaNegra(fechaInicio, fechaFin);
 
-            // Manejo si no hay resultados
             if (reportes.isEmpty()) {
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity("{\"message\":\"No se encontraron registros para el reporte solicitado.\"}")

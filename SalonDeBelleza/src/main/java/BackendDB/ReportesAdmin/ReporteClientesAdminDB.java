@@ -28,7 +28,6 @@ public class ReporteClientesAdminDB {
         List<ReporteClientes> reportes = new ArrayList<>();
         String setGroupConcatLimit = "SET SESSION group_concat_max_len = 1000000";
 
-        // Construcción dinámica de la consulta SQL
         String baseQuery = "SELECT u.ID_Usuario AS ID_Cliente, "
                 + "u.Nombre AS Nombre_Cliente, "
                 + "COUNT(c.ID_Cita) AS Total_Citas, "
@@ -63,7 +62,6 @@ public class ReporteClientesAdminDB {
             }
             resultSet = selectStatement.executeQuery();
 
-            // Procesar resultados
             while (resultSet.next()) {
                 ReporteClientes reporte = new ReporteClientes(
                         resultSet.getInt("ID_Cliente"),
@@ -131,7 +129,6 @@ public class ReporteClientesAdminDB {
             setStatement.execute();
             selectStatement = connection.prepareStatement(baseQuery);
 
-            // Configurar parámetros de fecha si es necesario
             if (inicio != null && fin != null) {
                 selectStatement.setDate(1, new java.sql.Date(inicio.getTime()));
                 selectStatement.setDate(2, new java.sql.Date(fin.getTime()));

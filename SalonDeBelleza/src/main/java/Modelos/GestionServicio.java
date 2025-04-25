@@ -12,12 +12,12 @@ import java.util.List;
 
 public class GestionServicio {
 
-    private Servicio servicio; // Datos básicos del servicio
-    private byte[] nuevaImagen; // Nueva imagen del servicio (opcional)
-    private String nuevoEstado; // Nuevo estado del servicio (Visible/Oculto) (opcional)
-    private List<Integer> empleadosIds; // IDs de empleados asignados (opcional)
+    private Servicio servicio; 
+    private byte[] nuevaImagen; 
+    private String nuevoEstado; 
+    private List<Integer> empleadosIds; 
 
-    // Getters y Setters
+
     public Servicio getServicio() {
         return servicio;
     }

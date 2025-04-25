@@ -35,10 +35,8 @@ public class GestionPrecioAnunciosController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerTodosLosPrecios(@HeaderParam("Authorization") String token) {
         try {
-            // Validar el token JWT
             jwtHelper.validateToken2(token);
 
-            // Obtener todos los precios configurados
             List<Map<String, Object>> precios = gestionPrecioAnunciosDB.obtenerTodosLosPrecios();
 
             if (precios.isEmpty()) {
@@ -72,19 +70,16 @@ public class GestionPrecioAnunciosController {
     public Response actualizarPrecio(@HeaderParam("Authorization") String token, Anuncio anuncio) {
 
         try {
-            // Validar el token usando validateToken2
             if (!jwtHelper.validateToken2(token)) {
-                System.err.println("Token inválido o vencido."); // Log del error de token
+                System.err.println("Token inválido o vencido."); 
                 return Response.status(Response.Status.UNAUTHORIZED)
                         .entity("{\"message\": \"Token inválido o vencido.\"}")
                         .type(MediaType.APPLICATION_JSON)
                         .build();
             }
 
-            // Extraer el rol del usuario
             String rol = jwtHelper.getRolFromToken(jwtHelper.cleanToken(token));
 
-            // Verificar que el usuario tenga el rol de Administrador
             if (!"Administrador".equals(rol)) {
                 return Response.status(Response.Status.FORBIDDEN)
                         .entity("{\"message\": \"No tienes permisos para realizar esta acción.\"}")
@@ -106,25 +101,21 @@ public class GestionPrecioAnunciosController {
                         .build();
             }
 
-            // Actualizar el precio en la base de datos
             double nuevoPrecio = anuncio.getPrecioPorDia();
             gestionPrecioAnunciosDB.actualizarPrecio(anuncio.getTipo(), nuevoPrecio);
 
-            // Responder con éxito
             return Response.ok("{\"message\": \"Precio actualizado correctamente para el tipo de anuncio: " + anuncio.getTipo() + ".\"}")
                     .type(MediaType.APPLICATION_JSON)
                     .build();
 
         } catch (JWTVerificationException e) {
-            // Token inválido o vencido
-            System.err.println("Error de validación del token: " + e.getMessage()); // Log del error del token
+            System.err.println("Error de validación del token: " + e.getMessage()); 
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity("{\"message\": \"Token inválido o vencido.\"}")
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         } catch (Exception e) {
-            // Error inesperado
-            System.err.println("Error inesperado: " + e.getMessage()); // Log del error inesperado
+            System.err.println("Error inesperado: " + e.getMessage()); 
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("{\"message\": \"Error inesperado al actualizar el precio: " + e.getMessage() + "\"}")

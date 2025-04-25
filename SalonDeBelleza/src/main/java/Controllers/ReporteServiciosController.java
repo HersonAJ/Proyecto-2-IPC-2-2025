@@ -30,7 +30,6 @@ public class ReporteServiciosController {
     public Response obtenerHistorialServiciosMasComprados(@QueryParam("fechaInicio") Date fechaInicio,
             @QueryParam("fechaFin") Date fechaFin) {
         try {
-            // Llamar al método para obtener el historial de servicios más comprados
             List<ReporteServicios> reportes = reporteDB.obtenerServiciosMasReservados(fechaInicio, fechaFin);
 
             if (reportes.isEmpty()) {

@@ -87,7 +87,6 @@ public class ReporteGananciasPorEmpleadoDB {
             connection = ConexionDB.getConnection();
             statement = connection.prepareStatement(query);
 
-            // Configuración dinámica de los parámetros de fechas
             if (inicio != null && fin != null) {
                 statement.setDate(1, new java.sql.Date(inicio.getTime()));
                 statement.setDate(2, new java.sql.Date(fin.getTime()));
@@ -99,7 +98,6 @@ public class ReporteGananciasPorEmpleadoDB {
             statement.setDate(3, inicio != null ? new java.sql.Date(inicio.getTime()) : null);
             statement.setDate(4, fin != null ? new java.sql.Date(fin.getTime()) : null);
 
-            // Configuración del filtro por empleado 
             if (idEmpleado != null) {
                 statement.setInt(5, idEmpleado);
                 statement.setInt(6, idEmpleado);

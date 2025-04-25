@@ -32,22 +32,14 @@ public List<Anuncio> obtenerAnunciosPorUsuario(int idUsuario, int limit, int off
     try (Connection connection = ConexionDB.getConnection();
          PreparedStatement stmt = connection.prepareStatement(sql)) {
 
-        // Log para verificar los valores que se están pasando a la consulta
-        System.out.println("ID Usuario: " + idUsuario);
-        System.out.println("Limit: " + limit + ", Offset: " + offset);
-
-        // Asignar parámetros de la consulta
         stmt.setInt(1, idUsuario);
         stmt.setInt(2, limit);
         stmt.setInt(3, offset);
 
         try (ResultSet rs = stmt.executeQuery()) {
-            // Log para saber si la consulta se ejecuta correctamente
-            System.out.println("Consulta ejecutada, procesando resultados...");
 
             while (rs.next()) {
                 Anuncio anuncio = new Anuncio();
-                // Mapear columnas del ResultSet al objeto `Anuncio`
                 anuncio.setIdAnuncio(rs.getInt("ID_Anuncio"));
                 anuncio.setNombreAnunciante(rs.getString("Nombre_Anunciante"));
                 anuncio.setContactoAnunciante(rs.getString("Contacto_Anunciante"));
@@ -63,12 +55,8 @@ public List<Anuncio> obtenerAnunciosPorUsuario(int idUsuario, int limit, int off
                 anuncios.add(anuncio);
             }
 
-            // Log para verificar el número de anuncios encontrados
-            System.out.println("Número de anuncios obtenidos: " + anuncios.size());
         }
     } catch (SQLException e) {
-        // Log para capturar errores en la ejecución de la consulta SQL
-        System.out.println("Error al obtener anuncios: " + e.getMessage());
         e.printStackTrace();
     }
     return anuncios;
@@ -86,7 +74,6 @@ public List<Anuncio> obtenerAnunciosPorUsuario(int idUsuario, int limit, int off
         try (Connection connection = ConexionDB.getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
-            // Asignar parámetros de la consulta
             stmt.setInt(1, idUsuario);
 
             try (ResultSet rs = stmt.executeQuery()) {
@@ -98,7 +85,7 @@ public List<Anuncio> obtenerAnunciosPorUsuario(int idUsuario, int limit, int off
             System.out.println("Error al contar anuncios: " + e.getMessage());
             e.printStackTrace();
         }
-        return 0; // Retorna 0 en caso de error
+        return 0; 
     }
 }
 
