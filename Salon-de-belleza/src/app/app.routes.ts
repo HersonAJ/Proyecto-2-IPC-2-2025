@@ -33,6 +33,7 @@ import { ReporteMarketingAnunciosMenosMostradosComponent } from './reporte-marke
 import { ReporteMarketingAnunciosMasCompradosComponent } from './reporte-marketing-anuncios-mas-comprados/reporte-marketing-anuncios-mas-comprados.component';
 import { ReporteServiciosServicioMasCompradoComponent } from './reporte-servicios-servicio-mas-comprado/reporte-servicios-servicio-mas-comprado.component';
 import { ReporteServiciosServicioMenosCompradoComponent } from './reporte-servicios-servicio-menos-comprado/reporte-servicios-servicio-menos-comprado.component';
+import { ReporteServiciosServicioMasIngresoComponent } from './reporte-servicios-servicio-mas-ingreso/reporte-servicios-servicio-mas-ingreso.component';
 
 export const routes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -69,4 +70,5 @@ export const routes: Routes = [
     {path: 'reporte-marketing-anuncios-mas-comprados', component: ReporteMarketingAnunciosMasCompradosComponent},
     {path: 'reporte-servicios-servicio-mas-comprado', component: ReporteServiciosServicioMasCompradoComponent},
     {path: 'reporte-servicios-servicio-menos-comprado', component: ReporteServiciosServicioMenosCompradoComponent},
+    {path: 'reporte-servicios-servicio-mas-ingreso', component: ReporteServiciosServicioMasIngresoComponent},
 ]

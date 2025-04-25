@@ -12,6 +12,15 @@ public class ReporteServicios {
     
     private String nombreServicio;
     private int totalReservas;
+    private double totalIngresos;
+
+    public double getTotalIngresos() {
+        return totalIngresos;
+    }
+
+    public void setTotalIngresos(double totalIngresos) {
+        this.totalIngresos = totalIngresos;
+    }
 
     public String getNombreServicio() {
         return nombreServicio;
