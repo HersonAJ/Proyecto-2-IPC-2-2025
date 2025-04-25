@@ -16,7 +16,7 @@ export class RegistrarUsuarioComponent {
   telefono: string = '';
   direccion: string = '';
   dpi: string = '';
-  rol: string = ''; // Rol del usuario (Empleado, Administrador, Marketing, Servicios)
+  rol: string = ''; 
   descripcion: string = '';
   fotoPerfil?: File;
 
@@ -38,8 +38,8 @@ export class RegistrarUsuarioComponent {
       formData.append('telefono', this.telefono);
       formData.append('direccion', this.direccion);
       formData.append('dpi', this.dpi);
-      formData.append('rol', this.rol); // Rol seleccionado
-      formData.append('estado', 'Activo'); // Estado por defecto
+      formData.append('rol', this.rol); 
+      formData.append('estado', 'Activo'); 
       formData.append('descripcion', this.descripcion);
       
       if (this.fotoPerfil) {

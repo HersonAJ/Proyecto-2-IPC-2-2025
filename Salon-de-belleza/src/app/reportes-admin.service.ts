@@ -84,5 +84,11 @@ exportarReporteGananciasPDF(params: any): Observable<Blob> {
   return this.http.get(url, { params, responseType: 'blob' }); 
 }
 
+  // Método para generar el reporte de anuncios mas vistos en PDF
+  exportarReporteAnunciosMasMostradosPDF(params: any): Observable<Blob> {
+    const url = `${this.apiURL}admin/reportes/anuncios-mas-mostrados/pdf`;
+    return this.http.get(url, { params, responseType: 'blob' }); 
+  }
+
 }
 

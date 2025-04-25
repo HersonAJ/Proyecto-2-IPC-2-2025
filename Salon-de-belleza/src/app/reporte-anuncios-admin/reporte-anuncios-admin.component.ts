@@ -63,4 +63,29 @@ export class ReporteAnunciosAdminComponent implements OnInit {
     this.fechaFin = '';
     this.obtenerReporte(); 
   }
+  exportarReportePDF(): void {
+    const params: any = {};
+    if (this.fechaInicio.trim()) {
+      params.fechaInicio = this.fechaInicio;
+    }
+    if (this.fechaFin.trim()) {
+      params.fechaFin = this.fechaFin;
+    }
+  
+    this.reportesAdminService.exportarReporteAnunciosMasMostradosPDF(params).subscribe({
+      next: (pdf: Blob) => {
+        const url = window.URL.createObjectURL(pdf);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'reporte_5_anuncios_mas_mostrados.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url); // Limpia el recurso después de usarlo
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error al exportar el reporte:', error);
+        this.mensaje = 'Ocurrió un error al exportar el reporte en PDF.';
+      },
+    });
+  }
+  
 }

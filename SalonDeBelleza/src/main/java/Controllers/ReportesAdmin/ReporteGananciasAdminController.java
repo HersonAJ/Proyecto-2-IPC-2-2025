@@ -50,10 +50,9 @@ public class ReporteGananciasAdminController {
                         .build();
             }
 
-            // Retornar el reporte en formato JSON
             return Response.ok(reportes).build();
         } catch (Exception e) {
-            e.printStackTrace(); // Log del error
+            e.printStackTrace(); 
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("{\"message\":\"Ocurrió un error al generar el reporte.\"}")
                     .build();
@@ -68,12 +67,10 @@ public class ReporteGananciasAdminController {
             // Obtener el listado de servicios desde la base de datos
             List<ServicioParaReportes> servicios = reporteGananciasDB.obtenerListadoServicios();
 
-            // Retornar la respuesta con el listado
             return Response.ok(servicios).build();
         } catch (Exception e) {
             e.printStackTrace();
 
-            // Retornar una respuesta de error si algo falla
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("{\"message\":\"Ocurrió un error al obtener el listado de servicios.\"}")
                     .build();

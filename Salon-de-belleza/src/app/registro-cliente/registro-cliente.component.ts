@@ -16,9 +16,8 @@ export class RegistroClienteComponent {
   protected telefono: string = '';
   protected direccion: string = '';
   protected dpi: string = '';
-  // Nuevos campos para hobbies e interés
-  protected hobbies: string = '';      // Los hobbies se enviarán como cadena separada por comas, por ejemplo: "leer, nadar, cocinar"
-  protected descripcion: string = '';  // Descripción personal
+  protected hobbies: string = '';      
+  protected descripcion: string = '';
 
   protected fotoPerfil?: File;
 
@@ -40,13 +39,11 @@ export class RegistroClienteComponent {
       formData.append('telefono', this.telefono);
       formData.append('direccion', this.direccion);
       formData.append('dpi', this.dpi);
-      formData.append('rol', 'Cliente');   // Fijamos el rol en "Cliente"
-      formData.append('estado', 'Activo');   // Se registra como activo por defecto
-      // Agregamos los campos nuevos:
+      formData.append('rol', 'Cliente');
+      formData.append('estado', 'Activo'); 
       formData.append('Hobbies', this.hobbies);
       formData.append('Descripcion', this.descripcion);
       
-      // Para la foto de perfil, asegúrate de enviar la clave exacta que espera el backend
       if(this.fotoPerfil) {
         formData.append('Foto_Perfil', this.fotoPerfil);
       }
@@ -86,20 +83,14 @@ export class RegistroClienteComponent {
     const inputElement = event.target as HTMLInputElement;
     const key = event.key;
     
-    // Expresión regular para dígitos y el símbolo '+'
-    // Permitir solo dígitos de forma general
     if (/^\d$/.test(key)) {
       return true;
     }
-    
-    // Permitir '+' solo si está al inicio (posición 0) y aún no se ha ingresado
     if (key === '+') {
       if (inputElement.selectionStart === 0 && inputElement.value.indexOf('+') === -1) {
         return true;
       }
     }
-    
-    // Si no cumple ningún caso, prevenir la entrada
     event.preventDefault();
     return false;
   }

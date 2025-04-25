@@ -43,9 +43,19 @@
           <td>{{ reporte.anunciante }}</td>
           <td>{{ reporte.tipoAnuncio }}</td>
           <td>{{ reporte.vecesMostrado }}</td>
-          <td>{{ reporte.urlMostrada }}</td>
+          <td>
+            <ul>
+              <li *ngFor="let url of reporte.urlMostrada.split(',')">
+                {{ url }}
+              </li>
+            </ul>
+          </td>
+          
         </tr>
       </tbody>
     </table>
+
+    <button class="btn btn-primary" (click)="exportarReportePDF()">Exportar Reporte en PDF</button>
+
   </div>
   
