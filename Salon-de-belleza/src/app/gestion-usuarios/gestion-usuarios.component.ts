@@ -36,7 +36,7 @@ export class GestionUsuariosComponent implements OnInit {
     const nuevoEstado = usuario.estado === 'Activo' ? 'Inactivo' : 'Activo';
     this.usuarioService.modificarEstadoUsuario(usuario.idUsuario, nuevoEstado).subscribe({
       next: (response) => {
-        usuario.estado = nuevoEstado; // Actualizar el estado en el frontend
+        usuario.estado = nuevoEstado; 
         alert(response.message || `El estado del usuario se ha cambiado a ${nuevoEstado}.`);
       },
       error: (err) => {

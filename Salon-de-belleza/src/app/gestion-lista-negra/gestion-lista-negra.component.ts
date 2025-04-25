@@ -37,7 +37,7 @@ export class GestionListaNegraComponent implements OnInit {
     this.gestionListaNegraService.obtenerClientesEnListaNegra(this.token).subscribe({
       next: (clientes: ListaNegra[]) => {
         this.listaNegra = clientes;
-        this.mensaje = ''; // Limpia cualquier mensaje previo
+        this.mensaje = ''; 
         this.cargando = false;
       },
       error: (err) => {
@@ -53,8 +53,6 @@ export class GestionListaNegraComponent implements OnInit {
     });
   }
   
-  
-  // Cambiar el estado de un cliente en la lista negra
   sacarDeListaNegra(idLista: number): void {
     const confirmacion = window.confirm(
       '¿Está seguro de que desea sacar a este cliente de la lista negra?'

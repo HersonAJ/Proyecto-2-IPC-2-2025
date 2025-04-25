@@ -149,7 +149,7 @@ export class CrearCitaComponent implements OnInit {
 
     this.citaService.validarClientePermitido(token).subscribe({
       next: (respuesta) => {
-        this.permitido = respuesta.permitido; // Asignar el resultado de la validación
+        this.permitido = respuesta.permitido;
         if (!this.permitido) {
           this.mensaje = respuesta.message || 'No puede agendar citas debido a restricciones.';
         } else {

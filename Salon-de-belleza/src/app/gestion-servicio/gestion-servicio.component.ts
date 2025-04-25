@@ -13,7 +13,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrls: ['./gestion-servicio.component.css']
 })
 export class GestionServicioComponent implements OnInit {
-  servicios: any[] = []; // Lista de servicios
+  servicios: any[] = []; 
   empleadosAsignados: any[] = []; 
   empleadosNoAsignados: any[] = []; 
   gestionForm: FormGroup;
@@ -46,7 +46,6 @@ export class GestionServicioComponent implements OnInit {
     this.gestionServicioService.obtenerServicios().subscribe({
       next: (data) => {
         this.servicios = data.map(servicio => {
-          // Convertir Base64 a Blob y generar una URL segura
           let catalogoPdfUrl = null;
           if (servicio.catalogoPdf) {
             const byteCharacters = atob(servicio.catalogoPdf);
@@ -110,7 +109,6 @@ export class GestionServicioComponent implements OnInit {
     });
   }
 
-  // Método para guardar cambios en el servicio
   guardarCambios(): void {
     if (!this.servicioSeleccionado) {
       alert('No se ha seleccionado ningún servicio.');

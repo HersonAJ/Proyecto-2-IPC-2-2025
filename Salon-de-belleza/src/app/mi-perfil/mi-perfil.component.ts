@@ -12,7 +12,6 @@ import { EditarPerfilComponent } from '../editar-perfil/editar-perfil.component'
   styleUrls: ['./mi-perfil.component.css']
 })
 export class MiPerfilComponent implements OnInit {
-  // Objeto que contiene la informacion del usuario
   perfil: any;
   mostrarEditar: boolean = false;
 
@@ -46,7 +45,6 @@ export class MiPerfilComponent implements OnInit {
 
   finalizarEdicion(): void {
     this.mostrarEditar = false;
-    // Recargar perfil actualizado
     this.obtenerPerfil();
   }
 }

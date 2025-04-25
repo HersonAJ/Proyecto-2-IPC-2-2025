@@ -46,7 +46,6 @@ export class HorarioGeneralComponent implements OnInit {
     });
   }
   
-  // Método para guardar/actualizar el horario general
   guardarHorarioGeneral(): void {
     const horariosParaGuardar = this.horarios.map(horario => ({
       diaSemana: horario.diaSemana,
@@ -56,7 +55,7 @@ export class HorarioGeneralComponent implements OnInit {
     this.horarioService.establecerHorarioGeneral(horariosParaGuardar).subscribe({
       next: () => {
         alert('Horario general guardado con éxito.');
-        this.obtenerHorarioGeneral(); // Refrescar la vista
+        this.obtenerHorarioGeneral(); 
       },
       error: (err) => {
         console.error('Error al guardar el horario general:', err);

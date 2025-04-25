@@ -19,8 +19,6 @@
     
     <!-- Botón para habilitar edición -->
     <button class="btn btn-warning mt-3" (click)="habilitarEdicion()">Editar Perfil</button>
-    
-    <!-- Si se habilita la edición, se muestra el componente para editar -->
     <div *ngIf="mostrarEditar">
       <app-editar-perfil (onGuardar)="finalizarEdicion()"></app-editar-perfil>
     </div>

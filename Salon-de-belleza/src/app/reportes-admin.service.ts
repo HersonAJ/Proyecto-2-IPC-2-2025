@@ -76,6 +76,13 @@ export class ReportesAdminService {
   obtenerReporteClientesMasCitasAtendidas(params: any): Observable<any[]> {
     const url = `${this.apiURL}admin/reportes/clientes-mas-citas-atendidas`;
     return this.http.get<any[]>(url, { params });
-  }  
+  } 
+  
+  // Método para generar el reporte de ganancias por servicio en PDF
+exportarReporteGananciasPDF(params: any): Observable<Blob> {
+  const url = `${this.apiURL}admin/reportes/ganancias-servicio/pdf`;
+  return this.http.get(url, { params, responseType: 'blob' }); 
+}
+
 }
 

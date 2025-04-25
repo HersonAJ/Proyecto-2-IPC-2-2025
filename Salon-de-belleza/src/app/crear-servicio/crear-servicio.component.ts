@@ -34,7 +34,7 @@ export class CrearServicioComponent implements OnInit {
   cargarEmpleados(): void {
     this.servicioService.obtenerEmpleados().subscribe({
       next: (data) => {
-        this.empleados = data; // Guardar la lista de empleados
+        this.empleados = data;
       },
       error: (err) => {
         console.error('Error al cargar empleados:', err);
@@ -45,10 +45,8 @@ export class CrearServicioComponent implements OnInit {
   // Método para manejar cambios en los checkboxes de empleados
   onEmpleadoChange(event: any, idEmpleado: number): void {
     if (event.target.checked) {
-      // Agregar ID del empleado seleccionado
       this.servicio.empleados.push(idEmpleado);
     } else {
-      // Eliminar ID del empleado desmarcado
       this.servicio.empleados = this.servicio.empleados.filter(id => id !== idEmpleado);
     }
   }
@@ -64,7 +62,6 @@ export class CrearServicioComponent implements OnInit {
   }
 
   crearServicio(): void {
-    // Validar que ambos archivos estén seleccionados
     if (!this.imagenFile || !this.catalogoPdfFile) {
       alert('Debe seleccionar tanto una imagen como un archivo PDF.');
       return;

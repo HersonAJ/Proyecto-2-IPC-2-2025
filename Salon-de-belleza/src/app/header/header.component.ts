@@ -19,7 +19,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
-    // Se suscribe al observable del AuthService para actualizar el estado en tiempo real
     this.authSubscription = this.authService.loggedIn$.subscribe(
       (state) => {
         this.isLoggedIn = state;
@@ -28,14 +27,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    // Llama al método logout del AuthService, lo que actualiza el estado y elimina el token
     this.authService.logout();
-    // Redirige a la página de login
     this.router.navigate(['/login']);
   }
 
   ngOnDestroy(): void {
-    // Cancelar la suscripción para evitar fugas de memoria
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
     }

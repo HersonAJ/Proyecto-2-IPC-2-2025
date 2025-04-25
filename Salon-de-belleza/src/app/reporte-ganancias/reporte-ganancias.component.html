@@ -1,7 +1,6 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">Reporte de Ganancias por Servicio</h2>
   
-    <!-- Mensaje de feedback -->
     <div *ngIf="mensaje" class="alert alert-info text-center">
       {{ mensaje }}
     </div>
@@ -57,5 +56,9 @@
     <div *ngIf="reportes.length > 0" class="text-end mt-4">
       <h4>Total General: {{ totalGeneral | currency:'Q' }}</h4>
     </div>
+    <div class="text-end mt-3">
+      <button class="btn btn-primary" (click)="exportarReportePDF()">Exportar Reporte en PDF</button>
+    </div>
+    
   </div>
   

@@ -13,7 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class ReporteGananciasComponent implements OnInit {
   reportes: any[] = []; 
-  servicios: any[] = []; // Almacena el listado de servicios con ID y Nombre
+  servicios: any[] = [];
   mensaje: string = ''; 
   fechaInicio: string = ''; 
   fechaFin: string = ''; 
@@ -23,11 +23,10 @@ export class ReporteGananciasComponent implements OnInit {
   constructor(private reportesAdminService: ReportesAdminService) {}
 
   ngOnInit(): void {
-    this.cargarServicios(); // Cargar el listado de servicios al iniciar
+    this.cargarServicios(); 
     this.obtenerReporte();
   }
 
-  // Método para cargar el listado de servicios
   cargarServicios(): void {
     this.reportesAdminService.obtenerListadoServicios().subscribe({
       next: (data) => {
@@ -40,9 +39,7 @@ export class ReporteGananciasComponent implements OnInit {
     });
   }
 
-  // Método para obtener el reporte con filtros aplicados
   obtenerReporte(): void {
-    // Construir parámetros dinámicamente
     const params: any = {};
     if (this.fechaInicio.trim() && this.fechaFin.trim()) {
       params.fechaInicio = this.fechaInicio;
@@ -51,8 +48,6 @@ export class ReporteGananciasComponent implements OnInit {
     if (this.idServicio !== null) {
       params.idServicio = this.idServicio;
     }
-
-    // Realizar solicitud con los filtros combinados
     this.reportesAdminService.obtenerReporteGanancias(params).subscribe({
       next: (data) => {
         this.reportes = data;
@@ -78,7 +73,6 @@ export class ReporteGananciasComponent implements OnInit {
     }, 0);
   }
 
-  // Aplicar filtros (combina fechas y servicio)
   aplicarFiltros(): void {
     if (!this.fechaInicio.trim() && !this.fechaFin.trim() && this.idServicio === null) {
       this.mensaje = 'Debe ingresar al menos un filtro para realizar la búsqueda.';
@@ -92,5 +86,30 @@ export class ReporteGananciasComponent implements OnInit {
     this.fechaFin = '';
     this.idServicio = null;
     this.obtenerReporte();
+  }
+  exportarReportePDF(): void {
+    const params: any = {};
+    if (this.fechaInicio.trim() && this.fechaFin.trim()) {
+      params.fechaInicio = this.fechaInicio;
+      params.fechaFin = this.fechaFin;
+    }
+    if (this.idServicio !== null) {
+      params.idServicio = this.idServicio;
+    }
+
+    this.reportesAdminService.exportarReporteGananciasPDF(params).subscribe({
+      next: (pdf: Blob) => {
+        const url = window.URL.createObjectURL(pdf);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'reporte_ganancias.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error al exportar el reporte PDF:', error);
+        this.mensaje = 'Ocurrió un error al exportar el reporte PDF.';
+      },
+    });
   }
 }

@@ -38,7 +38,6 @@ export class FacturaClienteComponent implements OnInit {
       },
       error: (error) => {
         if (error.status === 204) {
-          // Caso específico para 204 No Content
           this.facturas = []; 
           this.mensaje = 'No hay facturas disponibles.';
         } else {
@@ -50,7 +49,7 @@ export class FacturaClienteComponent implements OnInit {
     });
   }
 
-  facturaSeleccionada: number | null = null; // Controla qué factura está abierta
+  facturaSeleccionada: number | null = null;
 
   toggleFactura(idFactura: number): void {
     this.facturaSeleccionada = this.facturaSeleccionada === idFactura ? null : idFactura;

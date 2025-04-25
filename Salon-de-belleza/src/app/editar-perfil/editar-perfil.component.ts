@@ -12,17 +12,15 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./editar-perfil.component.css']
 })
 export class EditarPerfilComponent implements OnInit {
-  // Variable para almacenar el perfil actual
   perfil: any = {};
 
   passwordActual: string = "";
 
-  @Output() onGuardar = new EventEmitter<void>(); // Evento para notificar al contenedor
+  @Output() onGuardar = new EventEmitter<void>(); 
 
   constructor(private perfilService: PerfilService, private router: Router) {}
 
   ngOnInit(): void {
-    // Verifica si existe el token; de lo contrario, redirige al login
     const token = localStorage.getItem('token');
     if (!token) {
       alert('Debe iniciar sesión para editar su perfil.');
@@ -69,7 +67,6 @@ export class EditarPerfilComponent implements OnInit {
       const file = event.target.files[0];
       const reader = new FileReader();
       reader.onload = () => {
-        // Obtiene la cadena en Base64 
         const base64String = (reader.result as string).split(',')[1];
         this.perfil.fotoPerfil = base64String;
       };

@@ -10,7 +10,7 @@ import { ServiciosService } from '../servicios.service';
   styleUrls: ['./inicio.component.css']
 })
 export class InicioComponent implements OnInit {
-  servicios: any[] = []; // Almacena los servicios recuperados
+  servicios: any[] = []; 
   servicioSeleccionado: any = null;
 
   constructor(private servicioService: ServiciosService) {}
@@ -23,12 +23,9 @@ export class InicioComponent implements OnInit {
     this.servicioService.obtenerServicios().subscribe({
       next: (data) => {
         this.servicios = data.map((servicio) => {
-          // Verificar si el prefijo ya está presente para imagen
           const imagenBase64 = servicio.imagen?.startsWith('data:image/jpeg;base64,') 
             ? servicio.imagen 
             : `data:image/jpeg;base64,${servicio.imagen}`;
-  
-          // Verificar si el servicio tiene un PDF antes de procesarlo
           const pdfBase64 = servicio.catalogoPdf 
             ? (servicio.catalogoPdf.startsWith('data:application/pdf;base64,') 
               ? servicio.catalogoPdf 

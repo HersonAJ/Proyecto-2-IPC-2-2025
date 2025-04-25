@@ -30,7 +30,6 @@ export class AnunciosClienteComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Suscribirse al observable de login
     this.loginSubscription = this.authService.loggedIn$.subscribe((isLoggedIn) => {
       if (isLoggedIn) {
         const token = localStorage.getItem('token');
@@ -42,7 +41,6 @@ export class AnunciosClienteComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Cancelar la suscripción al destruir el componente
     if (this.loginSubscription) {
       this.loginSubscription.unsubscribe();
     }
@@ -80,7 +78,7 @@ export class AnunciosClienteComponent implements OnInit, OnDestroy {
       const token = localStorage.getItem('token');
       if (token) {
         this.cargarAnuncios(token);
-        this.reportarAnunciosMostrados(); // Reportar la URL y los IDs de los anuncios al avanzar
+        this.reportarAnunciosMostrados(); 
       }
     }
   }
@@ -91,7 +89,7 @@ export class AnunciosClienteComponent implements OnInit, OnDestroy {
       const token = localStorage.getItem('token');
       if (token) {
         this.cargarAnuncios(token);
-        this.reportarAnunciosMostrados(); // Reportar la URL y los IDs de los anuncios al retroceder
+        this.reportarAnunciosMostrados();
       }
     }
   }

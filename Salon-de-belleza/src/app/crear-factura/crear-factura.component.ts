@@ -9,15 +9,15 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./crear-factura.component.css']
 })
 export class CrearFacturaComponent {
-  @Input() idCita: number = 0; // ID de la cita
-  @Input() nombreServicio: string = ''; // Nombre del servicio
-  @Input() duracionServicio: number = 0; // Duración del servicio
-  @Input() precioServicio: number = 0; // Precio del servicio
-  @Input() nombreCliente: string = ''; // Nombre del cliente
+  @Input() idCita: number = 0; 
+  @Input() nombreServicio: string = ''; 
+  @Input() duracionServicio: number = 0; 
+  @Input() precioServicio: number = 0;
+  @Input() nombreCliente: string = ''; 
 
-  @Output() facturaConfirmada = new EventEmitter<void>(); // Evento para confirmar factura
+  @Output() facturaConfirmada = new EventEmitter<void>(); 
 
-  mensaje: string = ''; // Mensaje para mostrar éxito o error
+  mensaje: string = ''; 
 
   confirmarFactura(): void {
     this.facturaConfirmada.emit(); 

@@ -18,8 +18,8 @@ export class GestionarCitasEmpleadoComponent implements OnInit {
   token: string  = '';
   estados: string[] = [];
   estadoSeleccionado: string = 'Pendiente';
-  mostrarFactura: boolean = false; // Controla la visibilidad del componente CrearFactura
-  citaSeleccionada!: Cita; // Almacena la cita seleccionada para generar factura
+  mostrarFactura: boolean = false; 
+  citaSeleccionada!: Cita; 
 
   constructor(private citaEmpleadoService: CitaEmpleadoService) {}
 
@@ -36,7 +36,6 @@ export class GestionarCitasEmpleadoComponent implements OnInit {
     }
   }
   
-
   obtenerCitas(): void {
     this.citaEmpleadoService.obtenerCitasAsignadas(this.token!).subscribe({
       next: (citas: Cita[]) => {
@@ -75,14 +74,11 @@ export class GestionarCitasEmpleadoComponent implements OnInit {
       this.mensaje = 'Error: No se encontró un token válido.';
       return;
     }
-  
-    // Validación para evitar la cancelación de citas
     if (nuevoEstado === 'Cancelada') {
       this.mensaje = 'No tienes permiso para cancelar citas.';
       return;
     }
   
-    // Lógica especial para "No Presentado"
     if (nuevoEstado === 'No Presentado') {
       const cita = this.buscarCitaPorId(idCita);
       const motivo = 'No presentado';
@@ -92,7 +88,7 @@ export class GestionarCitasEmpleadoComponent implements OnInit {
           this.citaEmpleadoService.agregarAListaNegra(this.token, cita.idCliente, idCita, motivo).subscribe({
             next: () => {
               this.mensaje = 'El cliente se agregó a la lista negra exitosamente y el estado de la cita se actualizó.';
-              this.obtenerCitas(); // Refrescar las citas después de ambas acciones
+              this.obtenerCitas(); 
             },
             error: (error: HttpErrorResponse) => {
               this.mensaje = 'Error al agregar el cliente a la lista negra. Inténtelo nuevamente.';
@@ -146,12 +142,11 @@ export class GestionarCitasEmpleadoComponent implements OnInit {
     // Primero cambia el estado de la cita a "Atendida"
     this.citaEmpleadoService.cambiarEstadoCita(this.token, this.citaSeleccionada.idCita, 'Atendida').subscribe({
       next: () => {
-        // segundo genera la factua
         this.citaEmpleadoService.crearFactura(this.token, this.citaSeleccionada.idCita).subscribe({
           next: () => {
             this.mensaje = 'Factura generada y estado de la cita actualizado correctamente.';
             this.mostrarFactura = false; 
-            this.obtenerCitas(); // Refrescar las citas después de la confirmación
+            this.obtenerCitas(); 
           },
           error: (error: HttpErrorResponse) => {
             this.mensaje = 'Error al generar la factura. Inténtelo nuevamente.';
