@@ -1,88 +1,100 @@
 <div class="container mt-4">
     <!-- Indicador de carga -->
     <div *ngIf="cargando" class="text-center">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Cargando...</span>
-        </div>
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
     </div>
-
+  
     <!-- Mensaje de estado -->
     <div *ngIf="mensaje" class="alert alert-info text-center" role="alert">
-        {{ mensaje }}
+      {{ mensaje }}
     </div>
-
+  
     <!-- Mensaje cuando no hay anuncios -->
     <div *ngIf="!cargando && anuncios.length === 0" class="text-center">
-        <p class="text-muted">No hay anuncios disponibles.</p>
+      <p class="text-muted">No hay anuncios disponibles.</p>
     </div>
-
+  
+    <!-- Filtro de estados -->
+    <div *ngIf="!cargando && anuncios.length > 0" class="mb-3">
+      <label for="estadoSelector" class="form-label">Filtrar por Estado:</label>
+      <select id="estadoSelector" class="form-select" [(ngModel)]="selectedEstado" (change)="onEstadoChange()">
+        <option value="Todos">Todos</option>
+        <option value="Activo">Activo</option>
+        <option value="Inactivo">Inactivo</option>
+        <option value="Caducado">Caducado</option>
+      </select>
+    </div>
+  
     <!-- Acordeón de anuncios -->
-    <div *ngIf="!cargando && anuncios.length > 0">
-        <h2 class="text-center mb-4">Gestión de Anuncios</h2>
-        <div class="accordion" id="anunciosAccordion">
-            <div *ngFor="let anuncio of anuncios; let i = index" class="accordion-item">
-                <!-- Título del acordeón -->
-                <h2 class="accordion-header" [id]="'heading-' + i">
-                    <button 
-                        class="accordion-button collapsed" 
-                        type="button" 
-                        data-bs-toggle="collapse" 
-                        [attr.data-bs-target]="'#collapse-' + i" 
-                        [attr.aria-expanded]="false" 
-                        [attr.aria-controls]="'collapse-' + i">
-                        <strong>{{ anuncio.nombreAnunciante }}</strong> - {{ anuncio.tipo }} - <span [class]="getEstadoClase(anuncio.estado)">{{ anuncio.estado }}</span>
-                    </button>
-                </h2>
-
-                <!-- Contenido del acordeón -->
-                <div 
-                    [id]="'collapse-' + i" 
-                    class="accordion-collapse collapse" 
-                    [attr.aria-labelledby]="'heading-' + i" 
-                    data-bs-parent="#anunciosAccordion">
-                    <div class="accordion-body">
-                        <div class="row">
-                            <!-- Información del anuncio -->
-                            <div class="col-md-8">
-                                <p><strong>Contacto:</strong> {{ anuncio.contactoAnunciante }}</p>
-                                <p><strong>Contenido:</strong> {{ anuncio.contenidoTexto || 'N/A' }}</p>
-                                <p><strong>Precio Diario:</strong> {{ anuncio.precioPorDia | currency:'Q' }}</p>
-                                <p><strong>Duración:</strong> {{ anuncio.duracionDias }} días</p>
-                                <p><strong>Fecha Inicio:</strong> {{ anuncio.fechaInicio | date:'shortDate' }}</p>
-                                <p><strong>Fecha Fin:</strong> {{ anuncio.fechaFin | date:'shortDate' }}</p>
-                                <p><strong>Hobbies:</strong> 
-                                    <span *ngIf="anuncio.hobbiesRelacionados && anuncio.hobbiesRelacionados.length > 0">
-                                        {{ anuncio.hobbiesRelacionados.join(', ') }}
-                                    </span>
-                                    <span *ngIf="!anuncio.hobbiesRelacionados || anuncio.hobbiesRelacionados.length === 0">Sin hobbies</span>
-                                </p>
-                            </div>
-                            <!-- Enlaces a la imagen y video -->
-                            <div class="col-md-4">
-                                <div *ngIf="anuncio.urlImagen" class="mb-3">
-                                    <a [href]="anuncio.urlImagen" target="_blank" class="btn btn-link">Ver Imagen</a>
-                                </div>
-                                <div *ngIf="anuncio.urlVideo">
-                                    <a [href]="anuncio.urlVideo" target="_blank" class="btn btn-link">Ver Video</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Botones de acciones -->
-                        <div class="mt-3">
-                            <button *ngIf="anuncio.estado === 'Inactivo'" class="btn btn-success me-2" (click)="reactivarAnuncio(anuncio.idAnuncio)">
-                                Reactivar
-                            </button>
-                            <button *ngIf="anuncio.estado === 'Activo'" class="btn btn-danger me-2" (click)="desactivarAnuncio(anuncio.idAnuncio)">
-                                Desactivar
-                            </button>
-                            <button class="btn btn-warning" (click)="actualizarEstadoAnuncio(anuncio.idAnuncio, 'Caducado')">
-                                Marcar como Caducado
-                            </button>
-                        </div>
-                    </div>
+    <div *ngIf="!cargando && anunciosFiltrados.length > 0">
+      <h2 class="text-center mb-4">Gestión de Anuncios</h2>
+      <div class="accordion" id="anunciosAccordion">
+        <div *ngFor="let anuncio of anunciosFiltrados; let i = index" class="accordion-item">
+          <!-- Título del acordeón -->
+          <h2 class="accordion-header" [id]="'heading-' + i">
+            <button 
+              class="accordion-button collapsed" 
+              type="button" 
+              data-bs-toggle="collapse" 
+              [attr.data-bs-target]="'#collapse-' + i" 
+              [attr.aria-expanded]="false" 
+              [attr.aria-controls]="'collapse-' + i">
+              <strong>{{ anuncio.nombreAnunciante }}</strong> - {{ anuncio.tipo }} - <span [class]="getEstadoClase(anuncio.estado)">{{ anuncio.estado }}</span>
+            </button>
+          </h2>
+  
+          <!-- Contenido del acordeón -->
+          <div 
+            [id]="'collapse-' + i" 
+            class="accordion-collapse collapse" 
+            [attr.aria-labelledby]="'heading-' + i" 
+            data-bs-parent="#anunciosAccordion">
+            <div class="accordion-body">
+              <div class="row">
+                <!-- Información del anuncio -->
+                <div class="col-md-8">
+                  <p><strong>Contacto:</strong> {{ anuncio.contactoAnunciante }}</p>
+                  <p><strong>Contenido:</strong> {{ anuncio.contenidoTexto || 'N/A' }}</p>
+                  <p><strong>Precio Diario:</strong> {{ anuncio.precioPorDia | currency:'Q' }}</p>
+                  <p><strong>Duración:</strong> {{ anuncio.duracionDias }} días</p>
+                  <p><strong>Fecha Inicio:</strong> {{ anuncio.fechaInicio | date:'shortDate' }}</p>
+                  <p><strong>Fecha Fin:</strong> {{ anuncio.fechaFin | date:'shortDate' }}</p>
+                  <p><strong>Hobbies:</strong> 
+                    <span *ngIf="anuncio.hobbiesRelacionados && anuncio.hobbiesRelacionados.length > 0">
+                      {{ anuncio.hobbiesRelacionados.join(', ') }}
+                    </span>
+                    <span *ngIf="!anuncio.hobbiesRelacionados || anuncio.hobbiesRelacionados.length === 0">Sin hobbies</span>
+                  </p>
                 </div>
+                <!-- Enlaces a la imagen y video -->
+                <div class="col-md-4">
+                  <div *ngIf="anuncio.urlImagen" class="mb-3">
+                    <a [href]="anuncio.urlImagen" target="_blank" class="btn btn-link">Ver Imagen</a>
+                  </div>
+                  <div *ngIf="anuncio.urlVideo">
+                    <a [href]="anuncio.urlVideo" target="_blank" class="btn btn-link">Ver Video</a>
+                  </div>
+                </div>
+              </div>
+  
+              <!-- Botones de acciones -->
+              <div class="mt-3">
+                <button *ngIf="anuncio.estado === 'Inactivo'" class="btn btn-success me-2" (click)="reactivarAnuncio(anuncio.idAnuncio)">
+                  Reactivar
+                </button>
+                <button *ngIf="anuncio.estado === 'Activo'" class="btn btn-danger me-2" (click)="desactivarAnuncio(anuncio.idAnuncio)">
+                  Desactivar
+                </button>
+                <button class="btn btn-warning" (click)="actualizarEstadoAnuncio(anuncio.idAnuncio, 'Caducado')">
+                  Marcar como Caducado
+                </button>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
+  
