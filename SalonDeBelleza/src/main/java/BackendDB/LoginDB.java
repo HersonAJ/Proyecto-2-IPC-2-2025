@@ -27,8 +27,14 @@ public class LoginDB {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
+                    // Validar si el usuario está inactivo
+                    String estado = rs.getString("Estado");
+                    if ("Inactivo".equalsIgnoreCase(estado)) {
+                        System.out.println("Usuario inactivo, no puede iniciar sesión.");
+                        return null; // Retorna null si el usuario está inactivo
+                    }
+
                     Usuario usuario = new Usuario();
-                    // Rellenar atributos del objeto usuario
                     usuario.setIdUsuario(rs.getInt("ID_Usuario"));
                     usuario.setNombre(rs.getString("Nombre"));
                     usuario.setDpi(rs.getString("DPI"));
@@ -39,13 +45,13 @@ public class LoginDB {
                     usuario.setRol(rs.getString("Rol"));
                     usuario.setEstado(rs.getString("Estado"));
                     usuario.setDescripcion(rs.getString("Descripción"));
-                    return usuario;
+                    return usuario; 
                 }
             }
         } catch (SQLException e) {
             System.out.println("Error al autenticar el usuario: " + e.getMessage());
         }
-        return null;
+        return null; 
     }
 
 }
