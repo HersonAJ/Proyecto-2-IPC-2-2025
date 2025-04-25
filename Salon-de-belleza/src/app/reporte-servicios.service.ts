@@ -18,4 +18,10 @@ export class ReporteServiciosService {
     const url = `${this.apiURL}reporte-servicios/servicios-mas-comprados`;
     return this.http.get<any[]>(url, { params });
   }
+
+  //metodo para obtener el historial de servicios menos comprados
+  obtenerServiciosMenosComprados(params: any): Observable <any[]> {
+    const url = `${this.apiURL}reporte-servicios/servicios-menos-comprados`;
+    return this.http.get<any[]>(url, {params});
+  }
 }

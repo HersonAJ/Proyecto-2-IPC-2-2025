@@ -48,5 +48,29 @@ public class ReporteServiciosController {
                     .build();
         }
     }
+    
+    @GET
+    @Path("/servicios-menos-comprados")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerHistorialServiciosMenosComprados(@QueryParam("fechaInicio") Date fechaInicio,
+                                                            @QueryParam("fechaFin") Date fechaFin) {
+        
+        try {
+            List<ReporteServicios> reportes = reporteDB.obtenerServiciosMenosReservados(fechaInicio, fechaFin);
+            
+            if (reportes.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\": \"No se encontraron registros para el reporte solicitado.\"}")
+                        .build();
+            }
+            
+            return Response.ok(reportes).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"message\": \"Ocurrio un error al obtener el reporte.\"}")
+                    .build();
+        }
+    }
 }
 
